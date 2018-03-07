@@ -3,6 +3,7 @@ from pptree import print_tree
 def main():
     
     grammar = (
+    ("<E>","<E>","*","<E>"),
     ("<E>","<E>","+","<E>"),
     ("<E>","(","<E>",")"),
     ("<E>","<N>"),
@@ -38,8 +39,8 @@ class Parser:
         return root
         
         
-    def constructTree(self,item,stateSets):
-    
+    def constructTree(self,item,stateSets,visited = []):
+        visited.append(item)
         children = []
         parent = {}
         depth = item.start
@@ -62,19 +63,21 @@ class Parser:
             else:
                 next,symbolIndex = stack.pop()
                 depth = next.start
-                if next.end <= item.end:
-                    symbol = item.symbols[symbolIndex]
-                    if next.end <= item.end and item!=next and next.nonTerminal == symbol:
-                        depth = next.end
-                        symbolIndex +=1
-                        if symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
-                            parent[item.symbols[symbolIndex]] = next
-                        if depth < item.end:
-                            for i in stateSets[depth]:
-                                parent[i] = next
-                                stack.append((i,symbolIndex))
-                        elif depth == item.end:
-                            children.append(next)
+                symbol = item.symbols[symbolIndex]                    
+                if next not in visited and next.end <= item.end and next.nonTerminal == symbol:
+                    visited.append(next)
+                    depth = next.end
+                    symbolIndex +=1
+                    if symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
+                        parent[item.symbols[symbolIndex]] = next
+                    if depth < item.end:
+                        for i in stateSets[depth]:
+                            parent[i] = next
+                            stack.append((i,symbolIndex))
+                    elif depth == item.end:
+                        children.append(next)
+        
+        print(len(visited))
         
         for child in children:
             try:
@@ -82,7 +85,7 @@ class Parser:
             except:
                 pass
         
-        l = [Node(child,[]) if isinstance(child, str) else self.constructTree(child,stateSets) for child in children]
+        l = [Node(child,[]) if isinstance(child, str) else self.constructTree(child,stateSets,visited) for child in children]
         
         
         
