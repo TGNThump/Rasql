@@ -33,49 +33,56 @@ class Parser:
         
         for item in orderedStateSets[0]:
             if item.nonTerminal == rootRule and item.end == len(string):
-                root = self.constructNode(item,orderedStateSets)
+                root = self.constructTree(item,orderedStateSets)
                 break
         return root
         
-    def constructNode(self,item,stateSets):
-        self.printStateSets(stateSets)
         
-        print("Item: ", end="")
-        item.print()
-        print()
-        
+    def constructTree(self,item,stateSets):
+    
         children = []
         parent = {}
-        sIndex = item.start
-        stack = stateSets[sIndex]
+        depth = item.start
+        symbolIndex = 0
+        stack = [(set,0) for set in stateSets[depth]] 
         
-        
-        
-        while sIndex != item.end:
-            symbol = item.symbols[sIndex]
-            if self.terminal(symbol) and len(symbol) + sIndex <= item.end:
-                print("t")
-                sIndex += len(symbol)
+        while depth != item.end:
+            symbol = item.symbols[symbolIndex]
+            
+            if self.terminal(symbol) and len(symbol) + depth <= item.end:
+                
+                depth += len(symbol)
+                symbolIndex += 1
+                if depth < item.end:
+                    for i in stateSets[depth]:
+                        parent[i] = symbol
+                        stack.append((i,symbolIndex))
+                elif depth == item.end:
+                    children.append(symbol)
             else:
-                next = stack.pop()
-                sIndex = next.start
-                if sIndex < item.end:
-                    symbol = item.symbols[sIndex]
-                    print("Symbol: ",symbol)
+                next,symbolIndex = stack.pop()
+                depth = next.start
+                if next.end <= item.end:
+                    symbol = item.symbols[symbolIndex]
                     if next.end <= item.end and item!=next and next.nonTerminal == symbol:
-                        sIndex = next.end
-            if sIndex < item.end:
-                for i in stateSets[sIndex]:
-                    parent[i] = next
-                    stack.append(i)
-            elif sIndex == item.end:
-                children.append(symbol)
-                        
+                        depth = next.end
+                        symbolIndex +=1
+                        if symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
+                            parent[item.symbols[symbolIndex]] = next
+                        if depth < item.end:
+                            for i in stateSets[depth]:
+                                parent[i] = next
+                                stack.append((i,symbolIndex))
+                        elif depth == item.end:
+                            children.append(next)
         
+        for child in children:
+            try:
+                children.append(parent[child])
+            except:
+                pass
         
-        
-        
-        l = [Node(child) if isinstance(child, str) else constructNode(child) for child in children]
+        l = [Node(child,[]) if isinstance(child, str) else self.constructTree(child,stateSets) for child in children]
         
         
         
