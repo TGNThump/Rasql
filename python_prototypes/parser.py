@@ -3,7 +3,7 @@ from pptree import print_tree
 def main():
     
     grammar = (
-    ("<E>","<E>","*","<E>"),
+    ("<E>","<E>","**","<E>"),
     ("<E>","<E>","+","<E>"),
     ("<E>","(","<E>",")"),
     ("<E>","<N>"),
@@ -54,12 +54,14 @@ class Parser:
                 
                 depth += len(symbol)
                 symbolIndex += 1
+                if symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
+                        parent[(symbolIndex,depth)] = (symbolIndex-1,depth-len(symbol))
                 if depth < item.end:
                     for i in stateSets[depth]:
-                        parent[i] = symbol
+                        parent[i] = (symbolIndex-1,depth-len(symbol))
                         stack.append((i,symbolIndex))
                 elif depth == item.end:
-                    children.append(symbol)
+                    children.append((symbolIndex-1,depth-len(symbol)))
             else:
                 next,symbolIndex = stack.pop()
                 depth = next.start
@@ -68,8 +70,8 @@ class Parser:
                     visited.append(next)
                     depth = next.end
                     symbolIndex +=1
-                    if symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
-                        parent[item.symbols[symbolIndex]] = next
+                    if  symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
+                        parent[(symbolIndex,depth)] = next
                     if depth < item.end:
                         for i in stateSets[depth]:
                             parent[i] = next
@@ -77,15 +79,18 @@ class Parser:
                     elif depth == item.end:
                         children.append(next)
         
-        print(len(visited))
-        
         for child in children:
             try:
                 children.append(parent[child])
             except:
                 pass
+            try:
+                print(child[0],type(child[0]))
+            except:
+                pass
+       
         
-        l = [Node(child,[]) if isinstance(child, str) else self.constructTree(child,stateSets,visited) for child in children]
+        l = [self.constructTree(child,stateSets,visited) if isinstance(child, EarleyItem) else Node(item.symbols[child[0]]) for child in children]
         
         
         
@@ -148,8 +153,8 @@ class Parser:
         return parents
                 
     def scan(self,item, i, string, stateSets):
-        if i<len(string) and string[i] == item.nextSymbol():
-            stateSets[i+1].append(item.nextItem())
+        if i+len(item.nextSymbol())-1<len(string) and string[i:i+len(item.nextSymbol())] == item.nextSymbol():
+            stateSets[i+len(item.nextSymbol())].append(item.nextItem())
             
     def predict(self,item,i):
         items = []
