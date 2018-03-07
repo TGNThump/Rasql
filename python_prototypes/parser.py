@@ -26,11 +26,9 @@ class Parser:
         self.grammar = grammar
     
     def parse(self, string):
-        orderedStateSets = self.reverseStateSets(self.stateSets(string))
+        orderedStateSets = self.reverseStateSets(self.fullyParsed(self.stateSets(string)))
         rootRule = self.grammar[0][0]
-        for set in orderedStateSets:
-            for item in set:
-                item.print()
+        
         root = None
         
         for item in orderedStateSets[0]:
@@ -39,33 +37,61 @@ class Parser:
                 break
         return root
         
-    def constructNode(self,item,orderedStateSets):
+    def constructNode(self,item,stateSets):
+        self.printStateSets(stateSets)
+        
+        print("Item: ", end="")
+        item.print()
+        print()
+        
         children = []
-        startIndex = item.start
-        for symbol in item.symbols:
-            if self.terminal(symbol):
-                children.append(Node(symbol,[]))
-                startIndex += 1
+        parent = {}
+        sIndex = item.start
+        stack = stateSets[sIndex]
+        
+        
+        
+        while sIndex != item.end:
+            symbol = item.symbols[sIndex]
+            if self.terminal(symbol) and len(symbol) + sIndex <= item.end:
+                print("t")
+                sIndex += len(symbol)
             else:
-                for potentialItem in(orderedStateSets[startIndex]):
-                    if potentialItem.nonTerminal == symbol:
-                        newNode = self.constructNode(potentialItem,orderedStateSets)
-                        if newNode.leaves() <= item.end - startIndex:
-                            children.append(newNode)
-                            startIndex = item.end
-                            break       
-
-        return Node(item.nonTerminal,children)
+                next = stack.pop()
+                sIndex = next.start
+                if sIndex < item.end:
+                    symbol = item.symbols[sIndex]
+                    print("Symbol: ",symbol)
+                    if next.end <= item.end and item!=next and next.nonTerminal == symbol:
+                        sIndex = next.end
+            if sIndex < item.end:
+                for i in stateSets[sIndex]:
+                    parent[i] = next
+                    stack.append(i)
+            elif sIndex == item.end:
+                children.append(symbol)
+                        
+        
+        
+        
+        
+        l = [Node(child) if isinstance(child, str) else constructNode(child) for child in children]
+        
+        
+        
+        return Node(item.nonTerminal,l)
         
     def reverseStateSets(self, stateSets):
-        reduced = [[item for item in set if item.fullyParsed()] for set in stateSets]
-        reversed =[[] for i in range(len(reduced))]
-        for i, set in enumerate(reduced):
+        reversed =[[] for i in range(len(stateSets))]
+        for i, set in enumerate(stateSets):
             for item in set:
                 item.end = i
                 reversed[item.start].append(item)
                 
         return reversed
+        
+    def fullyParsed(self,stateSets):
+        return [[item for item in set if item.fullyParsed()] for set in stateSets]
     
     def stateSets(self, string):
     
@@ -128,6 +154,16 @@ class Parser:
                 return False
         return True
         
+    def printStateSets(self, sets):
+        for i, set in enumerate(sets):
+            print("===",i,"===")
+            self.printStateSet(set)
+            print()
+        print()
+    
+    def printStateSet(self,set):
+        for item in set:
+            item.print()
 class Node:
     name = ""
     children = []
@@ -187,6 +223,10 @@ class EarleyItem:
             return True
         else:
             return False
+    
+    def __hash__(self):
+        return hash((self.nonTerminal, self.symbols))
+    
     def print(self):
         print(self.start,self.end,self.parsed,self.nonTerminal,self.symbols)
         
