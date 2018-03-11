@@ -4,6 +4,7 @@ def main():
     
     grammar = (
     ("<E>","<E>","**","<E>"),
+    ("<E>","<E>","*","<E>"),
     ("<E>","<E>","+","<E>"),
     ("<E>","(","<E>",")"),
     ("<E>","<N>"),
@@ -30,6 +31,8 @@ class Parser:
         orderedStateSets = self.reverseStateSets(self.fullyParsed(self.stateSets(string)))
         rootRule = self.grammar[0][0]
         
+        self.printStateSets(orderedStateSets)
+        
         root = None
         
         for item in orderedStateSets[0]:
@@ -40,6 +43,9 @@ class Parser:
         
         
     def constructTree(self,item,stateSets,visited = []):
+        print("Item: ",end = "")
+        item.print()
+    
         visited.append(item)
         children = []
         parent = {}
@@ -51,7 +57,7 @@ class Parser:
             symbol = item.symbols[symbolIndex]
             
             if self.terminal(symbol) and len(symbol) + depth <= item.end:
-                
+                print(symbol,depth)
                 depth += len(symbol)
                 symbolIndex += 1
                 if symbolIndex < len(item.symbols) and self.terminal(item.symbols[symbolIndex]):
@@ -63,6 +69,7 @@ class Parser:
                 elif depth == item.end:
                     children.append((symbolIndex-1,depth-len(symbol)))
             else:
+                print(symbol,depth)
                 next,symbolIndex = stack.pop()
                 depth = next.start
                 symbol = item.symbols[symbolIndex]                    
@@ -79,23 +86,32 @@ class Parser:
                     elif depth == item.end:
                         children.append(next)
         
+        
+        
         for child in children:
             try:
                 children.append(parent[child])
-            except:
-                pass
-            try:
-                print(child[0],type(child[0]))
             except:
                 pass
        
         
         l = [self.constructTree(child,stateSets,visited) if isinstance(child, EarleyItem) else Node(item.symbols[child[0]]) for child in children]
         
-        
+        [print(i) for i in l]
         
         return Node(item.nonTerminal,l)
-        
+    
+    def sortStates(self,stateSets):
+        return None
+        #Completely broken do not use
+        for set in stateSets:
+            for i in range(len(set)-1):
+                for j in range(len(set)-1):
+                    if self.grammar.index(set[i].rule()) > self.grammar.index(set[i+1].rule()):
+                        set[i],set[i+1] = set[i+1],set[i]
+                        
+        return stateSets
+    
     def reverseStateSets(self, stateSets):
         reversed =[[] for i in range(len(stateSets))]
         for i, set in enumerate(stateSets):
@@ -241,6 +257,9 @@ class EarleyItem:
     
     def __hash__(self):
         return hash((self.nonTerminal, self.symbols))
+        
+    def rule(self):
+        return (self.nonTerminal,)+self.symbols
     
     def print(self):
         print(self.start,self.end,self.parsed,self.nonTerminal,self.symbols)
