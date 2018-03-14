@@ -1,11 +1,13 @@
 <template>
   <div class="container-fluid app">
-    <div class="card">
-      <div class="card-body">{{viewModel}}</div>
+    <div class="row">
+      <div class="col">
+        <input class="form-control" type="text" placeholder="" v-model="input_sql"></input>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-block" @click="Parse.Execute()">Parse</button>
+      </div>
     </div>
-    <br />
-    <button class="btn" @click="TestCommand.Execute()">printToConsole</button>
-    <button class="btn" @click="test++">increment</button>
   </div>
 </template>
 

@@ -110,7 +110,9 @@
     <Compile Include="Framework\ApplicationMode.cs" />
     <Compile Include="Framework\JobManagement.cs" />
     <Compile Include="Framework\Reactive.cs" />
-    <Compile Include="ViewModel\HelloViewModel.cs" />
+    <Compile Include="Parser\Parser.cs" />
+    <Compile Include="Parser\State.cs" />
+    <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -147,6 +149,7 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="View\.babelrc" />
+    <None Include="View\src\assets\sass\main.scss" />
     <Resource Include="FodyWeavers.xml" />
     <Content Include="View\.gitignore" />
     <None Include="View\data\vm.cjson" />
