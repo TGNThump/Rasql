@@ -21,7 +21,7 @@ namespace GroupProjectRASQL
 
         private void MainWindow_Initialized(object sender, EventArgs e)
         {
-            DataContext = new HelloViewModel();
+            DataContext = new ApplicationViewModel();
         }
 
         protected override void OnClosed(EventArgs e)
