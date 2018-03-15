@@ -8,6 +8,7 @@ using System.Threading;
 using System.Diagnostics;
 using GroupProjectRASQL.Framework;
 using System.Windows;
+using Chromium.Event;
 
 namespace GroupProjectRASQL
 {
@@ -29,8 +30,13 @@ namespace GroupProjectRASQL
             return new VueSessionInjector();
         }
 
-        #if DEBUG
-            protected static Thread MainThread;
+        protected override void UpdateLineCommandArg(CfxOnBeforeCommandLineProcessingEventArgs beforeLineCommand)
+        {
+            beforeLineCommand.CommandLine.AppendSwitch("disable-gpu");
+        }
+
+#if DEBUG
+        protected static Thread MainThread;
             protected static Job job;
             protected static void NPMThread()
             {
