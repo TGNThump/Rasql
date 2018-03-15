@@ -1,8 +1,7 @@
-[query] => [select] + ' ' + [from] + (' ' + [join])? + (' ' + [where])?
+[query] => [select] + ' ' + [from] + (' ' + [where])?
 
 [select] => 'SELECT ' + [selectList]
 [from] => 'FROM ' + [fromList]
-[join] => 'JOIN ' + [fromElement] + ' ON ' + [condition]
 [where] => 'WHERE' + [condition]
 
 [selectList] => '*'
@@ -12,10 +11,12 @@
 [selectElement] => [field] + ' AS ' + [string]
 
 [fromList] => [fromElement] + ([comma] + [fromElement])*
+[join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
 [fromElement] => [table]
-[fromElement] => [table] + ' AS ' + [table]
-[fromElement] => '(' + [query] + ')'
+[fromElement] => [join]
+[fromElement] => [fromElement] + ' AS ' + [table]
+[fromElement] => '(' + [query] + ') ' + [string]
 
 [condition] => [value] + [operator] + [value]
 [condition] => [condition] + ' AND ' + [condition]
