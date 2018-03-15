@@ -8,6 +8,14 @@
         <button class="btn btn-block" @click="Parse.Execute()">Parse</button>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body" v-html="output">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -10,26 +10,28 @@ namespace GroupProjectRASQL.ViewModel
     public class ApplicationViewModel : Reactive
     {
         public string input_sql { get; set; }
+        public string output { get; private set; } = "";
         public ISimpleCommand Parse { get; private set; }
 
         public ApplicationViewModel()
         {
             Parse = new RelaySimpleCommand(delegate()
             {
-                Debug.Print("Parse: " + input_sql);
+                output = "Parse: " + input_sql + "<br />";
                 Parser.Parser parser = new Parser.Parser();
-                List<State>[] stateSets = parser.Parse(input_sql);
+                List<State>[] stateSets = parser.FilterAndReverse(parser.Parse(input_sql));
 
                 for (int i=0; i<stateSets.Length; i++)
                 {
-                    Debug.Print("=== " + i + " ===");
-                    foreach(State state in stateSets[i])
+                    output += "=== " + i + " ===" + "<br />";
+                    foreach (State state in stateSets[i])
                     {
-                        Debug.Print(state.ToString());
+                        if (!state.isFinished()) continue;
+                        output += state.ToString() + "<br />";
                     }
                 }
 
-                Debug.Print("Valid: " + parser.IsValid(stateSets));
+                output += "Valid: " + parser.IsValid(stateSets) + "<br />";
             });
         }
     }
