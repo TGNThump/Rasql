@@ -18,6 +18,7 @@
 [fromElement] => [fromElement] + ' AS ' + [table]
 [fromElement] => '(' + [query] + ') ' + [string]
 
+[condition] => '(' + [condition] + ')'
 [condition] => [value] + [operator] + [value]
 [condition] => [condition] + ' AND ' + [condition]
 [condition] => [condition] + ' OR ' + [condition]
@@ -35,7 +36,7 @@
 
 [comma] => ','|', '
 
-[string] => [a-zA-Z]
+[string] => [a-zA-Z]*
 
 [table] => [string]
 [field] => [string]
