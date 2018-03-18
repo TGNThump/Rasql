@@ -38,6 +38,11 @@ namespace GroupProjectRASQL.Parser
             return nonterminal;
         }
 
+        public bool isTerminal()
+        {
+            return nonterminal == null;
+        }
+
         public bool Equals(State other)
         {
             return null != other && nonterminal == other.nonterminal && expression == other.expression && dot == other.dot && origin == other.origin && destination == other.destination;
@@ -58,7 +63,6 @@ namespace GroupProjectRASQL.Parser
         {
             return new State(nonterminal, expression, dot + 1, origin);
         }
-
 
         public override string ToString()
         {

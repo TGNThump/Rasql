@@ -1,40 +1,63 @@
-[query] => [select] + ' ' + [from] + (' ' + [join])? + (' ' + [where])?
+[query] => [select] + ' ' + [from] + ' ' + [where]
+[query] => [select] + ' ' + [from]
 
 [select] => 'SELECT ' + [selectList]
 [from] => 'FROM ' + [fromList]
-[join] => 'JOIN ' + [fromElement] + ' ON ' + [condition]
-[where] => 'WHERE' + [condition]
+[where] => 'WHERE ' + [condition]
 
 [selectList] => '*'
-[selectList] => [selectElement] + ([comma] + [selectElement])*
+[selectList] => [selectElement]
+[selectList] => [selectList] + [comma] + [selectElement]
 
 [selectElement] => [field]
 [selectElement] => [field] + ' AS ' + [string]
 
-[fromList] => [fromElement] + ([comma] + [fromElement])*
+[fromList] => [fromElement]
+[fromList] => [fromList] + [comma] + [fromElement]
+[join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
+[fromElement] => [join]
 [fromElement] => [table]
-[fromElement] => [table] + ' AS ' + [table]
-[fromElement] => '(' + [query] + ')'
+[fromElement] => [fromElement] + ' AS ' + [table]
+[fromElement] => '(' + [query] + ')' + [table]
 
+[condition] => '(' + [condition] + ')'
 [condition] => [value] + [operator] + [value]
 [condition] => [condition] + ' AND ' + [condition]
 [condition] => [condition] + ' OR ' + [condition]
 [condition] => 'NOT ' + [condition]
 
-[operator] => '='|'<>'|'>'|'<'|'<='|'>='
+[operator] => '='
+[operator] => '<>'
+[operator] => '>'
+[operator] => '<'
+[operator] => '<='
+[operator] => '>='
 
 [value] => [field]
 [value] => [numeric]
-[value] => ('\''|'"') + [string] + ('\''|'"')
-[value] => 'NULL'
+[value] => [quote] + [string] + [quote]
+[value] => [null]
 
-[numeric] => [0-9]
-[numeric] => [0-9] + '.' + [0-9]
+[null] => 'NULL'
 
-[comma] => ','|', '
+[int] => [0-9]
+[int] => [int] + [0-9]
 
-[string] => [a-zA-Z]
+[numeric] => [int]
+[numeric] => [int] + '.' + [int]
+
+[quote] => '\''
+[quote] => '"'
+
+[comma] => ','
+[comma] => ', '
+
+[char] => [a-zA-Z]
+[char] => [int]
+
+[string] => [char]
+[string] => [string] + [char]
 
 [table] => [string]
 [field] => [string]

@@ -11,7 +11,7 @@
     <div class="row">
       <div class="col">
         <div class="card">
-          <div class="card-body" v-html="output">
+          <div class="card-body" style="height: 500px; overflow-y: scroll; overflow-x: hidden;" v-html="output">
           </div>
         </div>
       </div>

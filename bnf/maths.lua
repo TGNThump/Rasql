@@ -1,0 +1,10 @@
+[sum] => [sum] + '+' + [product]
+[sum] => [sum] + '-' + [product]
+[sum] => [product]
+[product] => [product] + '*' + [factor]
+[product] => [product] + '/' + [factor]
+[product] => [factor]
+[factor] => '(' + [sum] + ')'
+[factor] => [number]
+[number] => [0-9] + [number]
+[number] => [0-9]
