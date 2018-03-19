@@ -272,7 +272,9 @@ namespace GroupProjectRASQL.Parser
             for (int depth = 0; stack.Count > 0; depth++)
             {
                 Node v = stack.Pop();
-                foreach (Edge u in edges(depth, v))
+                List<Edge> us = edges(depth, v);
+                if (us.Count == 0) depth--;
+                foreach (Edge u in us)
                 {
                     Node w = child(depth, u);
                     //if (!seen.Contains(w))
