@@ -6,14 +6,14 @@
 [where] => 'WHERE ' + [condition]
 
 [selectList] => '*'
-[selectList] => [selectElement]
 [selectList] => [selectList] + [comma] + [selectElement]
+[selectList] => [selectElement]
 
 [selectElement] => [field]
 [selectElement] => [field] + ' AS ' + [string]
 
-[fromList] => [fromElement]
 [fromList] => [fromList] + [comma] + [fromElement]
+[fromList] => [fromElement]
 [join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
 [fromElement] => [join]

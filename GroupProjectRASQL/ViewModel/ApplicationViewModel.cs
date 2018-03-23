@@ -19,10 +19,12 @@ namespace GroupProjectRASQL.ViewModel
             Parse = new RelaySimpleCommand(delegate()
             {
                 output = "Parse: " + input_sql + "<br />";
-                Parser.Parser parser = new Parser.Parser(@"C:\Users\ben\Projects\COMP208G17\bnf\maths.lua");
+                Parser.Parser parser = new Parser.Parser();
                 List<State>[] stateSets = parser.Parse(input_sql);
-                output += "Valid: " + parser.IsValid(stateSets) + "<br />";
+                bool valid = parser.IsValid(stateSets);
+                output += "Valid: " + valid + "<br />";
 
+                if (!valid) return;
                 stateSets = parser.FilterAndReverse(stateSets);
 
                 TreeNode<String> tree = parser.parse_tree(input_sql, stateSets);
@@ -41,7 +43,7 @@ namespace GroupProjectRASQL.ViewModel
 
         public void outputTree(TreeNode<String> tree, int depth = 0)
         {
-            for (int i = 0; i < depth; i++) output += "-";
+            for (int i = 0; i < depth; i++) output += "&nbsp;&nbsp;&nbsp;&nbsp;";
             output += tree.Data += "<br />";
             foreach (TreeNode<String> child in tree.Children) outputTree(child, depth + 1);
         }
