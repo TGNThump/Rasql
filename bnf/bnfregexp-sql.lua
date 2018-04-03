@@ -6,20 +6,21 @@
 [where] => 'WHERE ' + [condition]
 
 [selectList] => '*'
-[selectList] => [selectList] + [comma] + [selectElement]
+[selectList] => [selectElement] + [comma] + [selectList]
 [selectList] => [selectElement]
 
 [selectElement] => [field]
 [selectElement] => [field] + ' AS ' + [string]
 
-[fromList] => [fromList] + [comma] + [fromElement]
+[fromList] => [fromElement] + [comma] + [fromList]
 [fromList] => [fromElement]
-[join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
 [fromElement] => [join]
 [fromElement] => [table]
 [fromElement] => [fromElement] + ' AS ' + [table]
 [fromElement] => '(' + [query] + ')' + [table]
+
+[join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
 [condition] => '(' + [condition] + ')'
 [condition] => [value] + [operator] + [value]
@@ -57,7 +58,7 @@
 [char] => [int]
 
 [string] => [char]
-[string] => [string] + [char]
+[string] => [char] + [string]
 
 [table] => [string]
 [field] => [string]

@@ -303,7 +303,7 @@ namespace GroupProjectRASQL.Parser
             }
 
             // Something went very wrong.
-            return null;
+            return new List<Edge>();
         }
 
         private List<State> getSubEdges(String input, List<State>[] stateSets, State state)
