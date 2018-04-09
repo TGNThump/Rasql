@@ -12,8 +12,8 @@ namespace GroupProjectRASQL.ViewModel
     {
         public string input_sql { get; set; }
 
-        private string output = "";
-        public string Output { get { return output; } private set { Set(ref output, value); }}
+        public string output { get; private set; } = "";
+        //public string output { get { return output; } private set { Set(ref output, value); }}
 
         public ISimpleCommand Parse { get; private set; }
 
@@ -21,11 +21,11 @@ namespace GroupProjectRASQL.ViewModel
         {
             Parse = new RelaySimpleCommand(delegate()
             {
-                Output = "Parse: " + input_sql + "<br />";
+                output = "Parse: " + input_sql + "<br />";
                 Parser.Parser parser = new Parser.Parser();
                 List<State>[] stateSets = parser.Parse(input_sql);
                 bool valid = parser.IsValid(stateSets);
-                Output += "Valid: " + valid + "<br />";
+                output += "Valid: " + valid + "<br />";
 
                 if (!valid) return;
                 stateSets = parser.FilterAndReverse(stateSets);
@@ -35,10 +35,10 @@ namespace GroupProjectRASQL.ViewModel
 
                 for (int i = 0; i < stateSets.Length; i++)
                 {
-                    Output += "=== " + i + " ===" + "<br />";
+                    output += "=== " + i + " ===" + "<br />";
                     foreach (State state in stateSets[i])
                     {
-                        Output += state.ToString() + "<br />";
+                        output += state.ToString() + "<br />";
                     }
                 }
             });
@@ -46,8 +46,8 @@ namespace GroupProjectRASQL.ViewModel
 
         public void outputTree(TreeNode<String> tree, int depth = 0)
         {
-            for (int i = 0; i < depth; i++) Output += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            Output += tree.Data += "<br />";
+            for (int i = 0; i < depth; i++) output += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            output += tree.Data += "<br />";
             foreach (TreeNode<String> child in tree.Children) outputTree(child, depth + 1);
         }
     }
