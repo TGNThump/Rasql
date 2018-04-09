@@ -9,7 +9,7 @@ namespace GroupProjectRASQL.Parser
 {
     class Parser
     {
-        Dictionary<String, List<String[]>> grammer = new Dictionary<string, List<string[]>>();
+        Dictionary<String, List<String[]>> grammar = new Dictionary<string, List<string[]>>();
         Dictionary<String, List<String[]>> defaults = new Dictionary<string, List<string[]>>()
         {
             { "[0-9]", new List<String[]>(){
@@ -91,7 +91,7 @@ namespace GroupProjectRASQL.Parser
                     char? last = c > 1 ? split[1][c - 1] : (char?) null;
 
                     if (current.Equals('\'') && !(last.Equals('\\') || inStringDoubleQuote)){
-                        inStringSingleQuote = !inStringSingleQuote;
+                        //inStringSingleQuote = !inStringSingleQuote;
                     } else if (current.Equals('"') && !(last.Equals('\\') || inStringSingleQuote))
                     {
                         inStringDoubleQuote = !inStringDoubleQuote;
@@ -110,14 +110,14 @@ namespace GroupProjectRASQL.Parser
 
                 parts.Add(preparePart(currentPart));
 
-                addGrammerRule(split[0], parts.ToArray());
+                addgrammarRule(split[0], parts.ToArray());
             }
             
             foreach(KeyValuePair<String, List<String[]>> element in defaults)
             {
                 foreach(String[] expression in element.Value)
                 {
-                    addGrammerRule(element.Key, expression);
+                    addgrammarRule(element.Key, expression);
                 }
             }
         }
@@ -130,10 +130,10 @@ namespace GroupProjectRASQL.Parser
             return part.Replace("\\\"", "\"").Replace("\\\'", "\'").Replace("\\\\", "\\");
         }
 
-        private void addGrammerRule(String nonterminal, String[] expression)
+        private void addgrammarRule(String nonterminal, String[] expression)
         {
-            if (!grammer.ContainsKey(nonterminal)) grammer.Add(nonterminal, new List<string[]>());
-            grammer[nonterminal].Add(expression);
+            if (!grammar.ContainsKey(nonterminal)) grammar.Add(nonterminal, new List<string[]>());
+            grammar[nonterminal].Add(expression);
         }
 
         public List<State>[] Parse(String input)
@@ -144,8 +144,8 @@ namespace GroupProjectRASQL.Parser
                 stateSets[i] = new List<State>();
             }
 
-            String start = grammer.Keys.First();
-            foreach (String[] rule in grammer[start])
+            String start = grammar.Keys.First();
+            foreach (String[] rule in grammar[start])
             {
                 stateSets[0].Add(new State(start, rule, 0, 0));
             }
@@ -160,7 +160,7 @@ namespace GroupProjectRASQL.Parser
                     if (state.isFinished())
                     {
                         stateSets[i].AddRange(Complete(state, stateSets));
-                    } else if (!grammer.Keys.Contains(state.nextSymbol()))
+                    } else if (!grammar.Keys.Contains(state.nextSymbol()))
                     {
                         Scan(state, i, input, stateSets);
                     } else
@@ -205,7 +205,7 @@ namespace GroupProjectRASQL.Parser
         {
             List<State> items = new List<State>();
             List<String[]> rules = new List<string[]>();
-            if (!grammer.TryGetValue(state.nextSymbol(), out rules)) return items;
+            if (!grammar.TryGetValue(state.nextSymbol(), out rules)) return items;
             foreach (String[] rule in rules)
             {
                 items.Add(new State(state.nextSymbol(), rule, 0, i));
@@ -323,7 +323,7 @@ namespace GroupProjectRASQL.Parser
                         return new List<State>();
                     }
                     String part = symbols[depth];
-                    if (!grammer.ContainsKey(part))
+                    if (!grammar.ContainsKey(part))
                     {
                         // terminal
                         if (!input.Substring(origin).StartsWith(part)) return new List<State>();
@@ -359,7 +359,7 @@ namespace GroupProjectRASQL.Parser
         public TreeNode<String> parse_tree(String input, List<State>[] stateSets)
         {
             int finish = stateSets.Length - 1;
-            String name = grammer.Keys.First();
+            String name = grammar.Keys.First();
 
             State startState = stateSets[0].Find((state) => { return state.getDestination() == finish && state.getNonterminal().Equals(name); });
 
