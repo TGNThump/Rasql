@@ -48,7 +48,7 @@ namespace GroupProjectRASQL.Parser
             }},
         };
 
-        public Parser(String path = @"C:\Users\ben\Projects\COMP208G17\bnf\bnfregexp-sql.lua")
+        public Parser(String path = @"..\..\..\bnf\bnfregexp-sql.lua")
         {
             String[] lines = System.IO.File.ReadAllLines(path);
             

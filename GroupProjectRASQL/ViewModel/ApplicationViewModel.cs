@@ -11,18 +11,21 @@ namespace GroupProjectRASQL.ViewModel
     public class ApplicationViewModel : Reactive
     {
         public string input_sql { get; set; }
-        public string output { get; private set; } = "";
+
+        private string output = "";
+        public string Output { get { return output; } private set { Set(ref output, value); }}
+
         public ISimpleCommand Parse { get; private set; }
 
         public ApplicationViewModel()
         {
             Parse = new RelaySimpleCommand(delegate()
             {
-                output = "Parse: " + input_sql + "<br />";
+                Output = "Parse: " + input_sql + "<br />";
                 Parser.Parser parser = new Parser.Parser();
                 List<State>[] stateSets = parser.Parse(input_sql);
                 bool valid = parser.IsValid(stateSets);
-                output += "Valid: " + valid + "<br />";
+                Output += "Valid: " + valid + "<br />";
 
                 if (!valid) return;
                 stateSets = parser.FilterAndReverse(stateSets);
@@ -32,10 +35,10 @@ namespace GroupProjectRASQL.ViewModel
 
                 for (int i = 0; i < stateSets.Length; i++)
                 {
-                    output += "=== " + i + " ===" + "<br />";
+                    Output += "=== " + i + " ===" + "<br />";
                     foreach (State state in stateSets[i])
                     {
-                        output += state.ToString() + "<br />";
+                        Output += state.ToString() + "<br />";
                     }
                 }
             });
@@ -43,8 +46,8 @@ namespace GroupProjectRASQL.ViewModel
 
         public void outputTree(TreeNode<String> tree, int depth = 0)
         {
-            for (int i = 0; i < depth; i++) output += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            output += tree.Data += "<br />";
+            for (int i = 0; i < depth; i++) Output += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            Output += tree.Data += "<br />";
             foreach (TreeNode<String> child in tree.Children) outputTree(child, depth + 1);
         }
     }
