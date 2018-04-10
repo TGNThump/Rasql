@@ -19,10 +19,11 @@ namespace GroupProjectRASQL.ViewModel
 
         public ApplicationViewModel()
         {
+            Parser.Parser parser = new Parser.Parser();
+
             Parse = new RelaySimpleCommand(delegate()
             {
                 output = "Parse: " + input_sql + "<br />";
-                Parser.Parser parser = new Parser.Parser();
                 List<State>[] stateSets = parser.Parse(input_sql);
                 bool valid = parser.IsValid(stateSets);
                 output += "Valid: " + valid + "<br />";

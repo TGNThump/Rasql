@@ -4,12 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Truncon.Collections;
 
 namespace GroupProjectRASQL.Parser
 {
     class Parser
     {
-        Dictionary<String, List<String[]>> grammar = new Dictionary<string, List<string[]>>();
+        OrderedDictionary<String, List<String[]>> grammar = new OrderedDictionary<string, List<string[]>>();
         Dictionary<String, List<String[]>> defaults = new Dictionary<string, List<string[]>>()
         {
             { "[0-9]", new List<String[]>(){
@@ -217,7 +218,7 @@ namespace GroupProjectRASQL.Parser
         {
             foreach (State state in stateSet[stateSet.Length - 1])
             {
-                if (state.getNonterminal() != grammer.Keys.First()) continue; 
+                if (state.getNonterminal() != grammar.Keys.First()) continue; 
                 if (state.isFinished() && state.getOrigin() == 0)
                 {
                     return true;
