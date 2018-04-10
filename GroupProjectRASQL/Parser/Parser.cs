@@ -217,6 +217,7 @@ namespace GroupProjectRASQL.Parser
         {
             foreach (State state in stateSet[stateSet.Length - 1])
             {
+                if (state.getNonterminal() != grammer.Keys.First()) continue; 
                 if (state.isFinished() && state.getOrigin() == 0)
                 {
                     return true;
