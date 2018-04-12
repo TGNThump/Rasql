@@ -112,6 +112,13 @@ namespace GroupProjectRASQL.Parser
 
         }
 
+        public TreeNode<T> Child(int i) {
+
+            if (i >= Children.Count || i < 0) return null;
+            else return Children.ElementAt(i);
+
+        }
+
         #endregion
 
 
