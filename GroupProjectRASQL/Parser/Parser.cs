@@ -264,29 +264,29 @@ namespace GroupProjectRASQL.Parser
             Node root
         )
         {
-            Debug.WriteLine("DFS(" + root + "): ");
-            Stack<Node> stack = new Stack<Node>();
+            //Debug.WriteLine("DFS(" + root + "): ");
+            // Stack of depths and Nodes.
+            Stack<KeyValuePair<int, Node>> stack = new Stack<KeyValuePair<int, Node>>();
             Dictionary<Node, KeyValuePair<Node, Edge>> parent = new Dictionary<Node, KeyValuePair<Node, Edge>>();
             //HashSet<Node> seen = new HashSet<Node>();
 
-            stack.Push(root);
+            stack.Push(new KeyValuePair<int,Node>(0, root));
             //seen.Add(root);
 
-            for (int depth = 0; stack.Count > 0; depth++)
+            while (stack.Count > 0)
             {
-                Node v = stack.Pop();
-                Debug.WriteLine("  " + v + ", (" + depth + ") {");
-                List<Edge> us = edges(depth, v);
-                if (us.Count == 0) depth--;
+                KeyValuePair<int, Node> v = stack.Pop();
+                //Debug.WriteLine("  " + v.Value + ", (" + v.Key + ") {");
+                List<Edge> us = edges(v.Key, v.Value);
                 foreach (Edge u in us)
                 {
-                    Debug.WriteLine("    " + u);
-                    Node w = child(depth, u);
+                    //Debug.WriteLine("    " + u);
+                    Node w = child(v.Key, u);
                     //if (!seen.Contains(w))
                     //{
-                        parent[w] = new KeyValuePair<Node, Edge>(v, u);
+                        parent[w] = new KeyValuePair<Node, Edge>(v.Value, u);
 
-                        if (pred(depth + 1, w))
+                        if (pred(v.Key + 1, w))
                         {
                             List<Edge> path = new List<Edge>();
 
@@ -297,22 +297,22 @@ namespace GroupProjectRASQL.Parser
                             } while (parent.TryGetValue(p.Key, out p));
 
                             path.Reverse();
-                        Debug.WriteLine("    SUCCESS");
-                        Debug.WriteLine("  }");
+                            //Debug.WriteLine("    SUCCESS");
+                            //Debug.WriteLine("  }");
                             //foreach (Edge edge in path) Debug.WriteLine("  " + edge);
                             return path;
                         }
 
                         //seen.Add(w);
-                        stack.Push(w);
+                        stack.Push(new KeyValuePair<int, Node>(v.Key+1, w));
 
                     //}
                 }
 
-                Debug.WriteLine("  }");
+                //Debug.WriteLine("  }");
             }
 
-            Debug.WriteLine("  FAIL");
+            //Debug.WriteLine("  FAIL");
             // Something went very wrong.
             return new List<Edge>();
         }
