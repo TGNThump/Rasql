@@ -9,8 +9,8 @@
 [selectList] => [selectElement] + [comma] + [selectList]
 [selectList] => [selectElement]
 
-[selectElement] => [field]
 [selectElement] => [field] + ' AS ' + [string]
+[selectElement] => [field]
 
 [fromList] => [fromElement] + [comma] + [fromList]
 [fromList] => [fromElement]

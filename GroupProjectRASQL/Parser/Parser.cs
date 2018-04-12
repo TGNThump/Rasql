@@ -264,6 +264,7 @@ namespace GroupProjectRASQL.Parser
             Node root
         )
         {
+            Debug.WriteLine("DFS(" + root + "): ");
             Stack<Node> stack = new Stack<Node>();
             Dictionary<Node, KeyValuePair<Node, Edge>> parent = new Dictionary<Node, KeyValuePair<Node, Edge>>();
             //HashSet<Node> seen = new HashSet<Node>();
@@ -274,10 +275,12 @@ namespace GroupProjectRASQL.Parser
             for (int depth = 0; stack.Count > 0; depth++)
             {
                 Node v = stack.Pop();
+                Debug.WriteLine("  " + v + ", (" + depth + ") {");
                 List<Edge> us = edges(depth, v);
                 if (us.Count == 0) depth--;
                 foreach (Edge u in us)
                 {
+                    Debug.WriteLine("    " + u);
                     Node w = child(depth, u);
                     //if (!seen.Contains(w))
                     //{
@@ -294,6 +297,9 @@ namespace GroupProjectRASQL.Parser
                             } while (parent.TryGetValue(p.Key, out p));
 
                             path.Reverse();
+                        Debug.WriteLine("    SUCCESS");
+                        Debug.WriteLine("  }");
+                            //foreach (Edge edge in path) Debug.WriteLine("  " + edge);
                             return path;
                         }
 
@@ -302,8 +308,11 @@ namespace GroupProjectRASQL.Parser
 
                     //}
                 }
+
+                Debug.WriteLine("  }");
             }
 
+            Debug.WriteLine("  FAIL");
             // Something went very wrong.
             return new List<Edge>();
         }
