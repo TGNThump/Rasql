@@ -1,1 +1,2 @@
 Paulo, Tom and Anna will place the HTML, CSS and JS files for the user interface here. These should not have any neutronium elements on them, thus, the reasont his folder exists.
+# Please make a folder for each of the views! (see how i did it)
