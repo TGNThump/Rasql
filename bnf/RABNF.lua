@@ -9,6 +9,10 @@
 
 [projection] => [pi] + [attributeList] + '('+ [query] + ')'
 
+[pi] => 'PI'
+[pi] => 'PROJECT'
+[pi] => 'π'
+
 [attributeList] => [string]
 [attributeList] => [string] + [comma] + [attributeList]
 
