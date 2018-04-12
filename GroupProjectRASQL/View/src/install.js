@@ -1,6 +1,7 @@
 function install(Vue) {
     require('./assets/sass/main.scss');
 	require('bootstrap');
+    require('./components/components');
 }
 
 function vueInstanceOption() {
