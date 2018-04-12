@@ -86,6 +86,32 @@ namespace GroupProjectRASQL.Parser
             return this.ElementsIndex.FirstOrDefault(predicate);
         }
 
+
+        //Allows for custom collection initialiser
+        public void Add(TreeNode<T> node) {
+
+            Children.Add(node);
+
+        }
+
+
+        //Outputs string subtree represents
+        public String TreeToString() {
+
+            if (Children.Count() == 0) return ToString();
+
+            String childrenString = "";
+
+            foreach (TreeNode<T> node in Children) {
+
+                childrenString += node.TreeToString();
+
+            }
+
+            return childrenString;
+
+        }
+
         #endregion
 
 
