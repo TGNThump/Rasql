@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" style="overflow: hidden;">
   <head>
     <meta charset="utf-8">
@@ -7,72 +7,6 @@
   <body>
     <div id="main" style="height: 100%;overflow: hidden;">
       <App :view-model="$data.ViewModel" :__window__="$data.Window">
-      	<div class="vBox">  	
-      		<div id="titleBox">
-      			
-      		</div>
-      		<div id="datasetCreator" class="pageContent">
-      		
-      		</div>
-      		<div id="queryInput" class="pageContent">
-      			<div class="vBox">
-      				<div id="tabBar" class="hBox">
-      					<div class="tab">
-      						SQL
-      					</div>
-      					<div class="tab">
-      						RA
-      					</div>
-      				</div>
-      				<div id="sqlInput">
-      					<div class="operationBar hBox">
-	      					<div class="operation">
-    	  						SELECT
-      						</div>
-      						<div class="operation">
-      							FROM
-      						</div>
-      						<div class="operation">
-	      						WHERE
-    	  					</div>
-      					</div>
-      					<div class="freeTextBox">
-      					</div>
-      				</div>
-      				<div id="raInput">
-      					<div id="raInput" class="operationBar hBox">
-      						<div class="operation">
-      							*select symbol*
-      						</div>
-     	 					<div class="operation">
-      							*project symbol*
-      						</div>
-      						<div class="operation">
-      							*etc. symbol*
-      						</div>
-      					</div>
-      					<div class="freeTextBox">
-      					</div>
-      				</div>
-      				<div class="navBar hBox">
-      					<div>
-    						Parse
-      					</div>
-      					<div>
-      						Switch to Dataset Creation View
-      					</div>
-      				</div>
-      				<div class="verticalSpacer">
-      				</div>
-      				<div>
-      					*software info and acknowledgements*
-      				</div>
-      			</div>
-      		</div>
-      		<div id="optimiser" class="pageContent">
-      		
-      		</div>
-      	</div>
       </App>
     </div>
     <script src="dist/build.js"></script>
