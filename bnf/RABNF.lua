@@ -7,7 +7,7 @@
 [query] =>  '(' + [query] + ')'
 
 
-[projection] => [pi] + [attributeList] + '('+ [query] + ')'
+[projection] => [pi] + ' ' + [attributeList] + ' ('+ [query] + ')'
 
 [pi] => 'PI'
 [pi] => 'PROJECT'
@@ -40,15 +40,16 @@
 [rho] => 'ρ'
 [rho] => 'RENAME'
 
+[join] => [joinSymbol] + ' ' + [condition] + ' (' + [query] + [comma] + [query] + ')'
 [join] => [joinSymbol] + '(' + [query] + [comma] + [query] + ')'
 
-[joinSymbol] => ' JOIN ' + [condition]
-[joinSymbol] => ' ⋈ ' + [condition]
+[joinSymbol] => 'JOIN' 
+[joinSymbol] => '⋈'
 
 
 [setOperation] => [union]
 [setOperation] => [intersection]
-[setOPeration] => [cartesian]
+[setOperation] => [cartesian]
 [setOperation] => [difference]
 
 
