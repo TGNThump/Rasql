@@ -1,18 +1,22 @@
-/*
-*  General CSS 
-*   - buttons
-*   - text areas etc..
-*/
+/**********************
+*  General CSS        *
+*   - buttons         *
+*   - text areas etc..*
+**********************/
 
-/*
-* 
-* View 1 - Specific CSS
-*
-*/
 
+
+
+/************************
+* View 1 - Specific CSS *
+************************/
 body {
   background-color: #E8E8E8;
 }
+
+/*
+* Element CSS
+*/
 
 /* TopBarButton */
 .TopBarButton { 
@@ -122,12 +126,19 @@ body {
   background: rgba(252,252,252,1);
 }
 
+/*
+* ID Based CSS
+*/
+
 #logo{
     display:block;
     margin:auto;
 }
 
-/* Divs */
+/*
+* Divs 
+*/
+
 .PageArea{
     margin: 0 auto;
     width: 60%; 
