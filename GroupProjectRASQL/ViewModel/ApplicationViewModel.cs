@@ -1,5 +1,6 @@
 ﻿using GroupProjectRASQL.Framework;
 using GroupProjectRASQL.Parser;
+using GroupProjectRASQL.Translator;
 using Neutronium.MVVMComponents;
 using Neutronium.MVVMComponents.Relay;
 using System;
@@ -43,7 +44,9 @@ namespace GroupProjectRASQL.ViewModel
                         output += state.ToString() + "<br />";
                     }
                 }
-            });
+
+                output += SqlToRa.TranslateQuery(tree);
+                });
         }
 
         public void outputTree(TreeNode<String> tree, int depth = 0)
