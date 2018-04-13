@@ -49,7 +49,7 @@ namespace GroupProjectRASQL.ViewModel
         public void outputTree(TreeNode<String> tree, int depth = 0)
         {
             for (int i = 0; i < depth; i++) output += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            output += tree.Data += "<br />";
+            output += tree.Data + "<br />";
             foreach (TreeNode<String> child in tree.Children) outputTree(child, depth + 1);
         }
     }
