@@ -4,9 +4,6 @@
 *   - text areas etc..*
 **********************/
 
-
-
-
 /************************
 * View 1 - Specific CSS *
 ************************/
@@ -55,8 +52,8 @@ body {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   cursor: pointer;
-  padding: 10px 20px;
-  border: none;
+  padding: 10px 19px;
+  border-radius: 2px;
   font: normal 16px/normal "Times New Roman", Times, serif;
   color: rgba(255,255,255,0.9);
   -o-text-overflow: clip;
@@ -79,7 +76,7 @@ body {
 
 /* LowerBarButton */
 .LowerBarButton {
-  width: 49.6%;
+  width: 49.8%;
   cursor: pointer;
   padding: 10px 0px;
   font: normal 16px/normal Arial Black, Gadget, sans-serif;
@@ -118,17 +115,14 @@ body {
 .PageArea{
     margin: 0 auto;
     width: 60%; 
-    background: rgba(252,232,252,1);
 }
 
-.LogoArea{
-    background: rgba(252,252,252,1);
+.LogoArea{ 
 }
 
 .ParseArea{
-    margin-top: 5%;
-    margin-bottom: 10%;
-    background: rgba(252,252,252,1);
+    margin-top: 3%;
+    margin-bottom: 8%;
 }
 
 .InformationArea{
