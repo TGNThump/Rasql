@@ -2,14 +2,12 @@ var editor;
 $(document).ready(function(){
 	var code = $(".TextArea")[0];
 	editor =  CodeMirror.fromTextArea(code, {
-		value: "SELECT * FROM table;",
 		lineNumbers : true,
-		readOnly: false, 
-   		mode: "SQL"
-	});
+		mode: "sql"
+	}); 
 });  
 
-// lets not talk about this - it works tho
+// lets not talk about this - it works tho 
 function sqlOnClick(){
 	document.getElementById("tb1").innerHTML = "SELECT";
 	document.getElementById("tb2").innerHTML = "FROM";
@@ -43,4 +41,13 @@ function raOnClick(){
 function tButtonOnClick(id){
 	var operator = document.getElementById(id).innerHTML;
 	editor.setValue(editor.getValue() + operator);
+	editor.focus();
+}
+
+function parseOnClick(){
+	var code = editor.getValue();
+}
+
+function switchViewsOnClick(){
+
 }
