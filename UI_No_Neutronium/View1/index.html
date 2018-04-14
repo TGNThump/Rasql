@@ -6,13 +6,15 @@
     <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="plugin/codemirror/mode/sql/sql.js"></script>
     <script type="text/javascript" src="script.js"></script>
   </head>  
   <body>
     <div class="PageArea" id="page">
       <!-- Logo/Title -->
+      &nbsp;
       <div class="LogoArea" id="logo">
-          <img src="https://tinyurl.com/y8qb5bv7" id="logo" alt="Mountain View">
+          <img src="https://tinyurl.com/ybjx4cto" id="logo" alt="Mountain View">
       </div>
       <!-- Input Area -->
       <div class="ParseArea" id="outer">
@@ -25,7 +27,7 @@
               RA
             </button>
           </div>
-          <!-- Actual Taskbar -->
+          <!-- Actual Taskbar (RA is the default setting)-->
           <div id="taskbar">
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb1">π</button>
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb2">σ</button>
@@ -42,14 +44,14 @@
           </div>
           <!-- Text Area -->
           <div id="parseTextArea">
-            <textarea class="TextArea"></textarea>
+            <textarea class="TextArea"></textarea> 
           </div>
           <!-- Parse/View Buttons -->
         <div id="lowerbar">
-              <button type="button" class="LowerBarButton" id="parse">
+              <button type="button" class="LowerBarButton" onclick="parseOnClick()" id="parse">
                 Parse
               </button>
-              <button type="button" class="LowerBarButton" id="switch">
+              <button type="button" class="LowerBarButton" onclick="switchViewsOnClick()" id="switch">
                 Switch View
               </button>
           </div>
