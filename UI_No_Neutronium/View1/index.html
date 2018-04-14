@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="script.js"></script>
+<html lang="en"> 
+  <head> 
     <link rel="stylesheet" type="text/css" href="style.css"/>
-  </head> 
+    <link rel="stylesheet" type="text/css" href="plugin/codemirror/lib/codemirror.css"/>
+    <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+  </head>  
   <body>
     <div class="PageArea" id="page">
       <!-- Logo/Title -->
@@ -38,7 +42,7 @@
           </div>
           <!-- Text Area -->
           <div id="parseTextArea">
-            <textarea class="parseTextArea" id="textArea" rows="20" cols="50"></textarea>
+            <textarea class="TextArea"></textarea>
           </div>
           <!-- Parse/View Buttons -->
         <div id="lowerbar">
@@ -63,3 +67,5 @@
           <p>Group 17: Anna, Ben, Duncan, Paulo, Tom and Robin.</p>
       </div>
     </div>
+  </body>
+</html>
