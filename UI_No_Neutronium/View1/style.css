@@ -102,30 +102,6 @@ body {
   background: rgba(23,216,2,0.9);
 }
 
-.parseTextArea {
-  width: 99%;
-  border: 1px solid #b7b7b7;
-  -webkit-border-radius: 3px;
-  border-radius: 0px;
-  font: normal 16px/normal "Lucida Console", Monaco, monospace;
-  color: rgba(0,142,198,1);
-  -o-text-overflow: clip;
-  text-overflow: clip;
-  background: rgba(255,240,196,1);
-  -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
-  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.2) inset;
-  text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
-  -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-
-.parseTextArea:hover {
-  font: normal 16px/normal "Lucida Console", Monaco, monospace;
-  background: rgba(252,252,252,1);
-}
-
 /*
 * ID Based CSS
 */
