@@ -13,8 +13,8 @@
 [pi] => 'PROJECT'
 [pi] => 'π'
 
-[attributeList] => [string]
-[attributeList] => [string] + [comma] + [attributeList]
+[attributeList] => [field]
+[attributeList] => [field] + [comma] + [attributeList]
 
 
 [selection] => [sigma] + ' ' + [condition] + ' (' + [query] + ')'
