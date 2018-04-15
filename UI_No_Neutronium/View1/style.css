@@ -1,15 +1,24 @@
+/**********************
+*  General CSS        *
+*   - buttons         *
+*   - text areas etc..*
+**********************/
+
+/************************
+* View 1 - Specific CSS *
+************************/
 body {
   background-color: #E8E8E8;
 }
 
-.TopBarButton {
-  display: inline-block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  cursor: pointer;
+/*
+* Element CSS
+*/
+
+/* TopBarButton */
+.TopBarButton { 
+  width: 15%;
   padding: 10px 20px;
-  border: 1px solid #018dc4;
   -webkit-border-radius: 3px;
   border-radius: 3px;
   font: normal 16px/normal Arial Black, Gadget, sans-serif;
@@ -25,7 +34,7 @@ body {
   -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
   transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
-
+ 
 .TopBarButton:hover {
   color: rgba(255,0,191,0.9);
 }
@@ -36,14 +45,15 @@ body {
   box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset;
 }
 
+/* TaskBarButton */
 .TaskBarButton {
   display: inline-block;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   cursor: pointer;
-  padding: 10px 20px;
-  border: none;
+  padding: 10px 19px;
+  border-radius: 2px;
   font: normal 16px/normal "Times New Roman", Times, serif;
   color: rgba(255,255,255,0.9);
   -o-text-overflow: clip;
@@ -64,42 +74,11 @@ body {
   background: rgba(23,216,2,0.9);
 }
 
-.parseTextArea {
-  display: inline-block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  padding: 10px 20px;
-  border: 1px solid #b7b7b7;
-  -webkit-border-radius: 3px;
-  border-radius: 0px;
-  font: normal 16px/normal "Lucida Console", Monaco, monospace;
-  color: rgba(0,142,198,1);
-  -o-text-overflow: clip;
-  text-overflow: clip;
-  background: rgba(255,240,196,1);
-  -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
-  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.2) inset;
-  text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
-  -webkit-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  -moz-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  -o-transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-  transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-
-.parseTextArea:hover {
-  font: normal 16px/normal "Lucida Console", Monaco, monospace;
-  background: rgba(252,252,252,1);
-}
-
+/* LowerBarButton */
 .LowerBarButton {
-  display: inline-block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
+  width: 49.8%;
   cursor: pointer;
-  padding: 10px 20px;
-  border: 2px solid #018dc4;
+  padding: 10px 0px;
   font: normal 16px/normal Arial Black, Gadget, sans-serif;
   color: rgba(255,255,255,0.9);
   -o-text-overflow: clip;
@@ -118,4 +97,48 @@ body {
 
 .LowerBarButton:active {
   background: rgba(23,216,2,0.9);
+}
+
+/*
+* ID Based CSS
+*/
+
+#logo{
+    display:block;
+    margin:auto;
+}
+
+/*
+* Divs 
+*/
+
+.PageArea{
+    margin: 0 auto;
+    width: 60%; 
+}
+
+.LogoArea{ 
+}
+
+.ParseArea{
+    margin-top: 3%;
+    margin-bottom: 8%;
+}
+
+.InformationArea{
+  background: rgba(252,252,252,1); 
+  overflow: hidden;
+  border: 1px solid rgba(158,158,158,1);
+  font: normal 16px/1 "Times New Roman", Times, serif;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  background: #efffbf;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+}
+
+.InformationArea:hover {
+  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
 }

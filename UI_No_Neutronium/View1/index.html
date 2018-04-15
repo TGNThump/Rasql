@@ -1,54 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-  </head>
+<html lang="en"> 
+  <head> 
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="plugin/codemirror/lib/codemirror.css"/>
+    <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="plugin/codemirror/mode/sql/sql.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+  </head>  
   <body>
-  	<!-- Logo/Title -->
-  	<div id="logo">
-    	  <h1> 
-        	Group 17 - Online Query Plan Tool
-        </h1>
-    </div>
-  	<!-- Input Area -->
-    <div id="outer">
-    	<!-- SQL/RA Taskbar Toggle -->
-        <div id="togglebar">
-        	<button type="button" class="TopBarButton" id="SQL">
-            SQL
-          </button>
-          <button type="button" class="TopBarButton" id="RA">
-            RA
-          </button>
-        </div>
-        <!-- Actual Taskbar -->
-        <div id="taskbar">
-        	  <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-            <button type="button" class="TaskBarButton" id="">[]</button>
-        </div>
-        <!-- Text Area -->
-        <div id="parseTextArea">
-          <textarea class="parseTextArea" rows="4" cols="50"></textarea>
-        </div>
-        <!-- Parse/View Buttons -->
-    	<div id="lowerbar">
-        	  <button type="button" class="LowerBarButton" id="PARSE">
-            	Parse
+    <div class="PageArea" id="page">
+      <!-- Logo/Title -->
+      &nbsp;
+      <div class="LogoArea" id="logo">
+          <img src="https://tinyurl.com/ybjx4cto" id="logo" alt="Mountain View">
+      </div>
+      <!-- Input Area -->
+      <div class="ParseArea" id="outer">
+        <!-- SQL/RA Taskbar Toggle -->
+          <div id="togglebar">
+            <button type="button" id="sqltbutton" class="TopBarButton" onclick="sqlOnClick()" id="SQL">
+              SQL
             </button>
-            <button type="button" class="LowerBarButton" id="SWITCH">
-            	Switch View
+            <button type="button" onclick="raOnClick()" class="TopBarButton" id="RA">
+              RA
             </button>
-        </div>
-    </div>
-    <!-- Infobox below -->
-    <div id="infobox">
-        
+          </div>
+          <!-- Actual Taskbar (RA is the default setting)-->
+          <div id="taskbar">
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb1">π</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb2">σ</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb3">ρ</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb4">∩</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb5">∪</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb6">⨯</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb7">⨝</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb8">⟕</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb9">⟖</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb10">⟗</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb11">⋉</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb12">⋊</button>
+          </div>
+          <!-- Text Area -->
+          <div id="parseTextArea">
+            <textarea class="TextArea"></textarea> 
+          </div>
+          <!-- Parse/View Buttons -->
+        <div id="lowerbar">
+              <button type="button" class="LowerBarButton" onclick="parseOnClick()" id="parse">
+                Parse
+              </button>
+              <button type="button" class="LowerBarButton" onclick="switchViewsOnClick()" id="switch">
+                Switch View
+              </button>
+          </div>
+      </div>
+      <!-- Infobox below -->
+      <div class="InformationArea" id="infobox">
+          <h3>Useful Links:</h2>
+          <p>
+             <a href="https://www.w3schools.com/sql/sql_syntax.asp">SQL Syntax</a>
+          </p>
+          <p>
+            <a href="https://www.tutorialspoint.com/dbms/relational_algebra.htm">RA Syntax</a>
+          </p>
+          <h3>Acknowledgements:</h2>
+          <p>Group 17: Anna, Ben, Duncan, Paulo, Tom and Robin.</p>
+      </div>
     </div>
   </body>
 </html>
