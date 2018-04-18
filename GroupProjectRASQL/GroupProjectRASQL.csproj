@@ -114,6 +114,7 @@
     <Compile Include="Framework\ApplicationMode.cs" />
     <Compile Include="Framework\JobManagement.cs" />
     <Compile Include="Framework\Reactive.cs" />
+    <Compile Include="Translator\SqlToRa.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\State.cs" />
     <Compile Include="Parser\TreeNode.cs" />
