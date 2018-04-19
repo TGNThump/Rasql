@@ -46,8 +46,9 @@ function tButtonOnClick(id){
 
 function parseOnClick(){
 	var code = editor.getValue();
+	window.location = "view2.html";
 }
 
 function switchViewsOnClick(){
-
+	window.location = "view3.html";
 }
