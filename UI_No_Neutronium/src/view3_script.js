@@ -7,7 +7,10 @@ $(document).ready(function(){
 });  
  
 function parseOnClick(){
-	var xml = editor.getValue(); 
+	var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
+				+ "<root>" 
+				+ editor.getValue()
+				+ "</root>";
 	var x2js = new X2JS();
 	alert("converting: "+xml);
 	var jsonObj = x2js.xml_str2json( xml );
