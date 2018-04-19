@@ -137,7 +137,7 @@ body {
   text-overflow: ellipsis;
   background: #efffbf;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
-}
+} 
 
 .InformationArea:hover {
   -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
@@ -153,3 +153,34 @@ body {
 * View 3 - Specific CSS *
 ************************/
 
+table, td, th {   
+	background: rgba(252,252,252,1);  
+    border: 1px solid #ddd;
+    text-align: left;
+    font: normal 16px/1 "Times New Roman", Times, serif;
+    color: rgba(255,255,255,1);
+	text-align: center;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	background: #efffbf;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+}
+
+th{
+	font: normal 16px/normal Arial Black, Gadget, sans-serif;
+	background: rgba(252,152,252,1);  
+}
+
+th:hover {
+  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+}

@@ -7,13 +7,15 @@
  		<script type="text/javascript" src="jquery.js"></script>
  		<script type="text/javascript" src="plugins/codemirror/lib/codemirror.js"></script>
  		<script type="text/javascript" src="view3_script.js"></script>
- 	</head>
+ 	</head> 
 	<body> 
-		<div id="parseTextArea"> 
-            <textarea class="TextArea"></textarea> 
+		<div class="TextArea" >  
+            <textarea class="CodeArea"></textarea> 
         </div>
-        <button type="button" class="LowerBarButton" onclick="parseOnClick()" id="parse">
-                Parse
-        </button>
-	</body>
+        <div class="ButtonArea">
+        	<button type="button" class="LowerBarButton" onclick="saveOnClick()" id="save"> Save </button>
+        	<button type="button" class="LowerBarButton" onclick="previewOnClick()" id="preview"> Preview </button>
+        </div> 	 
+        <div class="PreviewArea" id="preview"></div>
+	</body> 
 </html>
