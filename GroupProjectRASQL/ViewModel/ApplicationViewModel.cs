@@ -16,14 +16,27 @@ namespace GroupProjectRASQL.ViewModel
         public string output { get; private set; } = "";
         //public string output { get { return output; } private set { Set(ref output, value); }}
 
-        public ISimpleCommand Parse { get; private set; }
+        public ISimpleCommand<String> Parse { get; private set; }
 
         public ApplicationViewModel()
         {
-            Parser.Parser parser = new Parser.Parser();
+            Parser.Parser sqlParser = new Parser.Parser("sql");
+            Parser.Parser raParser = new Parser.Parser("ra");
 
-            Parse = new RelaySimpleCommand(delegate()
+            Parse = new RelaySimpleCommand<String>(delegate(String type)
             {
+                Parser.Parser parser;
+                switch (type)
+                {
+                    case "sql":
+                        parser = sqlParser;
+                        break;
+                    case "ra":
+                        parser = raParser;
+                        break;
+                    default: return;
+                }
+
                 if (input_sql == null) return;
                 output = "Parse: " + input_sql + "<br />";
                 List<State>[] stateSets = parser.Parse(input_sql);
@@ -44,6 +57,8 @@ namespace GroupProjectRASQL.ViewModel
                         output += state.ToString() + "<br />";
                     }
                 }
+
+                if (type == "ra") return;
 
                 output += SqlToRa.TranslateQuery(tree);
                 });
