@@ -23,13 +23,14 @@ function saveOnClick(){
 	var jsonObj = x2js.xml_str2json( xml );
 
 	var status = isValidJsonObject(jsonObj);
-	if( !status[0] ){
-		// invalid
-	}else{
-		editor.setValue(JSON.stringify(jsonObj));
-		editor.focus();
-	}
+	
 	alert(status[1]);
+	if( !status[0] )
+		return;
+	
+	editor.setValue(JSON.stringify(jsonObj));
+	editor.focus();
+	
 	current_jsonObj = jsonObj;
 }
 
