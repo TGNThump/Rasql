@@ -12,19 +12,19 @@
   <body>
     <div class="PageArea" id="page">
       <!-- Logo/Title -->
-      &nbsp;
-      <div class="LogoArea" id="logo">
-          <img src="https://cdn.discordapp.com/attachments/407913888433045505/436155179193335819/paulo.png" id="logo" alt="Mountain View">
+      <div class="LogoArea">
+          <h1 id="logoHeader">Relational Algebra Educational Tool</h1>
+          <h2 id="logoUnder">Group 17 - COMP2something</h2>
       </div>
-      <!-- Input Area -->
+      <!-- Input Area --> 
       <div class="ParseArea" id="outer">
         <!-- SQL/RA Taskbar Toggle -->
           <div id="togglebar">
             <button type="button" id="sqltbutton" class="TopBarButton" onclick="sqlOnClick()" id="SQL">
-              SQL
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SQL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
             <button type="button" onclick="raOnClick()" class="TopBarButton" id="RA">
-              RA
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
             </button>
           </div>
           <!-- Actual Taskbar (RA is the default setting)-->
@@ -51,8 +51,8 @@
               <button type="button" class="LowerBarButton" onclick="parseOnClick()" id="parse">
                 Parse
               </button>
-              <button type="button" class="LowerBarButton" onclick="switchViewsOnClick()" id="switch">
-                Switch View
+              <button type="button" class="LowerBarButton" onclick="datasetCreationViewOnClick()" id="switch">
+                Dataset Creation View
               </button>
           </div>
       </div>
