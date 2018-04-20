@@ -14,7 +14,7 @@ namespace GroupProjectRASQL.Operations
 
         public override string ToString()
         {
-            return "[relation " + name + "]";
+            return "[Relation " + name + "]";
         }
     }
 }
