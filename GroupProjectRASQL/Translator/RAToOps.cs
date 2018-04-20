@@ -44,17 +44,39 @@ namespace GroupProjectRASQL.Translator
                     return cartesian;
 
                 case "[projection]":
+                    TreeNode<Operation> projection = new TreeNode<Operation>(new Projection(root.Child(2)));
+                    projection.AddChild(Translate(root.Child(4)));
+                    return projection;
 
                 case "[selection]":
-                case "[rename]":
+                    TreeNode<Operation> selection = new TreeNode<Operation>(new Selection(root.Child(2)));
+                    selection.AddChild(Translate(root.Child(4)));
+                    return selection;
+
+                case "[attRename]":
+                    TreeNode<String> paramaters = new TreeNode<String>("");
+                    paramaters.AddChild(root.Child(2));
+                    paramaters.AddChild(root.Child(4));
+
+                    TreeNode<Operation> attRename = new TreeNode<Operation>(new RenameAttribute(paramaters));
+                    attRename.AddChild(Translate(root.Child(6)));
+                    return attRename;
+                case "[relRename]":
+                    TreeNode<Operation> relRename = new TreeNode<Operation>(new RenameRelation(root.Child(2)));
+                    relRename.AddChild(Translate(root.Child(4)));
+                    return relRename;
+
                 case "[join]":
-                
-                    break;
+                    bool hasCondition = root.Children.Count > 6;
+
+                    TreeNode<Operation> join = new TreeNode<Operation>(new Join(hasCondition ? root.Child(2) : null));
+                    join.AddChild(Translate(root.Child((hasCondition ? 2 : 0) + 2)));
+                    join.AddChild(Translate(root.Child((hasCondition ? 2 : 0) + 4)));
+                    return join;
             }
 
             if (root.Children.Count == 1) return Translate(root.Child(0));
             throw new Exception("Can't parse " + root.TreeToString());
-            return null;
         }
     }
 }

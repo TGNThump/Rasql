@@ -114,6 +114,11 @@
     <Compile Include="Framework\ApplicationMode.cs" />
     <Compile Include="Framework\JobManagement.cs" />
     <Compile Include="Framework\Reactive.cs" />
+    <Compile Include="Operations\RenameRelation.cs" />
+    <Compile Include="Operations\Join.cs" />
+    <Compile Include="Operations\Projection.cs" />
+    <Compile Include="Operations\RenameAttribute.cs" />
+    <Compile Include="Operations\Selection.cs" />
     <Compile Include="Operations\SetOperations.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\Relation.cs" />
