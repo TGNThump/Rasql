@@ -24,6 +24,7 @@
 
 [condition] => '(' + [condition] + ')'
 [condition] => [value] + [operator] + [value]
+[condition] => [value] + " " + [operator] + " " +  [value]
 [condition] => [condition] + ' AND ' + [condition]
 [condition] => [condition] + ' OR ' + [condition]
 [condition] => 'NOT ' + [condition]
