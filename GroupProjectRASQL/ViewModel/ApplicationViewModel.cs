@@ -47,8 +47,8 @@ namespace GroupProjectRASQL.ViewModel
                 stateSets = parser.FilterAndReverse(stateSets);
 
                 TreeNode<String> tree = parser.parse_tree(input_sql, stateSets);
-                outputTree(tree);
 
+                /*
                 for (int i = 0; i < stateSets.Length; i++)
                 {
                     output += "=== " + i + " ===" + "<br />";
@@ -56,19 +56,17 @@ namespace GroupProjectRASQL.ViewModel
                     {
                         output += state.ToString() + "<br />";
                     }
+                }*/
+
+                if (type == "sql")
+                {
+                    output += tree.TreeToDebugString();
+                    output += SqlToRa.TranslateQuery(tree);
+                } else if (type == "ra")
+                {
+                    output += RAToOps.Translate(tree).TreeToDebugString();
                 }
-
-                if (type == "ra") return;
-
-                output += SqlToRa.TranslateQuery(tree);
                 });
-        }
-
-        public void outputTree(TreeNode<String> tree, int depth = 0)
-        {
-            for (int i = 0; i < depth; i++) output += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            output += tree.Data + "<br />";
-            foreach (TreeNode<String> child in tree.Children) outputTree(child, depth + 1);
         }
     }
 }

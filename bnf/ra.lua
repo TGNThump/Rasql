@@ -33,7 +33,7 @@
 [rename] => [attRename]
 [rename] => [relRename]
 
-[attRename] => [rho] + ' ' + [field] + '/' + [string] + ' (' + [query] + ')'
+[attRename] => [rho] + ' ' + [field] + [comma] + [field] + ' (' + [query] + ')'
 [relRename] => [rho] + ' ' + [string] + ' (' + [query] + ')'
 
 [rho] => 'RHO'
@@ -66,6 +66,7 @@
 [intersectSymbol] => 'N'
 
 [cartesian] => 'X(' + [query] + [comma] + [query] + ')'
+[cartesian] => 'x(' + [query] + [comma] + [query] + ')'
 
 [difference] => '-(' + [query] + [comma] + [query] + ')'
 
