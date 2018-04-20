@@ -20,7 +20,7 @@ function sqlOnClick(){
 	document.getElementById("tb9").innerHTML = "EXISTS";
 	document.getElementById("tb10").innerHTML = "IN";
 	document.getElementById("tb11").innerHTML = "LIKE";
-	document.getElementById("tb12").innerHTML = "NOT";
+	document.getElementById("tb12").innerHTML = "*";
 }
 
 function raOnClick(){
@@ -49,6 +49,6 @@ function parseOnClick(){
 	window.location = "view2.html";
 }
 
-function switchViewsOnClick(){
+function datasetCreationViewOnClick(){
 	window.location = "view3.html";
 }

@@ -4,24 +4,78 @@
 *   - text areas etc..*
 **********************/
 
+body {
+  background-color: #E8E8E8;
+  background-image: url("tile_background.png");
+  background-repeat: repeat;
+}
+
+table, td, th {   
+	background: rgba(252,252,252,1);  
+    border: 1px solid #ddd; 
+    text-align: left;
+    font: normal 16px/1 "Gruppo", Times, serif;
+    color: rgba(255,255,255,1);
+	text-align: center;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	background: #efffbf;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+}
+
+th{
+	font: bold 22px/normal "Gruppo", Gadget, sans-serif;
+	background: rgba(252,152,252,1);  
+}
+
+th:hover {
+  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+}
+
+/* General Font */
+/* latin-ext */
+@font-face {
+  font-family: 'Gruppo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Gruppo'), url(https://fonts.gstatic.com/s/gruppo/v8/WwkfxPmzE06v_ZW1UHrBCIE.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Gruppo';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Gruppo'), url(https://fonts.gstatic.com/s/gruppo/v8/WwkfxPmzE06v_ZW1XnrB.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+ 
+
 /************************
 * View 1 - Specific CSS *
 ************************/
-body {
-  background-color: #E8E8E8;
-}
-
 /*
 * Element CSS
 */
 
 /* TopBarButton */
 .TopBarButton { 
-  width: 15%;
+  display: inline-block;
   padding: 10px 20px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
-  font: normal 16px/normal Arial Black, Gadget, sans-serif;
+  text-align: center;
+  font: bold 22px/normal "Gruppo", Gadget, sans-serif;
   color: rgba(255,255,255,0.9);
   -o-text-overflow: clip;
   text-overflow: clip;
@@ -47,14 +101,12 @@ body {
 
 /* TaskBarButton */
 .TaskBarButton {
+  text-align: center;
   display: inline-block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
   cursor: pointer;
   padding: 10px 19px;
   border-radius: 2px;
-  font: normal 16px/normal "Times New Roman", Times, serif;
+  font: normal 16px/normal "Gruppo", Times, serif;
   color: rgba(255,255,255,0.9);
   -o-text-overflow: clip;
   text-overflow: clip;
@@ -70,7 +122,7 @@ body {
   background: rgba(195,255,0,0.9);
 }
 
-.TaskBarButton:active {
+.TaskBarButton:active { 
   background: rgba(23,216,2,0.9);
 }
 
@@ -78,8 +130,8 @@ body {
 .LowerBarButton {
   width: 49.8%;
   cursor: pointer;
-  padding: 10px 0px;
-  font: normal 16px/normal Arial Black, Gadget, sans-serif;
+  padding: 10px 10px;
+  font: bold 30px/normal "Gruppo", Gadget, sans-serif;
   color: rgba(255,255,255,0.9);
   -o-text-overflow: clip;
   text-overflow: clip;
@@ -99,13 +151,24 @@ body {
   background: rgba(23,216,2,0.9);
 }
 
-/*
+/* 
 * ID Based CSS
 */
 
-#logo{
-    display:block;
-    margin:auto;
+#logoHeader{white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+	font: bold 65px/1 "Gruppo", Times, serif;
+}
+
+#logoUnder{
+	font: normal 30px/1 "Gruppo", Times, serif;
+}
+
+#taskbar{
+	white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 /*
@@ -118,30 +181,35 @@ body {
 }
 
 .LogoArea{ 
-  
+  	white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center;
+	vertical-align: middle;
 }
 
 .ParseArea{
-    margin-top: 3%;
-    margin-bottom: 8%;
+    margin-top: 1%;
+    margin-bottom: 5%;
 }
 
-.InformationArea{
+.InformationArea{ 
   background: rgba(252,252,252,1); 
   overflow: hidden;
   border: 1px solid rgba(158,158,158,1);
-  font: normal 16px/1 "Times New Roman", Times, serif;
-  color: rgba(255,255,255,1);
+  font: normal 18px/1 "Gruppo", Times, serif;
+  color: rgba(0,0,0,1);
   text-align: center;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
   background: #efffbf;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
 } 
 
 .InformationArea:hover {
-  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
-  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5);
+  box-shadow: 0 0 6px 2px rgba(0,0,0,0.4);
+  color: rgba(255,255,255,1);
+  text-shadow: 1px 1px 10px rgba(0,0,0,1);
 }
 
 /************************
@@ -152,35 +220,37 @@ body {
 /************************
 * View 3 - Specific CSS *
 ************************/
-
-table, td, th {   
-	background: rgba(252,252,252,1);  
-    border: 1px solid #ddd;
-    text-align: left;
-    font: normal 16px/1 "Times New Roman", Times, serif;
-    color: rgba(255,255,255,1);
-	text-align: center;
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
-	background: #efffbf;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+.BackButton{
+  width: 100%;
+  cursor: pointer;
+  padding: 10px 20px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  text-align: center;
+  font: bold 30px/normal "Gruppo", Gadget, sans-serif;
+  color: rgba(255,255,255,0.9);
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  background: #c5ff07;
+  -webkit-box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) ;
+  box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) ;
+  text-shadow: -1px -1px 0 rgba(15,73,168,0.66) ;
+  -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+  -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+  -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+  transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-table {
-    border-collapse: collapse;
-    width: 100%;
+.BackButton:hover {
+  color: rgba(255,0,191,0.9);
 }
 
-th, td {
-    padding: 15px;
+.BackButton:active {
+  color: rgba(255,255,255,0.9);
+  -webkit-box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset;
+  box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset; 
 }
 
-th{
-	font: normal 16px/normal Arial Black, Gadget, sans-serif;
-	background: rgba(252,152,252,1);  
-}
-
-th:hover {
-  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
-  box-shadow: 0 0 6px 2px rgba(0,0,0,0.5) ;
+.TableTitle{
+	font: normal 30px/1 "Gruppo", Times, serif; 
 }
