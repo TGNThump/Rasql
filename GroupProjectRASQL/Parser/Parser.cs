@@ -49,8 +49,9 @@ namespace GroupProjectRASQL.Parser
             }},
         };
 
-        public Parser(String path = @"..\..\..\bnf\bnfregexp-sql.lua")
+        public Parser(String type = "sql")
         {
+            String path = @"..\..\..\bnf\" + type + ".lua";
             String[] lines = System.IO.File.ReadAllLines(path);
             
             for(int i=0; i<lines.Length; i++)

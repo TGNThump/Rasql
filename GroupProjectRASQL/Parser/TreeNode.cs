@@ -64,6 +64,13 @@ namespace GroupProjectRASQL.Parser
             return childNode;
         }
 
+        public void RemoveChildren()
+        {
+            this.Children.Clear();
+            this.ElementsIndex.Clear();
+            this.ElementsIndex.Add(this);
+        }
+
         public override string ToString()
         {
             return Data != null ? Data.ToString() : "[data null]";
@@ -110,6 +117,15 @@ namespace GroupProjectRASQL.Parser
 
             return childrenString;
 
+        }
+
+        public String TreeToDebugString(int depth = 0)
+        {
+            String ret = "";
+            for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            ret += Data + "<br />";
+            foreach (TreeNode<T> child in Children) ret += child.TreeToDebugString(depth + 1);
+            return ret;
         }
 
         public TreeNode<T> Child(int i) {

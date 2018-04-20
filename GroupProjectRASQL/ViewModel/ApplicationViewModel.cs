@@ -16,14 +16,27 @@ namespace GroupProjectRASQL.ViewModel
         public string output { get; private set; } = "";
         //public string output { get { return output; } private set { Set(ref output, value); }}
 
-        public ISimpleCommand Parse { get; private set; }
+        public ISimpleCommand<String> Parse { get; private set; }
 
         public ApplicationViewModel()
         {
-            Parser.Parser parser = new Parser.Parser();
+            Parser.Parser sqlParser = new Parser.Parser("sql");
+            Parser.Parser raParser = new Parser.Parser("ra");
 
-            Parse = new RelaySimpleCommand(delegate()
+            Parse = new RelaySimpleCommand<String>(delegate(String type)
             {
+                Parser.Parser parser;
+                switch (type)
+                {
+                    case "sql":
+                        parser = sqlParser;
+                        break;
+                    case "ra":
+                        parser = raParser;
+                        break;
+                    default: return;
+                }
+
                 if (input_sql == null) return;
                 output = "Parse: " + input_sql + "<br />";
                 List<State>[] stateSets = parser.Parse(input_sql);
@@ -34,8 +47,8 @@ namespace GroupProjectRASQL.ViewModel
                 stateSets = parser.FilterAndReverse(stateSets);
 
                 TreeNode<String> tree = parser.parse_tree(input_sql, stateSets);
-                outputTree(tree);
 
+                /*
                 for (int i = 0; i < stateSets.Length; i++)
                 {
                     output += "=== " + i + " ===" + "<br />";
@@ -43,17 +56,17 @@ namespace GroupProjectRASQL.ViewModel
                     {
                         output += state.ToString() + "<br />";
                     }
+                }*/
+
+                if (type == "sql")
+                {
+                    output += tree.TreeToDebugString();
+                    output += SqlToRa.TranslateQuery(tree);
+                } else if (type == "ra")
+                {
+                    output += RAToOps.Translate(tree).TreeToDebugString();
                 }
-
-                output += SqlToRa.TranslateQuery(tree);
                 });
-        }
-
-        public void outputTree(TreeNode<String> tree, int depth = 0)
-        {
-            for (int i = 0; i < depth; i++) output += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            output += tree.Data + "<br />";
-            foreach (TreeNode<String> child in tree.Children) outputTree(child, depth + 1);
         }
     }
 }

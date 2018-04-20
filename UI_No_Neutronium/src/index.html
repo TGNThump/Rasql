@@ -2,29 +2,29 @@
 <html lang="en"> 
   <head> 
     <link rel="stylesheet" type="text/css" href="style.css"/>
-    <link rel="stylesheet" type="text/css" href="plugin/codemirror/lib/codemirror.css"/>
+    <link rel="stylesheet" type="text/css" href="plugins/codemirror/lib/codemirror.css"/>
     <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
-    <script type="text/javascript" src="plugin/codemirror/mode/sql/sql.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="plugins/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="plugins/codemirror/mode/sql/sql.js"></script>
+    <script type="text/javascript" src="view1_script.js"></script>
   </head>  
   <body>
     <div class="PageArea" id="page">
       <!-- Logo/Title -->
-      &nbsp;
-      <div class="LogoArea" id="logo">
-          <img src="https://tinyurl.com/ybjx4cto" id="logo" alt="Mountain View">
+      <div class="LogoArea">
+          <h1 id="logoHeader">Relational Algebra Educational Tool</h1>
+          <h2 id="logoUnder">Group 17 - COMP2something</h2>
       </div>
-      <!-- Input Area -->
+      <!-- Input Area --> 
       <div class="ParseArea" id="outer">
         <!-- SQL/RA Taskbar Toggle -->
           <div id="togglebar">
             <button type="button" id="sqltbutton" class="TopBarButton" onclick="sqlOnClick()" id="SQL">
-              SQL
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SQL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
             <button type="button" onclick="raOnClick()" class="TopBarButton" id="RA">
-              RA
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
             </button>
           </div>
           <!-- Actual Taskbar (RA is the default setting)-->
@@ -51,8 +51,8 @@
               <button type="button" class="LowerBarButton" onclick="parseOnClick()" id="parse">
                 Parse
               </button>
-              <button type="button" class="LowerBarButton" onclick="switchViewsOnClick()" id="switch">
-                Switch View
+              <button type="button" class="LowerBarButton" onclick="datasetCreationViewOnClick()" id="switch">
+                Dataset Creation View
               </button>
           </div>
       </div>
