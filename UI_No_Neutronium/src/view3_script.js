@@ -9,6 +9,11 @@ $(document).ready(function(){
 });  
 
 function saveOnClick(){
+	if(editor.getValue().length < 1){
+		alert("Editor is blank!")
+		return;
+	}
+
 	var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
 	+ "<root>"  
 	+ editor.getValue()
@@ -54,6 +59,9 @@ function previewOnClick(){
 *********************/
 
 function isValidJsonObject(jsonObj){
+	if( jsonObj == null )
+		return [false, "Document structure && syntax is incorrect!"];
+
 	if( jsonObj.root != "[object Object]" )
 		return [false, "Invalid initial document structure! (Probably just random stuff was entered)"];
 
@@ -62,7 +70,7 @@ function isValidJsonObject(jsonObj){
 		var firstKey;
 		for (var key2 in jsonObj.root[key]) {
 			console.log(key2);
-			if( !isNaN(key2) )
+			if( !isNaN(key2) && repeatCol != 1 )
 				return [false, "There is more than one table with the same name!"];
 			if ( repeatCol == -1 ){ 
 				repeatCol = jsonObj.root[key][key2].length;
