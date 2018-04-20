@@ -18,7 +18,7 @@
 [fromElement] => [join]
 [fromElement] => [table]
 [fromElement] => [fromElement] + ' AS ' + [table]
-[fromElement] => '(' + [query] + ')' + [table]
+[fromElement] => '(' + [query] + ') ' + [table]
 
 [join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
