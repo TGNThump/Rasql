@@ -4,8 +4,16 @@ var current_jsonObj;
 $(document).ready(function(){
 	var code = $(".CodeArea")[0];
 	editor =  CodeMirror.fromTextArea(code, {
-		lineNumbers : true, 	
-	});  
+		lineNumbers : true, 	 
+	});   
+
+	var json_str = localStorage.getItem('current_jsonObj');
+	if(json_str != null){
+		alert("Found an active data set! Previewing:");
+		current_jsonObj = JSON.parse(json_str);
+		editor.setValue(json_str);
+		previewOnClick();
+	}
 });  
 
 function saveOnClick(){
@@ -31,7 +39,10 @@ function saveOnClick(){
 	editor.setValue(JSON.stringify(jsonObj));
 	editor.focus();
 	
+	// Put the object into storage
 	current_jsonObj = jsonObj;
+	localStorage.setItem('current_jsonObj', JSON.stringify(jsonObj));
+	console.log("storing json!");
 }
 
 function backToParserOnClick(){ 
@@ -83,10 +94,10 @@ function isValidJsonObject(jsonObj){
 	}
 
 	return [ true, "Valid xml input! Nice!" ];
-}
+} 
 
 function buildHtmlTable(table, id) {
-	alert("test");
+	alert("Building table id: " + id);
 	console.log(table);
 	var columnSet = Object.keys(table);
 	console.log( columnSet.length );  
