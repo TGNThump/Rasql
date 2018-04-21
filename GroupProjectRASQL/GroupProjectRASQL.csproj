@@ -127,6 +127,7 @@
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\State.cs" />
     <Compile Include="Parser\TreeNode.cs" />
+    <Compile Include="Translator\sqlToRa.cs" />
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
