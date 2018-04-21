@@ -4,11 +4,24 @@ var current_jsonObj;
 $(document).ready(function(){
 	var code = $(".CodeArea")[0];
 	editor =  CodeMirror.fromTextArea(code, {
-		lineNumbers : true, 	
-	});  
+		lineNumbers : true, 	 
+	});   
+
+	var json_str = localStorage.getItem('current_jsonObj');
+	if(json_str != null){
+		alert("Found an active data set! Previewing:");
+		current_jsonObj = JSON.parse(json_str);
+		editor.setValue(json_str);
+		previewOnClick();
+	}
 });  
 
 function saveOnClick(){
+	if(editor.getValue().length < 1){
+		alert("Editor is blank!")
+		return;
+	}
+
 	var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" 
 	+ "<root>"  
 	+ editor.getValue()
@@ -18,14 +31,18 @@ function saveOnClick(){
 	var jsonObj = x2js.xml_str2json( xml );
 
 	var status = isValidJsonObject(jsonObj);
-	if( !status[0] ){
-		// invalid
-	}else{
-		editor.setValue(JSON.stringify(jsonObj));
-		editor.focus();
-	}
+	
 	alert(status[1]);
+	if( !status[0] )
+		return;
+	
+	editor.setValue(JSON.stringify(jsonObj));
+	editor.focus();
+	
+	// Put the object into storage
 	current_jsonObj = jsonObj;
+	localStorage.setItem('current_jsonObj', JSON.stringify(jsonObj));
+	console.log("storing json!");
 }
 
 function backToParserOnClick(){ 
@@ -54,6 +71,9 @@ function previewOnClick(){
 *********************/
 
 function isValidJsonObject(jsonObj){
+	if( jsonObj == null )
+		return [false, "Document structure && syntax is incorrect!"];
+
 	if( jsonObj.root != "[object Object]" )
 		return [false, "Invalid initial document structure! (Probably just random stuff was entered)"];
 
@@ -62,7 +82,7 @@ function isValidJsonObject(jsonObj){
 		var firstKey;
 		for (var key2 in jsonObj.root[key]) {
 			console.log(key2);
-			if( !isNaN(key2) )
+			if( !isNaN(key2) && repeatCol != 1 )
 				return [false, "There is more than one table with the same name!"];
 			if ( repeatCol == -1 ){ 
 				repeatCol = jsonObj.root[key][key2].length;
@@ -74,10 +94,10 @@ function isValidJsonObject(jsonObj){
 	}
 
 	return [ true, "Valid xml input! Nice!" ];
-}
+} 
 
 function buildHtmlTable(table, id) {
-	alert("test");
+	alert("Building table id: " + id);
 	console.log(table);
 	var columnSet = Object.keys(table);
 	console.log( columnSet.length );  

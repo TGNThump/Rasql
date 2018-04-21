@@ -24,18 +24,18 @@ function sqlOnClick(){
 }
 
 function raOnClick(){
-	document.getElementById("tb1").innerHTML = "π";
-	document.getElementById("tb2").innerHTML = "σ";
-	document.getElementById("tb3").innerHTML = "ρ";
-	document.getElementById("tb4").innerHTML = "∩";
-	document.getElementById("tb5").innerHTML = "∪";
-	document.getElementById("tb6").innerHTML = "⨯";
-	document.getElementById("tb7").innerHTML = "⨝";
-	document.getElementById("tb8").innerHTML = "⟕";
-	document.getElementById("tb9").innerHTML = "⟖";
-	document.getElementById("tb10").innerHTML = "⟗";
-	document.getElementById("tb11").innerHTML = "⋉";
-	document.getElementById("tb12").innerHTML = "⋊";
+	document.getElementById("tb1").innerHTML = "\u03C0";
+	document.getElementById("tb2").innerHTML = "\u03C3";
+	document.getElementById("tb3").innerHTML = "\u03C1";
+	document.getElementById("tb4").innerHTML = "\u22C2";
+	document.getElementById("tb5").innerHTML = "\u22C3";
+	document.getElementById("tb6").innerHTML = "\u2A2F";
+	document.getElementById("tb7").innerHTML = "\u2A1D";
+	document.getElementById("tb8").innerHTML = "\u22C9";
+	document.getElementById("tb9").innerHTML = "\u22CA";
+	document.getElementById("tb10").innerHTML = "-";
+	document.getElementById("tb11").innerHTML = "\u2227";
+	document.getElementById("tb12").innerHTML = "\u2228";
 }
  		
 function tButtonOnClick(id){
