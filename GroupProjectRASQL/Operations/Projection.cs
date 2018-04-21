@@ -7,8 +7,8 @@ using GroupProjectRASQL.Parser;
 
 namespace GroupProjectRASQL.Operations
 {
-    class Cartesion : Operation {}
-    class Union : Operation { }
-    class Intersect : Operation { }
-    class Difference : Operation { }
+    class Projection : Operation
+    {
+        public Projection(TreeNode<string> parameter) : base(parameter) { }
+    }
 }
