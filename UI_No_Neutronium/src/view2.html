@@ -2,40 +2,51 @@
 <html lang="en"> 
   <head> 
     <link rel="stylesheet" type="text/css" href="style.css"/>
-    <link rel="stylesheet" type="text/css" href="plugin/codemirror/lib/codemirror.css"/>
-    <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-    <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
-    <script type="text/javascript" src="plugin/codemirror/mode/sql/sql.js"></script>
-    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="jquery.js"></script> 
+    <script type="text/javascript" src="view2_script.js"></script>
   </head>  
   <body>
-  	<div class="Page">
-  		<div id="displayPanel">
-  		.
-  		</div>
-  		<div id="inputPanel">
-  			<div class="Title">
-  				Title
-  			</div>
-  			<div id="nodeSelectionArea">
-  				NodeSelectionArea
-  			</div>
-  			<div id="controlPanel">
-  				<div class="Taskbar">
-  					<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">1</button>
-  					<div id="dropdownText">Dropdown</div>
-  					<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">2</button>
-              		<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">3</button>
-  				</div>
-  				<div class="Taskbar">
-  					<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">4</button>
-              		<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">5</button>
-              		<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">6</button>
-              		<button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="...">7</button>
-  				</div> 
-  			</div>
-  		</div>
-  	</div>
+    <div class="Page">
+      <!--- Left side of the page -->
+      <div class="NodeSelectionArea"> 
+        <h2> Tree Preview Area (Not implemented yet)</h2>
+      </div>
+      <!--- Right side of the page -->
+      <div class="NodeControlsArea">
+        <div class="NodeControlsSection" id="display">
+          <!--- header -->
+          <div class="NodeControlsSubSection" id="1">
+            <h1 id="logoHeader">Plan Optimiser</h1>
+            <button type="button" class="TopBarButton" onclick="backToView1OnClick()" id="backtoview1">Back to Parser</button>
+          </div>
+          <div class="NodeControlsSubSection" id="2">
+            <!--- display area -->
+            <textarea class="TextArea" rows="4" cols="50">
+              
+            </textarea>
+          </div>
+        </div>
+        <div class="NodeControlsSection" id="control">
+          <!--- Control Bar1 -->
+          <div class="NodeControlsBar" id="bar1">
+            <button type="button" class="TaskBarButton" onclick="helpOnClick()" id="help">?</button>
+            <select>
+              <option value="">Heuristic 1</option>
+              <option value="">Heuristic 2</option>
+              <option value="">Heuristic 3</option>
+              <option value="">Heuristic 4</option>
+            </select>
+            <button type="button" class="TaskBarButton" onclick="applyHeuristicOnClick()" id="apply">Apply Heuristic</button>
+          </div>
+          <!--- Control Bar2 -->
+          <div class="NodeControlsBar" id="bar2">
+            <button type="button" class="TaskBarButton" onclick="backOnClick()" id="back"><<</button>
+            <button type="button" class="TaskBarButton" onclick="fowardOnClick()" id="foward">>></button>
+            <button type="button" class="TaskBarButton" onclick="automateOnClick()" id="automate">Automate</button>
+            <button type="button" class="TaskBarButton" onclick="generateQueryOnClick()" id="generatequery">Generate SQL Query</button> 
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
