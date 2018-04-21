@@ -12,6 +12,7 @@ namespace GroupProjectRASQL.Translator
 {
     class SqlToRa
     {
+
         public static String TranslateQuery(Node node) {
 
             String returnString ="";

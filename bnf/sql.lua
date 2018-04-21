@@ -18,13 +18,12 @@
 [fromElement] => [join]
 [fromElement] => [table]
 [fromElement] => [fromElement] + ' AS ' + [table]
-[fromElement] => '(' + [query] + ') ' + [table]
+[fromElement] => '(' + [query] + ')' + [table]
 
 [join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
 [condition] => '(' + [condition] + ')'
 [condition] => [value] + [operator] + [value]
-[condition] => [value] + " " + [operator] + " " +  [value]
 [condition] => [condition] + ' AND ' + [condition]
 [condition] => [condition] + ' OR ' + [condition]
 [condition] => 'NOT ' + [condition]

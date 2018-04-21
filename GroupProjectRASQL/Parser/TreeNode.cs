@@ -31,11 +31,6 @@ namespace GroupProjectRASQL.Parser
             }
         }
 
-        internal void RemoveChild(TreeNode<T> child)
-        {
-            this.Children.Remove(child);
-            this.ElementsIndex.Remove(child);
-        }
 
         public TreeNode(T data)
         {

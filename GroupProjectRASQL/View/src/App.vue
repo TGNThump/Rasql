@@ -2,7 +2,7 @@
 	<div class="container-fluid app d-flex flex-column">
 		<div class="row">
 			<column>
-				<input class="form-control" type="text" placeholder="" v-model="input"></input>
+				<input class="form-control" type="text" placeholder="" v-model="input_sql"></input>
 			</column>
 			<div class="col-2">
 				<button class="btn btn-block" @click="Parse.Execute('sql')">SQL</button>
@@ -13,8 +13,9 @@
 		</div>
 		<div class="row" style="flex-grow: 1;">
 			<column class="d-flex flex-column" style="flex-grow: 1;">
-				<div style="overflow-y: scroll; overflow-x: hidden;" v-html="output">
-					
+				<div class="card" style="flex-grow: 1;">
+					<div class="card-body" style="overflow-y: scroll; overflow-x: hidden;" v-html="output">
+					</div>
 				</div>
 			</column>
 		</div>

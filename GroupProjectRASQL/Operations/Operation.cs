@@ -9,24 +9,11 @@ namespace GroupProjectRASQL.Operations
 {
     abstract class Operation
     {
-
-        public Operation(TreeNode<String> parameter = null)
-        {
-            this.parameter = parameter;
-        }
-
-        public TreeNode<String> parameter;
+        public TreeNode<String> parameter = new TreeNode<string>("");
 
         public override string ToString()
         {
-            if (parameter == null)
-            {
-                return "[" + this.GetType().Name + "]";
-            } else
-            {
-                return "[" + this.GetType().Name + "]{" + parameter.TreeToString() + "}";
-            }
-           
+            return "[" + this.GetType().Name + "]{" + parameter.TreeToString() + "}";
         }
     }
 }
