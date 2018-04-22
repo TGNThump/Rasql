@@ -7,7 +7,7 @@ using Neutronium.MVVMComponents.Relay;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using GroupProjectRASQL.Heuristics;
 namespace GroupProjectRASQL.ViewModel
 {
     public class ApplicationViewModel : Reactive
@@ -18,6 +18,7 @@ namespace GroupProjectRASQL.ViewModel
         //public string output { get { return output; } private set { Set(ref output, value); }}
 
         public ISimpleCommand<String> Parse { get; private set; }
+
 
         public ApplicationViewModel()
         {
@@ -68,7 +69,11 @@ namespace GroupProjectRASQL.ViewModel
                 //output += "</div></div>";
 
                 Squish(tree);
-                TreeNode<Operation> ops = RAToOps.Translate(tree);
+                TreeNode<Operation>  ops = RAToOps.Translate(tree);
+
+
+                // TEMPORARY - calls heuristics 
+                Heuristics.Heuristics.Heuristic1(ops);
 
                 output += "<div class='card'><div class='card-body'>";
                 output += ops.TreeToDebugString();

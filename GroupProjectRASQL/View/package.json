@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-  	"jquery": "^3.3.1",
+    "jquery": "^3.3.1",
     "neutronium-vue-command-mixin": "^1.4.1",
     "neutronium-vue-simple-command-mixin": "^1.1.0",
     "popper.js": "^1.12.9",
