@@ -71,13 +71,12 @@ namespace GroupProjectRASQL.ViewModel
                 Squish(tree);
                 TreeNode<Operation>  ops = RAToOps.Translate(tree);
 
-
-                // TEMPORARY - calls heuristics 
-                Heuristics.Heuristics.Heuristic1(ops);
-
                 output += "<div class='card'><div class='card-body'>";
                 output += ops.TreeToDebugString();
                 output += "</div></div>";
+                
+                // TEMPORARY - calls heuristics 
+                Heuristics.Heuristics.Heuristic1(ops);
 
                 return;
             });
