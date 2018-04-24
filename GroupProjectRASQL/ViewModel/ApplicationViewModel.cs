@@ -48,7 +48,7 @@ namespace GroupProjectRASQL.ViewModel
 
                     stateSets = sqlParser.FilterAndReverse(stateSets);
                     tree = sqlParser.parse_tree(sql, stateSets);
-                    Squish(tree);
+                    //DON'T SQUISH TREE BEFORE TRANSLATION. TRANSLATION ASSUMES TREE CORRESPONDS TO THE RA GRAMMAR. Squish(tree);
                     output += "<div class='card'><div class='card-body'>";
                     output += tree.TreeToDebugString();
                     output += "</div></div>";
