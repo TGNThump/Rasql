@@ -22,12 +22,18 @@
 
 [join] => [fromElement] + ' JOIN ' + [fromElement] + ' ON ' + [condition]
 
+[condition] => [literal]
 [condition] => '(' + [condition] + ')'
-[condition] => [value] + [operator] + [value]
-[condition] => [value] + " " + [operator] + " " +  [value]
-[condition] => [condition] + ' AND ' + [condition]
-[condition] => [condition] + ' OR ' + [condition]
-[condition] => 'NOT ' + [condition]
+[condition] => [andCondition]
+[condition] => [orCondition]
+[condition] => [notCondition]
+
+[literal] => [value]
+[literal] => [value] + [operator] + [value]
+
+[andCondition] => [condition] + ' AND ' + [condition]
+[orCondition] => [condition] + ' OR ' + [condition]
+[notCondition] => 'NOT ' + [condition]
 
 [operator] => '='
 [operator] => '<>'
@@ -53,7 +59,7 @@
 [quote] => '"'
 
 [comma] => ','
-[comma] => ', '
+[comma] => ',' + ' '
 
 [char] => [a-zA-Z]
 [char] => [int]

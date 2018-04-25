@@ -111,6 +111,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Conditions\Condition.cs" />
     <Compile Include="Framework\ApplicationMode.cs" />
     <Compile Include="Framework\JobManagement.cs" />
     <Compile Include="Framework\Reactive.cs" />

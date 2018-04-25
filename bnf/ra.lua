@@ -6,7 +6,6 @@
 [query] => [string]
 [query] =>  '(' + [query] + ')'
 
-
 [projection] => [pi] + ' ' + [attributeList] + ' ('+ [query] + ')'
 
 [pi] => 'PI'
@@ -23,17 +22,23 @@
 [sigma] => 'σ'
 [sigma] => 'SELECT'
 
+[condition] => [literal]
 [condition] => '(' + [condition] + ')'
-[condition] => [value] + [operator] + [value]
-[condition] => [condition] + ' AND ' + [condition]
-[condition] => [condition] + ' OR ' + [condition]
-[condition] => 'NOT ' + [condition]
+[condition] => [andCondition]
+[condition] => [orCondition]
+[condition] => [notCondition]
 
+[literal] => [value]
+[literal] => [value] + [operator] + [value]
+
+[andCondition] => [condition] + ' AND ' + [condition]
+[orCondition] => [condition] + ' OR ' + [condition]
+[notCondition] => 'NOT ' + [condition]
 
 [rename] => [attRename]
 [rename] => [relRename]
 
-[attRename] => [rho] + ' ' + [field] + [comma] + [field] + ' (' + [query] + ')'
+[attRename] => [rho] + ' ' + [field] + '/' + [field] + ' (' + [query] + ')'
 [relRename] => [rho] + ' ' + [string] + ' (' + [query] + ')'
 
 [rho] => 'RHO'
@@ -94,7 +99,7 @@
 [quote] => '"'
 
 [comma] => ','
-[comma] => ', '
+[comma] => ',' + ' '
 
 [char] => [a-zA-Z]
 [char] => [int]

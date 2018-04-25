@@ -9,6 +9,22 @@ namespace GroupProjectRASQL.Operations
 {
     class RenameAttribute : Operation
     {
-        public RenameAttribute(TreeNode<string> parameter) : base(parameter) { }
+        private String oldName;
+        private String newName;
+
+        public RenameAttribute(TreeNode<string> parameter) : base(parameter) {
+            newName = parameter.Child(0).TreeToString();
+            oldName = parameter.Child(1).TreeToString();
+        }
+
+        public String getNewName()
+        {
+            return newName;
+        }
+
+        public String getOldName()
+        {
+            return oldName;
+        }
     }
 }

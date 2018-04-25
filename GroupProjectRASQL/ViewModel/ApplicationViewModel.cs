@@ -49,9 +49,9 @@ namespace GroupProjectRASQL.ViewModel
                     stateSets = sqlParser.FilterAndReverse(stateSets);
                     tree = sqlParser.parse_tree(sql, stateSets);
                     //DON'T SQUISH TREE BEFORE TRANSLATION. TRANSLATION ASSUMES TREE CORRESPONDS TO THE RA GRAMMAR. Squish(tree);
-                    output += "<div class='card'><div class='card-body'>";
-                    output += tree.TreeToDebugString();
-                    output += "</div></div>";
+                    //output += "<div class='card'><div class='card-body'>";
+                    //output += tree.TreeToDebugString();
+                    //output += "</div></div>";
                     ra = SqlToRa.TranslateQuery(tree);
                 }
 
@@ -64,11 +64,15 @@ namespace GroupProjectRASQL.ViewModel
 
                 stateSets = raParser.FilterAndReverse(stateSets);
                 tree = raParser.parse_tree(ra, stateSets);
-                //output += "<div class='card'><div class='card-body'>";
-                //output += tree.TreeToDebugString();
-                //output += "</div></div>";
 
                 Squish(tree);
+
+                /*
+                output += "<div class='card'><div class='card-body'>";
+                output += tree.TreeToDebugString();
+                output += "</div></div>";
+                */
+                
                 TreeNode<Operation>  ops = RAToOps.Translate(tree);
 
                 output += "<div class='card'><div class='card-body'>";
@@ -76,7 +80,7 @@ namespace GroupProjectRASQL.ViewModel
                 output += "</div></div>";
                 
                 // TEMPORARY - calls heuristics 
-                Heuristics.Heuristics.Heuristic1(ops);
+                //Heuristics.Heuristics.Heuristic1(ops);
 
                 return;
             });

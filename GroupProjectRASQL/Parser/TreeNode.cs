@@ -76,6 +76,14 @@ namespace GroupProjectRASQL.Parser
             this.ElementsIndex.Add(this);
         }
 
+        public void ForEach(Action<TreeNode<T>> action)
+        {
+            action(this);
+            foreach(TreeNode<T> child in this.Children){
+                child.ForEach(action);
+            }
+        }
+
         public override string ToString()
         {
             return Data != null ? Data.ToString() : "[data null]";
