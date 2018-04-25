@@ -38,7 +38,7 @@ namespace GroupProjectRASQL.Translator
                     return difference;
 
                 case "[cartesian]":
-                    TreeNode<Operation> cartesian = new TreeNode<Operation>(new Cartesion());
+                    TreeNode<Operation> cartesian = new TreeNode<Operation>(new Cartesian());
                     cartesian.AddChild(Translate(root.Child(1)));
                     cartesian.AddChild(Translate(root.Child(3)));
                     return cartesian;

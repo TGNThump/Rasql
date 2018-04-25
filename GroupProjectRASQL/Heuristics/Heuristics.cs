@@ -98,9 +98,36 @@ namespace GroupProjectRASQL.Heuristics
         {
 
         }
-        public static void Heuristic4()
+        public static void Heuristic4(TreeNode<Operation> rootTree)
         {
+            rootTree.ForEach((element) => 
+            {
+                Console.WriteLine(element.Data.GetType().Name);
+                Console.WriteLine(element.Data.parameter);
 
+                if (element.Data.GetType().Name == "Cartesian") 
+                {
+                    if (element.Parent.Data.GetType().Name == "Selection")
+                    {
+                        Console.WriteLine("Being Edited");
+                        
+                        element.Parent.Data = new Join(element.Parent.Data.parameter);
+                        element.Parent.RemoveChild(element);
+                        element.Parent.AddChild(element.Child(0));
+                        element.Parent.AddChild(element.Child(1));
+
+                        //Console.WriteLine(element.Data.GetType().Name);
+                        //Console.WriteLine(element.Data.parameter);
+
+                        //Console.WriteLine(element.Parent.Data.GetType().Name);
+                        //Console.WriteLine(element.Parent.Data.parameter);
+
+
+                    }
+                }
+            });
+
+            Console.WriteLine(rootTree.TreeToDebugString());
         }
         public static void Heuristic5()
         {

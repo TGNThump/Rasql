@@ -7,7 +7,7 @@ using GroupProjectRASQL.Parser;
 
 namespace GroupProjectRASQL.Operations
 {
-    class Cartesion : Operation {}
+    class Cartesian : Operation {}
     class Union : Operation { }
     class Intersect : Operation { }
     class Difference : Operation { }
