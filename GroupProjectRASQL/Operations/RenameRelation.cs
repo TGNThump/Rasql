@@ -9,6 +9,20 @@ namespace GroupProjectRASQL.Operations
 {
     class RenameRelation : Operation
     {
-        public RenameRelation(TreeNode<string> parameter) : base(parameter) { }
+        private String newName;
+
+        public RenameRelation(TreeNode<string> parameter) : base(parameter) {
+            this.newName = parameter.TreeToString();
+        }
+
+        public String getNewName()
+        {
+            return newName;
+        }
+
+        public override string ToString()
+        {
+            return "[" + this.GetType().Name + "]{new: " + newName + "}";
+        }
     }
 }

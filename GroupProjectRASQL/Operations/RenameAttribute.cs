@@ -26,5 +26,10 @@ namespace GroupProjectRASQL.Operations
         {
             return oldName;
         }
+
+        public override string ToString()
+        {
+            return "[" + this.GetType().Name + "]{new: " + newName + ", old: " + oldName + "}";
+        }
     }
 }
