@@ -32,7 +32,7 @@ namespace GroupProjectRASQL.Translator
                 foreach (KeyValuePair<String, String> entry in attributeRenames)
                 {
 
-                    returnString += "ρ " + entry.Key + "/" + entry.Value + " (";
+                    returnString += "ρ " + entry.Value + "/" + entry.Key + " (";
 
                 }
 
