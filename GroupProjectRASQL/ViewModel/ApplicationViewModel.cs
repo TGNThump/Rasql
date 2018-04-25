@@ -80,7 +80,11 @@ namespace GroupProjectRASQL.ViewModel
                 output += "</div></div>";
                 
                 // TEMPORARY - calls heuristics 
-                //Heuristics.Heuristics.Heuristic1(ops);
+                Heuristics.Heuristics.Heuristic1(ops);
+
+                output += "<div class='card'><div class='card-body'>";
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
 
                 return;
             });

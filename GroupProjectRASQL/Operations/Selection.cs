@@ -15,6 +15,7 @@ namespace GroupProjectRASQL.Operations
         private TreeNode<String> condition;
 
         public Selection(TreeNode<string> parameter) : base(parameter) {
+            if (parameter == null) return;
             this.condition = Translate(parameter);
         }
 
@@ -50,9 +51,10 @@ namespace GroupProjectRASQL.Operations
             return condition;
         }
 
-        public void setCondition(TreeNode<String> condition)
+        public Selection setCondition(TreeNode<String> condition)
         {
             this.condition = condition;
+            return this;
         }
 
         public override string ToString()
