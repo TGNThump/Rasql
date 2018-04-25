@@ -233,6 +233,26 @@ th:hover {
   border-width: 5px;
 }
 
+.node-draw {
+  width: 100px;
+}
+
+.node-draw .node-name { 
+  font: bold 20px/1 "Gruppo", Times, serif;
+  font-size: 20px;
+  padding: 2px; 
+  white-space: pre; 
+  color: #00AFF0; 
+}
+
+.node-draw .node-desc {
+  font: normal 10px/1 "Gruppo", Times, serif;
+  font-size: 10px; 
+  padding: 2px; 
+  color: #999; 
+}
+
+
 /************************
 * View 3 - Specific CSS *
 ************************/

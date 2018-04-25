@@ -2,16 +2,19 @@
 <html lang="en"> 
   <head> 
     <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="stylesheet" type="text/css" href="plugins/treant/Treant.css"/>
     <script type="text/javascript" src="jquery.js"></script> 
     <script type="text/javascript" src="view2_script.js"></script>
+    <script src="plugins/treant/vendor/raphael.js"></script>
+    <script src="plugins/treant/Treant.js"></script>
   </head>  
   <body>
     <div class="Page">
-      <!--- Left side of the page -->
-      <div class="NodeSelectionArea"> 
-        <h2> Tree Preview Area (Not implemented yet)</h2>
+      <!--- Left side of the page [TREE DISPLAY] -->
+      <div class="NodeSelectionArea" id="tree-simple"> 
       </div>
-      <!--- Right side of the page -->
+      <script src="view2_tree_display.js"></script>
+      <!--- Right side of the page [TREE CONTROLS] -->
       <div class="NodeControlsArea">
         <div class="NodeControlsSection" id="display">
           <!--- header -->
