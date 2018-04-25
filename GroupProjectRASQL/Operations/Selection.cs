@@ -58,5 +58,12 @@ namespace GroupProjectRASQL.Operations
         {
              return "[" + this.GetType().Name + "]{<br />" + condition.TreeToDebugString() + "}";
         }
+
+        public void conjunctiveNormalForm() {
+
+            if (condition.Data == "[not]") { }
+
+
+        }
     }
 }
