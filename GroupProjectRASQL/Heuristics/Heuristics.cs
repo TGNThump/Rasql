@@ -47,7 +47,15 @@ namespace GroupProjectRASQL.Heuristics
 
         public static void Heuristic2(TreeNode<Operation> rootTree)
         {
+            rootTree.ForEach((element) =>
+            {
+                if (element.Data.GetType().Name == "Selection")
+                {
 
+                }
+
+
+            });
         }
 
         public static void Heuristic3(TreeNode<Operation> rootTree)
@@ -62,13 +70,13 @@ namespace GroupProjectRASQL.Heuristics
                 Console.WriteLine(element.Data.GetType().Name);
                 Console.WriteLine(element.Data.parameter);
 
-                if (element.Data.GetType().Name == "Cartesian") 
+                if (element.Data is Cartesian) 
                 {
-                    if (element.Parent.Data.GetType().Name == "Selection")
+                    if (element.Parent.Data is Selection)
                     {
                         Console.WriteLine("Being Edited");
-                        
-                        element.Parent.Data = new Join(element.Parent.Data.parameter);
+                        Selection selectionCondition = (Selection)element.Parent.Data;
+                        element.Parent.Data = new Join(selectionCondition.getCondition());
                         element.Parent.RemoveChild(element);
                         element.Parent.AddChild(element.Child(0));
                         element.Parent.AddChild(element.Child(1));
