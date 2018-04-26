@@ -22,7 +22,24 @@ namespace GroupProjectRASQL.ViewModel
 
         public ISimpleCommand<String> Parse { get; private set; }
 
-        public IList<Relation> Relations { get; set; } = new List<Relation> { new Relation("animals", new List<Field>() { new Field("name", new List<String>{ "cat", "dog" }) }) };
+        public IList<Relation> Relations { get; set; } = new List<Relation> {
+            new Relation("animals", new List<Field>() {
+                new Field("name", new List<String>{ "cat", "dog", "cow", "sheep", "pig" }),
+                new Field("age", new List<String>{ "1", "2", "4", "2", "4" }),
+                new Field("colour", new List<String>{ "black", "black", "brown", "white", "pink" }),
+                new Field("weight", new List<String>{ "100", "200", "350", "1000", "10" }),
+            }),
+            new Relation("test", new List<Field>() {
+                new Field("a", new List<String>{ "a" }),
+                new Field("b", new List<String>{ "b" }),
+                new Field("c", new List<String>{ "c" }),
+                new Field("d", new List<String>{ "d" }),
+                new Field("e", new List<String>{ "e" }),
+                new Field("f", new List<String>{ "f" }),
+                new Field("g", new List<String>{ "g" }),
+                new Field("h", new List<String>{ "h" }),
+            })
+        };
 
 
         public ApplicationViewModel()

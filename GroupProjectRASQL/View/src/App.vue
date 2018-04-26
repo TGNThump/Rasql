@@ -17,7 +17,21 @@
           <div class='card' style='flex-shrink: 0;'>
             <div class='card-header'>Schema</div>
             <div class='card-body'>
-              {{Relations}}
+              <div v-for='relation in Relations'>
+                <b>{{relation.name}}</b>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" v-for='field in relation.fields'>{{field.name}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for='(_,i) in relation.fields[0].values'>
+                      <td v-for='field in relation.fields'>{{field.values[i]}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <div v-html="output"></div>
