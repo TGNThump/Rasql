@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+using Node = GroupProjectRASQL.Parser.TreeNode<System.String>;
+
 namespace GroupProjectRASQL.Operations
 {
     class Selection : Operation
@@ -61,9 +64,106 @@ namespace GroupProjectRASQL.Operations
 
         public void conjunctiveNormalForm() {
 
-            if (condition.Data == "[not]") { }
-
+            condition =moveOrs(moveNots(condition));
 
         }
+
+        public static Node moveNots(Node node) {
+
+            if (node.Data == "[not]")
+            {
+
+
+
+                switch (node.Child(0).Data)
+                {
+
+                    case "[not]":
+
+                        node = moveNots(node.Child(0).Child(0));
+                        break;
+
+                    case "[and]":
+
+                        node = new Node("[or]")
+                        {
+                            new Node("[not]"){ moveNots(node.Child(0).Child(0))},
+                            new Node("[not]"){ moveNots(node.Child(0).Child(1))}
+
+                        };
+                        break;
+
+                    case "[or]":
+                        node = new Node("[and]")
+                        {
+                            new Node("[not]"){ moveNots(node.Child(0).Child(0))},
+                            new Node("[not]"){ moveNots(node.Child(0).Child(1))}
+
+                        };
+                        break;
+
+                }
+
+            }
+            else if (node.Data == "[and]" && node.Data == "[or]"){
+
+                node = new Node(node.Data) { moveNots(node.Child(0)), moveNots(node.Child(1)) };
+
+            }
+         
+
+            return node;
+
+        }
+
+        public static Node moveOrs(Node node) {
+
+            if (node.Data == "[or]")
+            {
+
+
+                if (node.Child(0).Data == "[and]")
+                {
+                    node = new Node("[and]") {
+
+                        new Node("[or]"){node.Child(1), node.Child(0).Child(0)},
+                        new Node("[or]"){node.Child(1), node.Child(0).Child(1)}
+
+                    };
+
+                }
+                else if (node.Child(1).Data == "[and]")
+                {
+
+                    node = new Node("[and]") {
+
+                        new Node("[or]"){node.Child(1), node.Child(0).Child(0)},
+                        new Node("[or]"){node.Child(1), node.Child(0).Child(1)}
+
+                    };
+
+                }
+
+
+
+            }
+            else if (node.Data == "[and]")
+            {
+
+                node = new Node(node.Data) { moveOrs(node.Child(0)), moveOrs(node.Child(1)) };
+
+            }
+            else if (node.Data == "[not]") {
+
+                node = new Node(node.Data) { moveOrs(node.Child(0))};
+
+            }
+
+
+
+            return node;
+
+        }
+
     }
 }
