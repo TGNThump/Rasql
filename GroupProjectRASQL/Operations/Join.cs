@@ -8,39 +8,17 @@ using System.Threading.Tasks;
 namespace GroupProjectRASQL.Operations
 {
     class Join : Operation
-    {
+    { 
         private TreeNode<String> condition;
 
-        public Join(TreeNode<string> parameter) : base(parameter) {
-            this.condition = Translate(parameter);
-        }
-        
-
-            public TreeNode<String> Translate(TreeNode<string> root)
+        public static Join fromParameters(TreeNode<String> parameters)
         {
+            return new Join(Conditions.Translate(parameters));
+        }
 
-            switch (root.Data)
-            {
-                case "[literal]": return new TreeNode<string>(root.TreeToString());
-                case "[andCondition]":
-                    TreeNode<String> and = new TreeNode<String>("[and]");
-                    and.AddChild(Translate(root.Child(0)));
-                    and.AddChild(Translate(root.Child(2)));
-                    return and;
-                case "[orCondition]":
-                    TreeNode<String> or = new TreeNode<String>("[or]");
-                    or.AddChild(Translate(root.Child(0)));
-                    or.AddChild(Translate(root.Child(2)));
-                    return or;
-                case "[notCondition]":
-                    TreeNode<String> not = new TreeNode<String>("[not]");
-                    not.AddChild(Translate(root.Child(1)));
-                    return not;
-            }
-
-            if (root.Children.Count == 1) return Translate(root.Child(0));
-            if (root.Children.Count == 3) return Translate(root.Child(1));
-            throw new Exception("Can't parse " + root.TreeToString());
+        public Join(TreeNode<String> condition)
+        {
+            this.condition = condition;
         }
 
         public TreeNode<String> getCondition()
@@ -48,14 +26,29 @@ namespace GroupProjectRASQL.Operations
             return condition;
         }
 
-        public void setCondition(TreeNode<String> condition)
+        public IEnumerable<String> getFields()
+        {
+            return Conditions.GetFields(condition);
+        }
+
+        public Join setCondition(TreeNode<String> condition)
         {
             this.condition = condition;
+            return this;
         }
 
         public override string ToString()
         {
-            return "[" + this.GetType().Name + "]{<br />" + condition.TreeToDebugString() + "}";
+            return ToString(0);
+        }
+
+        public string ToString(int depth = 0)
+        {
+            String ret = "[" + this.GetType().Name + "](<br />" + condition.TreeToDebugString(new List<String>() { "[literal]" }, depth + 1);
+            for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            ret += ")";
+            return ret;
+        
         }
     }
 }
