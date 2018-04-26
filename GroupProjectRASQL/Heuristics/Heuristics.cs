@@ -3,12 +3,16 @@ using GroupProjectRASQL.Parser;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
+using Condition = GroupProjectRASQL.Parser.TreeNode<System.String>;
+using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Operation>;
+
 namespace GroupProjectRASQL.Heuristics
 {
     static class Heuristics
     {
 
-        public static void Heuristic1(TreeNode<Operation> operation)
+        public static void Heuristic1(Node operation)
         {
             /*
              * Heuristic One deals with the splitting of any selection 
@@ -16,23 +20,26 @@ namespace GroupProjectRASQL.Heuristics
              * for example  σa=b and b=c  ,into several smaller selections.
             */
 
-            if (!(operation.Data is Selection)) return;
+            if (operation.Data is Selection)
+            {
+                Selection selection = (Selection)operation.Data;
+                Condition condition = selection.getCondition();
 
-            ((Selection)operation.Data).conjunctiveNormalForm();
-            /*
-            TreeNode<String> condition = ((Selection)operation.Data).getCondition();
-            if (condition.Data != "[and]") return;
+                condition = Conditions.ToCNF(condition);
 
-            TreeNode<Operation>[] children = new TreeNode<Operation>[operation.Children.Count];
-            operation.Children.CopyTo(children, 0);
-            operation.RemoveChildren();
+                if (condition.Data == "[and]")
+                {
+                    Node[] children = new Node[operation.Children.Count];
+                    operation.Children.CopyTo(children, 0);
+                    operation.RemoveChildren();
 
-            TreeNode<Operation> newChild = new TreeNode<Operation>(new Selection(null).setCondition(condition.Child(1)));
-            ((Selection)operation.Data).setCondition(condition.Child(0));
+                    Node newChild = new Node(new Selection(condition.Child(1)));
+                    selection.setCondition(condition.Child(0));
 
-            newChild.AddChildren(children);
-            operation.AddChild(newChild);*/
-
+                    newChild.AddChildren(children);
+                    operation.AddChild(newChild);
+                }
+            }
             
             for (int i = 0; i < operation.Children.Count; i++)
             {

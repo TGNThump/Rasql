@@ -111,11 +111,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Conditions\Condition.cs" />
     <Compile Include="Framework\ApplicationMode.cs" />
     <Compile Include="Framework\JobManagement.cs" />
     <Compile Include="Framework\Reactive.cs" />
     <Compile Include="Heuristics\Heuristics.cs" />
+    <Compile Include="Operations\Conditions.cs" />
     <Compile Include="Operations\RenameRelation.cs" />
     <Compile Include="Operations\Join.cs" />
     <Compile Include="Operations\Projection.cs" />

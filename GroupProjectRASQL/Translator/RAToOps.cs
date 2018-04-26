@@ -49,7 +49,7 @@ namespace GroupProjectRASQL.Translator
                     return projection;
 
                 case "[selection]":
-                    TreeNode<Operation> selection = new TreeNode<Operation>(new Selection(root.Child(1)));
+                    TreeNode<Operation> selection = new TreeNode<Operation>(Selection.fromParameters(root.Child(1)));
                     selection.AddChild(Translate(root.Child(3)));
                     return selection;
 

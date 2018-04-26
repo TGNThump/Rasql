@@ -81,12 +81,32 @@ namespace GroupProjectRASQL.ViewModel
                 
                 // TEMPORARY - calls heuristics 
                 Heuristics.Heuristics.Heuristic1(ops);
+
+                output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
                 Heuristics.Heuristics.Heuristic2(ops);
+
+                output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
                 Heuristics.Heuristics.Heuristic3(ops);
+
+                output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
                 Heuristics.Heuristics.Heuristic4(ops);
+
+                output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
                 Heuristics.Heuristics.Heuristic5(ops);
 
-                output += "<div class='card'><div class='card-body'>";
+                output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
                 output += ops.TreeToDebugString();
                 output += "</div></div>";
 
