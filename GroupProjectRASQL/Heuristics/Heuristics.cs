@@ -24,6 +24,39 @@ namespace GroupProjectRASQL.Heuristics
              * for example  σa=b and b=c  ,into several smaller selections.
             */
             Console.WriteLine("Heuristics Start");
+
+
+            rootTree.ForEach((operation) =>
+            {
+                if (!(operation.Data is Selection)) return;
+                
+                ((Selection)operation.Data).getCondition().ForEach((condition) => {
+                    switch (condition.Data){
+                        case "[or]":
+                        case "[not]":
+                            return true;
+                        case "[and]":
+                            ICollection<TreeNode<Operation>> children = operation.Children;
+                            operation.RemoveChildren();
+                            TreeNode<Operation> newChild = new TreeNode<Operation>(new Selection(null).setCondition(condition.Child(1)));
+                            newChild.AddChildren(children);
+                            operation.AddChild(newChild);
+                            ((Selection)operation.Data).setCondition(condition.Child(0));
+                            return false;
+                        default: return true;
+                    }
+
+                    
+                });
+
+            });
+
+            return rootTree;
+
+
+
+
+            /*
             // int stepType. Denotes the Current Step setting. 0 = to end, 1 = wait for button press.
             TreeNode<Operation> currentChild = rootTree;
            
@@ -34,12 +67,12 @@ namespace GroupProjectRASQL.Heuristics
             dfsStack.Push(currentChild); // Push start of tree
             while(dfsStack.Count > 0) // Depth first traverse the tree
             {
-                /*while ( stepType != 0) // This is where the Step type check happens,
-                {
-                        if button press > break 
-                        if >> stepType = 0
-                }
-                */
+                //while ( stepType != 0) // This is where the Step type check happens,
+                //{
+               //         if button press > break 
+              //          if >> stepType = 0
+               // }
+                
                 TreeNode<Operation> node = dfsStack.Pop();
                 if (visitedNodes.Contains(node))
                 {
@@ -88,6 +121,7 @@ namespace GroupProjectRASQL.Heuristics
 
             }
             return rootTree; // Return pointer to the tree that has been edited.
+            */
         }
 
         public static void Heuristic2()
