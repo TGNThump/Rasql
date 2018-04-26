@@ -148,6 +148,22 @@ namespace GroupProjectRASQL.Parser
             return ret;
         }
 
+        public String TreeToDebugString2()
+        {
+            String ret = Data.ToString();
+            if (Children.Count == 0) return ret;
+            ret += "{";
+
+            for(int i = 0; i < Children.Count; i++)
+            {
+                ret += Children.ElementAt(i).TreeToDebugString2();
+                if (i < Children.Count - 1) ret += ", ";
+            }
+
+            ret += "}";
+            return ret;
+        }
+
         public TreeNode<T> Child(int i) {
 
             if (i >= Children.Count || i < 0) return null;
