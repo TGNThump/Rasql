@@ -18,16 +18,39 @@
             <div class='card-header'>Schema</div>
             <div class='card-body'>
               <div v-for='relation in Relations'>
-                <b>{{relation.name}}</b>
-                <table class="table">
+                <input class="form-control relationName" type="text" placeholder="Relation" v-model="relation.name"></input>
+                <!-- <pre>{{relation}}</pre> -->
+                <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col" v-for='field in relation.fields'>{{field.name}}</th>
+                      <th scope="col" v-for='field in relation.fields'>
+                        <input class="form-control fieldName" type="text" placeholder="Field" v-model="field.name"></input>
+                      </th>
+                      <th scope="col" class="newButton">
+                        <button @click="newColumn(relation)" type="button" class="btn btn-default">+</button>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for='(_,i) in relation.fields[0].values'>
-                      <td v-for='field in relation.fields'>{{field.values[i]}}</td>
+                      <tr v-for='(_,i) in relation.fields[0].values'>
+                        <td v-for='field in relation.fields'>
+                          <input class="form-control fieldValue" type="text" placeholder="Value" v-model="field.values[i]"></input>
+                        </td>
+                        <td class="newButton">
+                          <button @click="removeRow(relation, i)" type="button" class="btn btn-default">-</button>
+                        </td>
+                      </tr>
+                    <tr>
+                      <td v-for='(field,i) in relation.fields'>
+                        <button @click="removeColumn(relation, i)" :disabled="relation.fields.length < 2"  type="button" class="btn btn-block btn-default">-</button>
+                      </td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td style="background-color: transparent !important; "class="newButton" :colspan="relation.fields.length">
+                        <button @click="newRow(relation)" type="button" class="btn btn-block btn-default">+</button>
+                      </td>
+                      <td></td>
                     </tr>
                   </tbody>
                 </table>
@@ -52,12 +75,50 @@ export default {
 	props,
 	data () {
 		return this.viewModel
-	}
+	},
+  methods: {
+    newRow: function(relation){
+      for (var i = relation.fields.length - 1; i >= 0; i--) {
+        relation.fields[i].values.push("");
+      }
+    },
+    removeRow: function(relation, row){
+       for (var i = relation.fields.length - 1; i >= 0; i--) {
+        relation.fields[i].values.splice(row, 1);
+      }
+    },
+    newColumn: function(relation){
+      relation.fields.push({
+        name: "",
+        values: []
+      });
+    },
+    removeColumn: function(relation, column){
+      if (relation.fields.length == 1) return;
+      relation.fields.splice(column, 1);
+    }
+  }
 }
 </script>
 
 <style>
   .cardcontainer .card{
-    margin-top: 10px;
+  margin-top: 10px;
+  }
+
+  .fieldName,
+  .relationName{
+  font-weight: bold;
+  }
+
+  .relationName,
+  .fieldName,
+  .fieldValue{
+  background-color: transparent; border: 0px;
+  }
+
+  .newButton{
+    text-align: center;
+    vertical-align: center;
   }
 </style>
