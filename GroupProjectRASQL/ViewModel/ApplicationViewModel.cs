@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using GroupProjectRASQL.Heuristics;
+using GroupProjectRASQL.Schema;
+using System.Linq;
+
 namespace GroupProjectRASQL.ViewModel
 {
     public class ApplicationViewModel : Reactive
@@ -19,6 +22,8 @@ namespace GroupProjectRASQL.ViewModel
 
         public ISimpleCommand<String> Parse { get; private set; }
 
+        public IList<Relation> Relations { get; set; } = new List<Relation> { new Relation("animals", new List<Field>() { new Field("name", new List<String>{ "cat", "dog" }) }) };
+
 
         public ApplicationViewModel()
         {
@@ -27,85 +32,92 @@ namespace GroupProjectRASQL.ViewModel
 
             Parse = new RelaySimpleCommand<String>(delegate (String type)
             {
-                if (input == null) return;
-                output = "";
-
-                String sql = input;
-                String ra = input;
-                List<State>[] stateSets;
-                TreeNode<String> tree;
-                bool valid;
-
-                if (type.Equals("sql"))
+                try
                 {
-                    output += @"<div class='card'><div class='card-header'>SQL: " + sql + "</div></div>";
+                    if (input == null) return;
+                    output = "";
 
-                    stateSets = sqlParser.Parse(sql);
+                    String sql = input;
+                    String ra = input;
+                    List<State>[] stateSets;
+                    TreeNode<String> tree;
+                    bool valid;
 
-                    valid = sqlParser.IsValid(stateSets);
-                    output += @"<div class='card'><div class='card-body'>Valid: " + valid + "</div></div>";
+                    if (type.Equals("sql"))
+                    {
+                        output += @"<div class='card'><div class='card-header'>SQL: " + sql + "</div>";
+
+                        stateSets = sqlParser.Parse(sql);
+
+                        valid = sqlParser.IsValid(stateSets);
+                        output += @"<div class='card-body'>Valid: " + valid + "</div></div>";
+                        if (!valid) return;
+
+                        stateSets = sqlParser.FilterAndReverse(stateSets);
+                        tree = sqlParser.parse_tree(sql, stateSets);
+                        //DON'T SQUISH TREE BEFORE TRANSLATION. TRANSLATION ASSUMES TREE CORRESPONDS TO THE RA GRAMMAR. Squish(tree);
+                        //output += "<div class='card'><div class='card-body'>";
+                        //output += tree.TreeToDebugString();
+                        //output += "</div></div>";
+                        ra = SqlToRa.TranslateQuery(tree);
+                    }
+
+                    output += @"<div class='card'><div class='card-header'>RA: " + ra + "</div>";
+                    stateSets = raParser.Parse(ra);
+
+                    valid = raParser.IsValid(stateSets);
+                    output += @"<div class='card-body'>Valid: " + valid + "</div></div>";
                     if (!valid) return;
 
-                    stateSets = sqlParser.FilterAndReverse(stateSets);
-                    tree = sqlParser.parse_tree(sql, stateSets);
-                    //DON'T SQUISH TREE BEFORE TRANSLATION. TRANSLATION ASSUMES TREE CORRESPONDS TO THE RA GRAMMAR. Squish(tree);
-                    //output += "<div class='card'><div class='card-body'>";
-                    //output += tree.TreeToDebugString();
-                    //output += "</div></div>";
-                    ra = SqlToRa.TranslateQuery(tree);
+                    stateSets = raParser.FilterAndReverse(stateSets);
+                    tree = raParser.parse_tree(ra, stateSets);
+
+                    Squish(tree);
+
+                    /*
+                    output += "<div class='card'><div class='card-body'>";
+                    output += tree.TreeToDebugString();
+                    output += "</div></div>";
+                    */
+
+                    TreeNode<Operation> ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+
+                    output += "<div class='card'><div class='card-body'>";
+                    output += ops.TreeToDebugString();
+                    output += "</div></div>";
+
+                    Heuristics.Heuristics.Heuristic1(ops);
+
+                    output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                    output += ops.TreeToDebugString();
+                    output += "</div></div>";
+
+                    Heuristics.Heuristics.Heuristic2(ops);
+
+                    output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                    output += ops.TreeToDebugString();
+                    output += "</div></div>";
+
+                    Heuristics.Heuristics.Heuristic3(ops);
+
+                    output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+                    output += ops.TreeToDebugString();
+                    output += "</div></div>";
+
+                    Heuristics.Heuristics.Heuristic4(ops);
+
+                    output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+                    output += ops.TreeToDebugString();
+                    output += "</div></div>";
+
+                    Heuristics.Heuristics.Heuristic5(ops);
+
+                    return;
+                } catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    output = "<div class='alert alert-danger'>" + e.ToString().Replace(Environment.NewLine, "<br/>") + "</div>";
                 }
-
-                output += @"<div class='card'><div class='card-header'>RA: " + ra + "</div></div>";
-                stateSets = raParser.Parse(ra);
-
-                valid = raParser.IsValid(stateSets);
-                output += @"<div class='card'><div class='card-body'>Valid: " + valid + "</div></div>";
-                if (!valid) return;
-
-                stateSets = raParser.FilterAndReverse(stateSets);
-                tree = raParser.parse_tree(ra, stateSets);
-
-                Squish(tree);
-
-                /*
-                output += "<div class='card'><div class='card-body'>";
-                output += tree.TreeToDebugString();
-                output += "</div></div>";
-                */
-                
-                TreeNode<Operation>  ops = RAToOps.Translate(tree);
-
-                output += "<div class='card'><div class='card-body'>";
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
-                
-                Heuristics.Heuristics.Heuristic1(ops);
-
-                output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
-
-                Heuristics.Heuristics.Heuristic2(ops);
-
-                output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
-
-                Heuristics.Heuristics.Heuristic3(ops);
-
-                output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
-
-                Heuristics.Heuristics.Heuristic4(ops);
-
-                output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
-
-                Heuristics.Heuristics.Heuristic5(ops);
-
-                return;
             });
         }
 

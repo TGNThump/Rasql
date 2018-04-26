@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupProjectRASQL.Operations
 {
-    abstract class Operation
+    public abstract class Operation
     {
 
         public Operation(TreeNode<String> parameter = null)

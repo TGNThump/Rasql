@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupProjectRASQL.Schema;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +7,25 @@ using System.Threading.Tasks;
 
 namespace GroupProjectRASQL.Operations
 {
-    class Relation : Operation
+    public class Relation : Operation
     {
-        private String name;
+        public String name { get; set; }
+        public IList<Field> fields { get; set; }
 
-        public Relation(string name) => this.name = name;
+        public Relation(String name, IList<Field> fields)
+        {
+            this.name = name;
+            this.fields = fields;
+        }
+
+        public IEnumerable<String> getFieldNames()
+        {
+            return fields.Select(field => field.name);
+        }
 
         public override string ToString()
         {
-            return "[Relation " + name + "]";
+            return "[Relation " + name + "]{" + getFieldNames().Aggregate((all, next) => all + ", " + next) + "}";
         }
     }
 }

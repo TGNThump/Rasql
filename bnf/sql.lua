@@ -30,6 +30,9 @@
 
 [literal] => [value]
 [literal] => [value] + [operator] + [value]
+[literal] => [value] + ' ' + [operator] + ' ' + [value]
+[literal] => [value] + [operator] + ' ' + [value]
+[literal] => [value] + ' ' + [operator] + [value]
 
 [andCondition] => [condition] + ' AND ' + [condition]
 [orCondition] => [condition] + ' OR ' + [condition]

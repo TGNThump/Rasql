@@ -124,6 +124,7 @@
     <Compile Include="Operations\SetOperations.cs" />
     <Compile Include="Operations\Operation.cs" />
     <Compile Include="Operations\Relation.cs" />
+    <Compile Include="Operations\Field.cs" />
     <Compile Include="Translator\RAToOps.cs" />
     <Compile Include="Translator\SqlToRa.cs" />
     <Compile Include="Parser\Parser.cs" />
