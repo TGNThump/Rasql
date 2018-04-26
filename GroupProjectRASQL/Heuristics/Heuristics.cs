@@ -12,39 +12,37 @@ namespace GroupProjectRASQL.Heuristics
     static class Heuristics
     {
 
-        public static void Heuristic1(Node operation)
+        public static void Heuristic1(Node root)
         {
             /*
              * Heuristic One deals with the splitting of any selection 
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
-            
-            if (operation.Data is Selection)
+
+            root.ForEach((operation) =>
             {
-                Selection selection = (Selection)operation.Data;
-                Condition condition = selection.getCondition();
-
-                condition = Conditions.ToCNF(condition);
-
-                if (condition.Data == "[and]")
+                if (operation.Data is Selection)
                 {
-                    Node[] children = new Node[operation.Children.Count];
-                    operation.Children.CopyTo(children, 0);
-                    operation.RemoveChildren();
+                    Selection selection = (Selection)operation.Data;
+                    Condition condition = selection.getCondition();
 
-                    Node newChild = new Node(new Selection(condition.Child(1)));
-                    selection.setCondition(condition.Child(0));
+                    condition = Conditions.ToCNF(condition);
 
-                    newChild.AddChildren(children);
-                    operation.AddChild(newChild);
+                    if (condition.Data == "[and]")
+                    {
+                        Node[] children = new Node[operation.Children.Count];
+                        operation.Children.CopyTo(children, 0);
+                        operation.RemoveChildren();
+
+                        Node newChild = new Node(new Selection(condition.Child(1)));
+                        selection.setCondition(condition.Child(0));
+
+                        newChild.AddChildren(children);
+                        operation.AddChild(newChild);
+                    }
                 }
-            }
-            
-            for (int i = 0; i < operation.Children.Count; i++)
-            {
-                Heuristic1(operation.Child(i));
-            }
+            });
         }
 
         public static void Heuristic2(TreeNode<Operation> rootTree)

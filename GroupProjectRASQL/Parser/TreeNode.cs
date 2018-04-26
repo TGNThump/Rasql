@@ -118,9 +118,8 @@ namespace GroupProjectRASQL.Parser
 
         //Allows for custom collection initialiser
         public void Add(TreeNode<T> node) {
-
+            if (node == null) return;
             AddChild(node);
-
         }
 
         //Outputs string subtree represents
