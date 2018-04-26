@@ -117,10 +117,9 @@ namespace GroupProjectRASQL.Parser
         //Allows for custom collection initialiser
         public void Add(TreeNode<T> node) {
 
-            Children.Add(node);
+            AddChild(node);
 
         }
-
 
         //Outputs string subtree represents
         public String TreeToString() {
@@ -153,6 +152,11 @@ namespace GroupProjectRASQL.Parser
             if (i >= Children.Count || i < 0) return null;
             else return Children.ElementAt(i);
 
+        }
+
+        public TreeNode<T> Child()
+        {
+            return Child(0);
         }
 
         #endregion
