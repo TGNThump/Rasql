@@ -80,6 +80,7 @@ namespace GroupProjectRASQL.ViewModel
                 output += "</div></div>";
                 
                 // TEMPORARY - calls heuristics 
+<<<<<<< HEAD
                 Heuristics.Heuristics.Heuristic1(ops);
 
                 output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
@@ -105,10 +106,18 @@ namespace GroupProjectRASQL.ViewModel
                 output += "</div></div>";
 
                 Heuristics.Heuristics.Heuristic5(ops);
+=======
+<<<<<<< HEAD
+                Heuristics.Heuristics.Heuristic4(ops);
+                
+=======
+                Heuristics.Heuristics.Heuristic1(ops);
+>>>>>>> 25ae7a970347480657608758f95db20e3bab4de4
 
                 output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
                 output += ops.TreeToDebugString();
                 output += "</div></div>";
+>>>>>>> 8b6bf4b40f31262e40b8453c089cca5c2010cf3f
 
                 return;
             });

@@ -76,6 +76,21 @@ namespace GroupProjectRASQL.Parser
             this.ElementsIndex.Add(this);
         }
 
+        public void ForEach(Func<TreeNode<T>, Boolean> action)
+        {
+            if (action(this)) return;
+
+            for (int i = 0; i < this.Children.Count; i++)
+            {
+                Children.ElementAt(i).ForEach(action);
+            }
+        }
+
+        public void ForEach(Action<TreeNode<T>> action)
+        {
+            ForEach((node) => { action(node); return false; });
+        }
+
         public override string ToString()
         {
             return Data != null ? Data.ToString() : "[data null]";
@@ -84,7 +99,7 @@ namespace GroupProjectRASQL.Parser
 
         #region searching
 
-        public ICollection<TreeNode<T>> ElementsIndex { get; protected set; }
+        private ICollection<TreeNode<T>> ElementsIndex { get; set; }
 
         private void RegisterChildForSearch(TreeNode<T> node)
         {
@@ -98,10 +113,11 @@ namespace GroupProjectRASQL.Parser
             return this.ElementsIndex.FirstOrDefault(predicate);
         }
 
+
         //Allows for custom collection initialiser
         public void Add(TreeNode<T> node) {
 
-            AddChild(node);
+            Children.Add(node);
 
         }
 
@@ -132,32 +148,11 @@ namespace GroupProjectRASQL.Parser
             return ret;
         }
 
-        public String TreeToDebugString2()
-        {
-            String ret = Data.ToString();
-            if (Children.Count == 0) return ret;
-            ret += "{";
-
-            for(int i = 0; i < Children.Count; i++)
-            {
-                ret += Children.ElementAt(i).TreeToDebugString2();
-                if (i < Children.Count - 1) ret += ", ";
-            }
-
-            ret += "}";
-            return ret;
-        }
-
         public TreeNode<T> Child(int i) {
 
             if (i >= Children.Count || i < 0) return null;
             else return Children.ElementAt(i);
 
-        }
-
-        public TreeNode<T> Child()
-        {
-            return Child(0);
         }
 
         #endregion

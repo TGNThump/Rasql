@@ -19,7 +19,7 @@ namespace GroupProjectRASQL.Heuristics
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
-
+            
             if (operation.Data is Selection)
             {
                 Selection selection = (Selection)operation.Data;
@@ -51,14 +51,38 @@ namespace GroupProjectRASQL.Heuristics
         {
 
         }
+
         public static void Heuristic3(TreeNode<Operation> rootTree)
         {
 
         }
+
         public static void Heuristic4(TreeNode<Operation> rootTree)
         {
+            rootTree.ForEach((element) => 
+            {
+                Console.WriteLine(element.Data.GetType().Name);
+                Console.WriteLine(element.Data.parameter);
 
+                if (element.Data.GetType().Name == "Cartesian") 
+                {
+                    if (element.Parent.Data.GetType().Name == "Selection")
+                    {
+                        Console.WriteLine("Being Edited");
+                        
+                        element.Parent.Data = new Join(element.Parent.Data.parameter);
+                        element.Parent.RemoveChild(element);
+                        element.Parent.AddChild(element.Child(0));
+                        element.Parent.AddChild(element.Child(1));
+
+
+                    }
+                }
+            });
+
+            Console.WriteLine(rootTree.TreeToDebugString());
         }
+        
         public static void Heuristic5(TreeNode<Operation> rootTree)
         {
 
