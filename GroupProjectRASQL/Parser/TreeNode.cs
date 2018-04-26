@@ -76,21 +76,6 @@ namespace GroupProjectRASQL.Parser
             this.ElementsIndex.Add(this);
         }
 
-        public void ForEach(Func<TreeNode<T>, Boolean> action)
-        {
-            if (action(this)) return;
-
-            for (int i = 0; i < this.Children.Count; i++)
-            {
-                Children.ElementAt(i).ForEach(action);
-            }
-        }
-
-        public void ForEach(Action<TreeNode<T>> action)
-        {
-            ForEach((node) => { action(node); return false; });
-        }
-
         public override string ToString()
         {
             return Data != null ? Data.ToString() : "[data null]";
@@ -99,7 +84,7 @@ namespace GroupProjectRASQL.Parser
 
         #region searching
 
-        private ICollection<TreeNode<T>> ElementsIndex { get; set; }
+        public ICollection<TreeNode<T>> ElementsIndex { get; protected set; }
 
         private void RegisterChildForSearch(TreeNode<T> node)
         {
@@ -113,11 +98,10 @@ namespace GroupProjectRASQL.Parser
             return this.ElementsIndex.FirstOrDefault(predicate);
         }
 
-
         //Allows for custom collection initialiser
         public void Add(TreeNode<T> node) {
 
-            Children.Add(node);
+            AddChild(node);
 
         }
 
@@ -169,6 +153,11 @@ namespace GroupProjectRASQL.Parser
             if (i >= Children.Count || i < 0) return null;
             else return Children.ElementAt(i);
 
+        }
+
+        public TreeNode<T> Child()
+        {
+            return Child(0);
         }
 
         #endregion

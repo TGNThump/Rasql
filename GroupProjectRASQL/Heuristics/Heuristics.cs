@@ -7,14 +7,6 @@ namespace GroupProjectRASQL.Heuristics
 {
     static class Heuristics
     {
-        //public static void Heuristics()
-        //{
-        //    GroupProjectRASQL.ViewModel.ops;
-
-
-
-
-        //}
 
         public static void Heuristic1(TreeNode<Operation> operation)
         {
@@ -26,16 +18,22 @@ namespace GroupProjectRASQL.Heuristics
 
             if (!(operation.Data is Selection)) return;
 
+            ((Selection)operation.Data).conjunctiveNormalForm();
+            /*
             TreeNode<String> condition = ((Selection)operation.Data).getCondition();
             if (condition.Data != "[and]") return;
 
-            ICollection<TreeNode<Operation>> children = operation.Children;
+            TreeNode<Operation>[] children = new TreeNode<Operation>[operation.Children.Count];
+            operation.Children.CopyTo(children, 0);
             operation.RemoveChildren();
+
             TreeNode<Operation> newChild = new TreeNode<Operation>(new Selection(null).setCondition(condition.Child(1)));
-            newChild.AddChildren(children);
-            operation.AddChild(newChild);
             ((Selection)operation.Data).setCondition(condition.Child(0));
 
+            newChild.AddChildren(children);
+            operation.AddChild(newChild);*/
+
+            
             for (int i = 0; i < operation.Children.Count; i++)
             {
                 Heuristic1(operation.Child(i));
