@@ -14,8 +14,9 @@ namespace GroupProjectRASQL.Operations
         public Join(TreeNode<string> parameter) : base(parameter) {
             this.condition = Translate(parameter);
         }
+        
 
-        public TreeNode<String> Translate(TreeNode<string> root)
+            public TreeNode<String> Translate(TreeNode<string> root)
         {
 
             switch (root.Data)
@@ -31,7 +32,7 @@ namespace GroupProjectRASQL.Operations
                     or.AddChild(Translate(root.Child(0)));
                     or.AddChild(Translate(root.Child(2)));
                     return or;
-                case "[not]":
+                case "[notCondition]":
                     TreeNode<String> not = new TreeNode<String>("[not]");
                     not.AddChild(Translate(root.Child(1)));
                     return not;
