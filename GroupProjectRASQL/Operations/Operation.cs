@@ -24,7 +24,7 @@ namespace GroupProjectRASQL.Operations
                 return "[" + this.GetType().Name + "]";
             } else
             {
-                return "[" + this.GetType().Name + "]{" + parameter.TreeToString() + "}";
+                return "[" + this.GetType().Name + "](" + parameter.TreeToString() + ")";
             }
            
         }

@@ -39,7 +39,15 @@ namespace GroupProjectRASQL.Operations
 
         public override string ToString()
         {
-             return "[" + this.GetType().Name + "]{<br />" + condition.TreeToDebugString() + "}";
+             return ToString(0);
+        }
+
+        public string ToString(int depth = 0)
+        {
+            String ret = "[" + this.GetType().Name + "](<br />" + condition.TreeToDebugString(new List<String>() { "[literal]" }, depth+1);
+            for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            ret += ")";
+            return ret;
         }
     }
 }

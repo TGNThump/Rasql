@@ -1,7 +1,9 @@
-﻿using System;
+﻿using GroupProjectRASQL.Operations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace GroupProjectRASQL.Parser
 {
@@ -138,12 +140,20 @@ namespace GroupProjectRASQL.Parser
 
         }
 
-        public String TreeToDebugString(int depth = 0)
+        public String TreeToDebugString(IList<T> squish = null, int depth = 0)
         {
+            squish = squish ?? new List<T>();
             String ret = "";
             for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
-            ret += Data + "<br />";
-            foreach (TreeNode<T> child in Children) ret += child.TreeToDebugString(depth + 1);
+            if (squish.Contains(Data)) return ret + TreeToString() + "<br />";
+
+            MethodInfo toString = Data.GetType().GetMethod("ToString", new Type[] { typeof(int) });
+
+            ret +=  (toString != null ? toString.Invoke(Data, new object[]{ depth }) : Data.ToString()) + (Children.Count == 0 ? "<br/>" : "{<br />");
+            if (Children.Count == 0) return ret;
+            foreach (TreeNode<T> child in Children) ret += child.TreeToDebugString(squish, depth + 1);
+            for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
+            ret += "}<br />";
             return ret;
         }
 
