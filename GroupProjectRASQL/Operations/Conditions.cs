@@ -48,10 +48,14 @@ namespace GroupProjectRASQL.Operations
 
         public static Node SetField(Node root, String oldName, String newName)
         {
-           foreach(Node condition in root)
+            root.ForEach(node =>
             {
-                if (root.Data.Equals(oldName)) root.Data = newName;
-            }
+                if (node.Data.Equals(oldName))
+                {
+                    node.Data = newName;
+                }
+                return node;
+            });
             return root;
         }
 
