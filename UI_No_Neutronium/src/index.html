@@ -20,32 +20,34 @@
       <div class="ParseArea" id="outer">
         <!-- SQL/RA Taskbar Toggle -->
           <div id="togglebar">
-            <button type="button" id="sqltbutton" class="TopBarButton" onclick="sqlOnClick()" id="SQL">
+            <button type="button" id="SQLbtn" class="TopBarButton" onclick="sqlOnClick()" id="SQL">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SQL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </button>
-            <button type="button" onclick="raOnClick()" class="TopBarButton" id="RA">
+            <button type="button" onclick="raOnClick()" class="TopBarButton" id="RAbtn">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   
             </button>
           </div>
           <!-- Actual Taskbar (RA is the default setting)-->
           <div id="taskbar ra">
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb1">&#x03C0</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb2">&#x03C3</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb3">&#x03C1</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb4">&#x22C2</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb5">&#x22C3</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb6">&#x2A1D</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="project">&#x03C0</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="RAselect">&#x03C3</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="rename">&#x03C1</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="RAjoin">&#x2A1D</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="union">&#x22C3</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="intersection">&#x22C2</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="cartesian">X</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="difference">-</button>
           </div>
           <div id="taskbar sql" hidden=true>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb1">SELECT</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb2">FROM</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb3">WHERE</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb4">JOIN</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb5">ON</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb6">AS</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb7">AND</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb8">OR</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb9">NOT</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="SQLselect">SELECT</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="from">FROM</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="where">WHERE</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="SQLjoin">JOIN</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="on">ON</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="as">AS</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="and">AND</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="or">OR</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="not">NOT</button>
           </div>
           <!-- Text Area -->
           <div id="parseTextArea">
@@ -63,14 +65,7 @@
       </div>
       <!-- Infobox below -->
       <div class="InformationArea" id="infobox">
-          <h3>Useful Links:</h2>
-          <p>
-             <a href="https://www.w3schools.com/sql/sql_syntax.asp">SQL Syntax</a>
-          </p>
-          <p>
-            <a href="https://www.tutorialspoint.com/dbms/relational_algebra.htm">RA Syntax</a>
-          </p>
-          <h3>Acknowledgements:</h2>
+          <h3>Acknowledgements:</h3>
           <p>Group 17: Anna, Ben, Duncan, Paulo, Tom and Robin.</p>
       </div>
     </div>
