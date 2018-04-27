@@ -1,5 +1,5 @@
-[query] => [select] + ' ' + [from] + ' ' + [where]
-[query] => [select] + ' ' + [from]
+[query] => [select] + ' ' + [from] + ' ' + [where] + ';'
+[query] => [select] + ' ' + [from] + ';'
 
 [select] => 'SELECT ' + [selectList]
 [from] => 'FROM ' + [fromList]
