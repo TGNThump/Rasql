@@ -25,7 +25,7 @@ namespace GroupProjectRASQL.Operations
         public override void setFieldName(string oldName, string newName)
         {
             this.oldName = newName;
-            this.newName = oldName.Split('.')[0] + '.' + this.newName;
+            this.newName = newName.Split('.')[0] + '.' + this.newName;
         }
 
         public String getNewName()

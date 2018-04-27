@@ -31,19 +31,13 @@ namespace GroupProjectRASQL.Heuristics
                 foreach (Node relation in relations)
                 {
                     String relationName = ((Relation)relation.Data).name;
-                    List<Node> path;
+                    List<Node> path = new List<Node>();
 
-                    if (operation.Equals(relation)) path = new List<Node>(relation);
-                    else path = DFS.DepthFirstSearch<Node, Node>(
-                         //a function that given a depth and a node, will return a list of edges.
-                         (depth, node) => node.Children.ToList(),
-                         //a function that given a depth and an edge, will return a node.
-                         (depth, edge) => edge,
-                         //a function that given a depth and a node, will tell you if the node is a leaf.
-                         (depth, node) => node.Equals(relation),
-                         //a node. This will be the starting point of the search.
-                         operation
-                    );
+                    for(Node current = relation; !current.Equals(operation); current = current.Parent)
+                    {
+                        path.Add(current);
+                    }
+
                     path.Reverse();
 
                     foreach (Node node in path)
