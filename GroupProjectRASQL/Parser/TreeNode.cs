@@ -96,7 +96,6 @@ namespace GroupProjectRASQL.Parser
         public TreeNode<T> ForEach(Action<TreeNode<T>> action,bool stepping = true )
         {
             action(this);
-            if (this.Children.Count == 0) { return null; }
             if (!stepping)
             {
                 for (int i=0; i < this.Children.Count; i++)
@@ -111,10 +110,10 @@ namespace GroupProjectRASQL.Parser
                 forEachStore(action);
                 return this;
                 
+                
             }
         }
 
-        private int currenti;
         private Action<TreeNode<T>> currentAction;
         
         public void forEachStore(Action<TreeNode<T>> action)
@@ -122,24 +121,28 @@ namespace GroupProjectRASQL.Parser
             this.currentAction = action;
         }
 
-        public void step()
+        public bool step()
         {
             Console.WriteLine("Step");
+
             for (int i = 0; i < this.Children.Count; i++)
             {
                 Children.ElementAt(i).ForEach(this.currentAction, true);
             }
+            return true;
         }
-        public void stepToEnd()
+        public bool stepToEnd()
         {
             Console.WriteLine("toEnd");
 
             ForEach(this.currentAction, false);
-            
+            return true;
+
+
 
         }
 
-        
+
 
 
 

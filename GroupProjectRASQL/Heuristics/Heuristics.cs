@@ -136,7 +136,7 @@ namespace GroupProjectRASQL.Heuristics
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
-
+            bool temp = false;
             switch (isRunning)
             {
                 case 0:
@@ -169,47 +169,70 @@ namespace GroupProjectRASQL.Heuristics
                     }
 
                     isRunning = 1;
-                    return 1;
+                    break;
                 case 1:
-                    if (currentNode != null)
-                    {
-                        Console.WriteLine(currentNode.ToString());
-                        isRunning = 1;
-                        if (typeOfStep == 1)
-                        {
-                            currentNode.step();
-                        }
-                        else
-                        {
-                            currentNode.stepToEnd();
-                            return 2;
-                        }
-                        return 1;
-
-                    }
-                    else
-                    {
-                        isRunning = 0;
-                        return 2;
-                    }
+                   
+                     Console.WriteLine(currentNode.ToString());
+                     isRunning = 1;
+                     if (typeOfStep == 1)
+                     {
+                         temp=currentNode.step();
+                     }
+                     else
+                     {
+                         temp=currentNode.stepToEnd();
+                     }
+                    break;
                 default:
-                    return 1;
-
+                    break;
             }
+            if (temp) { return 2; }
+            else { return 1; }
         }
 
         public static int Heuristic2(TreeNode<Operation> rootTree, int typeOfStep = 1)
         {
-            rootTree.ForEach((element) =>
+            /*
+             * Heuristic One deals with the splitting of any selection 
+             * - σp(r) - statement that has more than one condition,
+             * for example  σa=b and b=c  ,into several smaller selections.
+            */
+            bool temp = false;
+            switch (isRunning)
             {
+                case 0:
+                    currentNode = root.ForEach((operation) =>
+                    {
+                        //// CODE goes here
+=                    }, (typeOfStep == 1));
 
-                if (element.Data.GetType().Name == "Selection")
-                {
 
-                }
-            });
-            return 3;
 
+                    if (typeOfStep == 2)
+                    {
+                        return 2;
+                    }
+
+                    isRunning = 1;
+                    break;
+                case 1:
+
+                    Console.WriteLine(currentNode.ToString());
+                    isRunning = 1;
+                    if (typeOfStep == 1)
+                    {
+                        temp = currentNode.step();
+                    }
+                    else
+                    {
+                        temp = currentNode.stepToEnd();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (temp) { return 2; }
+            else { return 1; }
         }
 
         public static int Heuristic3(TreeNode<Operation> rootTree, int typeOfStep = 1)
