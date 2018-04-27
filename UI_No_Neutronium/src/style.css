@@ -76,7 +76,7 @@ th:hover {
   border-radius: 3px;
   text-align: center;
   font: bold 22px/normal "Gruppo", Gadget, sans-serif;
-  color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.5);
   -o-text-overflow: clip;
   text-overflow: clip;
   background: #c5ff07;
@@ -94,7 +94,7 @@ th:hover {
 }
 
 .TopBarButton:active {
-  color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.5);
   -webkit-box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset;
   box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset;
 }
@@ -107,7 +107,7 @@ th:hover {
   padding: 10px 19px;
   border-radius: 2px;
   font: normal 16px/normal "Gruppo", Times, serif;
-  color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.5);
   -o-text-overflow: clip;
   text-overflow: clip;
   background: rgba(235,255,173,0.9);
@@ -132,7 +132,7 @@ th:hover {
   cursor: pointer;
   padding: 10px 10px;
   font: bold 30px/normal "Gruppo", Gadget, sans-serif;
-  color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.5);
   -o-text-overflow: clip;
   text-overflow: clip;
   background: rgba(235,255,173,0.9);
@@ -205,13 +205,6 @@ th:hover {
   background: #efffbf;
 } 
 
-.InformationArea:hover {
-  -webkit-box-shadow: 0 0 6px 2px rgba(0,0,0,0.5);
-  box-shadow: 0 0 6px 2px rgba(0,0,0,0.4);
-  color: rgba(255,255,255,1);
-  text-shadow: 1px 1px 10px rgba(0,0,0,1);
-}
-
 /************************
 * View 2 - Specific CSS *
 ************************/
@@ -264,7 +257,7 @@ th:hover {
   border-radius: 3px;
   text-align: center;
   font: bold 30px/normal "Gruppo", Gadget, sans-serif;
-  color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.5);
   -o-text-overflow: clip;
   text-overflow: clip;
   background: #c5ff07;
@@ -282,7 +275,7 @@ th:hover {
 }
 
 .BackButton:active {
-  color: rgba(255,255,255,0.9);
+  color: rgba(0,0,0,0.5);
   -webkit-box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset;
   box-shadow: 2px 2px 2px 0 rgba(40,40,40,0.2) inset; 
 }
