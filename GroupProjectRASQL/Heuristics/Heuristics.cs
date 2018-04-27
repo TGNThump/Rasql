@@ -195,7 +195,7 @@ namespace GroupProjectRASQL.Heuristics
                 default:
                     return 1;
 
-            } );
+            }
         }
 
         public static int Heuristic2(TreeNode<Operation> rootTree, int typeOfStep = 1)
