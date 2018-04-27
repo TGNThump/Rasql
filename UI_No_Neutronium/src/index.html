@@ -14,7 +14,7 @@
       <!-- Logo/Title -->
       <div class="LogoArea">
           <h1 id="logoHeader">Relational Algebra Educational Tool</h1>
-          <h2 id="logoUnder">Group 17 - COMP2something</h2>
+          <h2 id="logoUnder">Group 17 - COMP202</h2>
       </div>
       <!-- Input Area --> 
       <div class="ParseArea" id="outer">
@@ -28,19 +28,22 @@
             </button>
           </div>
           <!-- Actual Taskbar (RA is the default setting)-->
-          <div id="taskbar">
+          <div id="taskbar ra">
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb1">&#x03C0</button>
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb2">&#x03C3</button>
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb3">&#x03C1</button>
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb4">&#x22C2</button>
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb5">&#x22C3</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb6">&#x2A2F</button>
               <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb7">&#x2A1D</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb8">&#x22C9</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb9">&#x22CA</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb10">&#x2212</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb11">&#x2227</button>
-              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb12">&#x2228</button>
+          </div>
+          <div id="taskbar sql" hidden=true>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb1">SELECT</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb2">FROM</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb3">WHERE</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb4">JOIN</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb5">AND</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb6">OR</button>
+              <button type="button" class="TaskBarButton" onclick="tButtonOnClick(this.id)" id="tb7">NOT</button>
           </div>
           <!-- Text Area -->
           <div id="parseTextArea">
