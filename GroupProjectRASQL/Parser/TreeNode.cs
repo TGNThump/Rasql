@@ -80,15 +80,73 @@ namespace GroupProjectRASQL.Parser
 
         public void ForEach(Func<TreeNode<T>, TreeNode<T>> action)
         {
-            TreeNode <T> temp = action(this);
+            TreeNode<T> temp = action(this);
             this.Data = temp.Data;
             this.Parent = temp.Parent;
             this.Children = temp.Children;
             for (int i = 0; i < this.Children.Count; i++)
-            {
                 Children.ElementAt(i).ForEach(action);
+        }
+    
+
+
+
+
+
+        public TreeNode<T> ForEach(Action<TreeNode<T>> action,bool stepping = true )
+        {
+            action(this);
+            if (this.Children.Count == 0) { return null; }
+            if (!stepping)
+            {
+                for (int i=0; i < this.Children.Count; i++)
+                {
+                    Children.ElementAt(i).ForEach(action,false);
+                }
+                return null;
+
+            }
+            else
+            {
+                forEachStore(action);
+                return this;
+                
             }
         }
+
+        private int currenti;
+        private Action<TreeNode<T>> currentAction;
+        
+        public void forEachStore(Action<TreeNode<T>> action)
+        {
+            this.currentAction = action;
+        }
+
+        public void step()
+        {
+            Console.WriteLine("Step");
+            for (int i = 0; i < this.Children.Count; i++)
+            {
+                Children.ElementAt(i).ForEach(this.currentAction, true);
+            }
+        }
+        public void stepToEnd()
+        {
+            Console.WriteLine("toEnd");
+
+            ForEach(this.currentAction, false);
+            
+
+        }
+
+        
+
+
+
+
+
+
+
 
         public override string ToString()
         {
@@ -146,7 +204,7 @@ namespace GroupProjectRASQL.Parser
             MethodInfo toString = Data.GetType().GetMethod("ToString", new Type[] { typeof(int) });
 
             ret +=  (toString != null ? toString.Invoke(Data, new object[]{ depth }) : Data.ToString()) + (Children.Count == 0 ? "<br/>" : "{<br />");
-            if (Children.Count == 0) return ret;
+            if (Children.Count == 0) return ret; // TEMPish
             foreach (TreeNode<T> child in Children) ret += child.TreeToDebugString(squish, depth + 1);
             for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
             ret += "}<br />";

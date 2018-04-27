@@ -19,8 +19,11 @@ namespace GroupProjectRASQL.ViewModel
 
         public string output { get; private set; } = "";
         //public string output { get { return output; } private set { Set(ref output, value); }}
-
+        public TreeNode<Operation> ops;
+        public int currentHeuristic = 1;
         public ISimpleCommand<String> Parse { get; private set; }
+        public ISimpleCommand<String> step { get; private set; }
+        public ISimpleCommand<String> stepToEnd{ get; private set;}
 
         public IList<Relation> Relations { get; set; } = new List<Relation> {
             new Relation("animals", new List<Field>() {
@@ -53,7 +56,8 @@ namespace GroupProjectRASQL.ViewModel
                 {
                     if (input == null) return;
                     output = "";
-
+                    Heuristics.Heuristics.reset();
+                    currentHeuristic = 1;
                     String sql = input;
                     String ra = input;
                     List<State>[] stateSets;
@@ -97,14 +101,14 @@ namespace GroupProjectRASQL.ViewModel
                     output += "</div></div>";
                     */
 
-                    TreeNode<Operation> ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+                    ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
                     ops = Heuristics.Heuristics.Heuristic0(ops);
 
                     output += "<div class='card'><div class='card-body'>";
                     output += ops.TreeToDebugString();
                     output += "</div></div>";
-
-                    Heuristics.Heuristics.Heuristic1(ops);
+                    /*
+                    //Heuristics.Heuristics.Heuristic1(ops);
 
                     output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
                     output += ops.TreeToDebugString();
@@ -129,13 +133,84 @@ namespace GroupProjectRASQL.ViewModel
                     output += "</div></div>";
 
                     Heuristics.Heuristics.Heuristic5(ops);
-
+                    */
                     return;
                 } catch (Exception e){
                     Console.WriteLine(e.ToString());
                     output = "<div class='alert alert-danger'>" + e.ToString().Replace(Environment.NewLine, "<br/>") + "</div>";
                 }
             });
+            step = new RelaySimpleCommand<String>(delegate (String type)
+            {
+                switch(currentHeuristic)
+                {
+                    case 1:
+                        currentHeuristic=Heuristics.Heuristics.Heuristic1(ops,1);
+                        output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                        break;
+                    case 2:
+                        currentHeuristic=Heuristics.Heuristics.Heuristic2(ops,1);
+                        output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+
+                        break;
+                    case 3:
+                        currentHeuristic=Heuristics.Heuristics.Heuristic3(ops,1);
+                        output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+
+                        break;
+                    case 4:
+                        currentHeuristic=Heuristics.Heuristics.Heuristic4(ops,1);
+                        output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+
+                        break;
+                    case 5:
+                        currentHeuristic=Heuristics.Heuristics.Heuristic5(ops,1);
+                        output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
+
+                        break;
+
+
+                }
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
+            });
+            stepToEnd = new RelaySimpleCommand<String>(delegate (String type)
+            {
+                switch (currentHeuristic)
+                {
+                    case 1:
+                        currentHeuristic = Heuristics.Heuristics.Heuristic1(ops, 2);
+                        output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                        break;
+                    case 2:
+                        currentHeuristic = Heuristics.Heuristics.Heuristic2(ops, 2);
+                        output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+
+                        break;
+                    case 3:
+                        currentHeuristic = Heuristics.Heuristics.Heuristic3(ops, 2);
+                        output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+
+                        break;
+                    case 4:
+                        currentHeuristic = Heuristics.Heuristics.Heuristic4(ops, 2);
+                        output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+
+                        break;
+                    case 5:
+                        currentHeuristic = Heuristics.Heuristics.Heuristic5(ops, 2);
+                        output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
+
+                        break;
+
+
+                }
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
+            });
+
         }
 
         bool Squish(TreeNode<String> root)

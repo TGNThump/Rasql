@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using Condition = GroupProjectRASQL.Parser.TreeNode<System.String>;
 using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Operation>;
 
@@ -12,6 +11,8 @@ namespace GroupProjectRASQL.Heuristics
 {
     static class Heuristics
     {
+        private static int isRunning = 0;
+        private static TreeNode<Operation> currentNode;
         public static void AddSingle<K,V>(this IDictionary<K,IList<V>> dictionary, K key, V value)
         {
             if (!dictionary.ContainsKey(key)) dictionary.Add(key, new List<V>());
@@ -64,7 +65,6 @@ namespace GroupProjectRASQL.Heuristics
                                 }
                             } else {
                                 // Convert Dictionary<relationName, List<fieldName>> to List<KeyValuePair<relationName,fieldName>>
-                                new KeyValuePair<String, String>("a", "b");
                                 IEnumerable<KeyValuePair<String,String>> fieldPairs = fields.ToList().SelectMany(key => key.Value, (key, value) => new KeyValuePair<String,String>(key.Key, value));
                                 // Filter to when fieldName = oldName
                                 IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(pair => pair.Value.Equals(oldName));
@@ -124,7 +124,12 @@ namespace GroupProjectRASQL.Heuristics
             return root;
         }
 
-        public static void Heuristic1(Node root)
+        public static void reset()
+        {
+            isRunning = 0;
+            currentNode = null;
+        }
+        public static int Heuristic1(Node root, int typeOfStep = 1)
         {
             /*
              * Heuristic One deals with the splitting of any selection 
@@ -132,51 +137,87 @@ namespace GroupProjectRASQL.Heuristics
              * for example  σa=b and b=c  ,into several smaller selections.
             */
 
-            root.ForEach((operation) =>
+            switch (isRunning)
             {
-                if (operation.Data is Selection)
-                {
-                    Selection selection = (Selection)operation.Data;
-                    Condition condition = selection.getCondition();
-
-                    condition = Conditions.ToCNF(condition);
-
-                    if (condition.Data == "[and]")
+                case 0:
+                    currentNode = root.ForEach((operation) =>
                     {
-                        Node[] children = new Node[operation.Children.Count];
-                        operation.Children.CopyTo(children, 0);
-                        operation.RemoveChildren();
+                        if (operation.Data is Selection)
+                        {
+                            Selection selection = (Selection)operation.Data;
+                            Condition condition = selection.getCondition();
 
-                        Node newChild = new Node(new Selection(condition.Child(1)));
-                        selection.setCondition(condition.Child(0));
+                            condition = Conditions.ToCNF(condition);
 
-                        newChild.AddChildren(children);
-                        operation.AddChild(newChild);
+                            if (condition.Data == "[and]")
+                            {
+                                Node[] children = new Node[operation.Children.Count];
+                                operation.Children.CopyTo(children, 0);
+                                operation.RemoveChildren();
+
+                                Node newChild = new Node(new Selection(condition.Child(1)));
+                                selection.setCondition(condition.Child(0));
+
+                                newChild.AddChildren(children);
+                                operation.AddChild(newChild);
+                            }
+                        }
+                    }, (typeOfStep == 1));
+                    if (typeOfStep == 2)
+                    {
+                        return 2;
                     }
-                }
-                return operation;
-            });
+
+                    isRunning = 1;
+                    return 1;
+                case 1:
+                    if (currentNode != null)
+                    {
+                        Console.WriteLine(currentNode.ToString());
+                        isRunning = 1;
+                        if (typeOfStep == 1)
+                        {
+                            currentNode.step();
+                        }
+                        else
+                        {
+                            currentNode.stepToEnd();
+                            return 2;
+                        }
+                        return 1;
+
+                    }
+                    else
+                    {
+                        isRunning = 0;
+                        return 2;
+                    }
+                default:
+                    return 1;
+
+            }
         }
 
-        public static void Heuristic2(TreeNode<Operation> rootTree)
+        public static int Heuristic2(TreeNode<Operation> rootTree, int typeOfStep = 1)
         {
             rootTree.ForEach((element) =>
             {
+
                 if (element.Data.GetType().Name == "Selection")
                 {
 
                 }
-
-                return element;
             });
+            return 3;
+
         }
 
-        public static void Heuristic3(TreeNode<Operation> rootTree)
+        public static int Heuristic3(TreeNode<Operation> rootTree, int typeOfStep = 1)
         {
-
+            return 4;
         }
 
-        public static void Heuristic4(TreeNode<Operation> rootTree)
+        public static int Heuristic4(TreeNode<Operation> rootTree, int typeOfStep = 1)
         {
             rootTree.ForEach((element) => 
             {
@@ -195,16 +236,18 @@ namespace GroupProjectRASQL.Heuristics
                 }
                 return element;
             });
+            return 5;
+
         }
-        
-        public static void Heuristic5(TreeNode<Operation> rootTree)
+
+        public static int Heuristic5(TreeNode<Operation> rootTree, int typeOfStep = 1)
         {
+            return 1;
 
         }
-
-
 
     }
     
     
 }
+
