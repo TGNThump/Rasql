@@ -129,7 +129,7 @@ namespace GroupProjectRASQL.Heuristics
             isRunning = 0;
             currentNode = null;
         }
-        public static int Heuristic1(Node root, int typeOfStep = 1)
+        public static int Heuristic1(Node root, int typeOfStep = 1) // Selection Split Heuristic
         {
             /*
              * Heuristic One deals with the splitting of any selection 
@@ -195,14 +195,14 @@ namespace GroupProjectRASQL.Heuristics
             
         }
 
-        public static int Heuristic2(Node root, int typeOfStep = 1)
+        public static int Heuristic2(Node root, int typeOfStep = 1) // Move Selection Heuristic
         {
             /*
              * Heuristic One deals with the splitting of any selection 
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
-            /*
+            
             bool temp = false;
             switch (isRunning)
             {
@@ -210,71 +210,13 @@ namespace GroupProjectRASQL.Heuristics
                     currentNode = root.ForEach((operation) =>
                     {
                         //// CODE goes here
-=                    }, (typeOfStep == 1));
-
-
-
-                    if (typeOfStep == 2)
-                    {
-                        return 2;
-                    }
-
-                    isRunning = 1;
-                    break;
-                case 1:
-
-                    Console.WriteLine(currentNode.ToString());
-                    isRunning = 1;
-                    if (typeOfStep == 1)
-                    {
-                        temp = currentNode.step();
-                    }
-                    else
-                    {
-                        temp = currentNode.stepToEnd();
-                    }
-                    break;
-                default:
-                    break;
-            }
-            if (temp) { return 2; }
-            else { return 1; }*/
-            return 3;
-        }
-
-        public static int Heuristic3(Node root, int typeOfStep = 1)
-        {
-            return 4;
-        }
-
-        public static int Heuristic4(Node root, int typeOfStep = 1)
-
-        {
-            bool temp = false;
-            switch (isRunning)
-            {
-                case 0:
-                    currentNode = root.ForEach((element) =>
-                    {
-                        if (element.Data is Cartesian)
-                        {
-                            if (element.Parent.Data is Selection)
-                            {
-                                Selection selection = (Selection)element.Parent.Data;
-                                element.Parent.Data = new Join(selection.getCondition());
-                                element.Parent.RemoveChild(element);
-                                element.Parent.AddChild(element.Child(0));
-                                element.Parent.AddChild(element.Child(1));
-                            }
-                        }
-                        //// CODE goes here
                     }, (typeOfStep == 1));
 
 
 
                     if (typeOfStep == 2)
                     {
-                        return 2;
+                        return 4;// Changed to reflect current heuristic
                     }
 
                     isRunning = 1;
@@ -295,13 +237,71 @@ namespace GroupProjectRASQL.Heuristics
                 default:
                     break;
             }
-            if (temp) { return 2; }
-            else { return 1; }
-           
+            if (temp) { return 4; }// Changed to reflect current heuristic
+            else { return 3; } // Changed to reflect current heuristic
+            return 3;
+        }
+
+        public static int Heuristic3(Node root, int typeOfStep = 1) // Restriction Heuristic
+        {
+            return 4;
+        }
+
+        public static int Heuristic4(Node root, int typeOfStep = 1) // Cartisean removal Heuristic
+
+        {
+            bool temp = false;
+            switch (isRunning)
+            {
+                case 0:
+                    currentNode = root.ForEach((element) => // The following block is the only part that meaningfully changes from Heuristic 1 - see comments there
+                    {
+                        if (element.Data is Cartesian) // if this node is a cartisean product
+                        {
+                            if (element.Parent.Data is Selection) // and the node above it is a selection
+                            {
+                                Selection selection = (Selection)element.Parent.Data;  // cast the selection
+                                element.Parent.Data = new Join(selection.getCondition()); // create a new join using the cast selections condition
+
+                                element.Parent.RemoveChild(element);  // Give this join its position in the list
+                                element.Parent.AddChild(element.Child(0));
+                                element.Parent.AddChild(element.Child(1));
+                            }
+                        }
+                    }, (typeOfStep == 1));
+
+
+
+                    if (typeOfStep == 2)
+                    {
+                        return 5; // Changed to reflect current heuristic
+                    }
+
+                    isRunning = 1;
+                    break;
+                case 1:
+
+                    Console.WriteLine(currentNode.ToString());
+                    isRunning = 1;
+                    if (typeOfStep == 1)
+                    {
+                        temp = currentNode.step();
+                    }
+                    else
+                    {
+                        temp = currentNode.stepToEnd();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (temp) { return 5; }// Changed to reflect current heuristic
+            else { return 4; }// Changed to reflect current heuristic
+
 
         }
 
-        public static int Heuristic5(Node root, int typeOfStep = 1)
+        public static int Heuristic5(Node root, int typeOfStep = 1) // Move projection heuristic
         {
             return 1;
 
