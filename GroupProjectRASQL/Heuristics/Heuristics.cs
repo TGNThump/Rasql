@@ -11,8 +11,8 @@ namespace GroupProjectRASQL.Heuristics
 {
     static class Heuristics
     {
-        private static int isRunning = 0;
-        private static TreeNode<Operation> currentNode;
+        private static int isRunning = 0; // Running flag
+        private static TreeNode<Operation> currentNode; // Current Root for any paused heuristic
         public static void AddSingle<K,V>(this IDictionary<K,IList<V>> dictionary, K key, V value)
         {
             if (!dictionary.ContainsKey(key)) dictionary.Add(key, new List<V>());
@@ -136,63 +136,62 @@ namespace GroupProjectRASQL.Heuristics
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
-            bool temp = false;
-            switch (isRunning)
+            bool temp = false; // Init a temporary boolean to handle whether the tree has been explored
+            switch (isRunning) // Switch on isRunning - heuristics class static variable that handles whether a heuristic is currently being run
             {
-                case 0:
-                    currentNode = root.ForEach((operation) =>
+                case 0: // If not running
+                    currentNode = root.ForEach((operation) => // ForEach is a iteration function for the tree, it returns the node at each step incase it needs to be interupted ( for stepwise explinations )
                     {
-                        if (operation.Data is Selection)
+                        if (operation.Data is Selection) // if the current node is a selection 
                         {
-                            Selection selection = (Selection)operation.Data;
-                            Condition condition = selection.getCondition();
+                            Selection selection = (Selection)operation.Data; // cast it to selection
+                            Condition condition = selection.getCondition(); // get the selections conditions
 
-                            condition = Conditions.ToCNF(condition);
+                            condition = Conditions.ToCNF(condition); // In order to split the selection into multiple selections its condition must be in conjunctive normal form, this function handles that.
 
-                            if (condition.Data == "[and]")
+                            if (condition.Data == "[and]") // If it can be split
                             {
-                                Node[] children = new Node[operation.Children.Count];
-                                operation.Children.CopyTo(children, 0);
-                                operation.RemoveChildren();
+                                Node[] children = new Node[operation.Children.Count]; // Create a new node
+                                operation.Children.CopyTo(children, 0); // Move this nodes child pointers to the new node
+                                operation.RemoveChildren(); // Remove the original nodes child pointers
 
-                                Node newChild = new Node(new Selection(condition.Child(1)));
-                                selection.setCondition(condition.Child(0));
+                                Node newChild = new Node(new Selection(condition.Child(1))); // Make a new selection
+                                selection.setCondition(condition.Child(0)); // set  its condition to the first branch of the original condition
 
-                                newChild.AddChildren(children);
+                                newChild.AddChildren(children); // give the new selection its position in the tree
                                 operation.AddChild(newChild);
                             }
                         }
-                    }, (typeOfStep == 1));
-                    if (typeOfStep == 2)
+                    }, (typeOfStep == 1)); // passes true if it needs to be done stepwise
+                    if (typeOfStep == 2) // if stepwise is false
                     {
-                        isRunning = 0;
-                        return 2;
+                        isRunning = 0; // This is finished
+                        return 2; // return the next heuristic
                     }
 
-                    isRunning = 1;
+                    isRunning = 1; // otherwise its not finished
                     break;
-                case 1:
+                case 1: // if currently running
                    
-                     Console.WriteLine(currentNode.ToString());
-                     isRunning = 1;
-                     if (typeOfStep == 1)
+                     //Console.WriteLine(currentNode.ToString()); // debug string
+                     if (typeOfStep == 1) // if stepwise
                      {
-                         temp=currentNode.step();
+                         temp=currentNode.step(); // next step // returns tree if this is the end of the tree, false otherwise
                      }
-                     else
+                     else // if not stepwise
                      {
-                         temp=currentNode.stepToEnd();
+                         temp=currentNode.stepToEnd(); // move to end - returns true
                      }
                     break;
-                default:
+                default: // In an error situation, this will trigger - this should never trigger.
                     break;
             }
-            if (temp)
+            if (temp) // If the tree has been explored
             {
-                isRunning = 0;
-                return 2;
+                isRunning = 0; // this is finished
+                return 2; // move to next heuristic
             }
-            else { return 1; }
+            else { return 1; } // otherwise stay on this heuristic
             
         }
 
