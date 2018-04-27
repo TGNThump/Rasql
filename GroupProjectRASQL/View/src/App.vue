@@ -10,6 +10,13 @@
       <div class="col-2">
         <button class="btn btn-block" @click="Parse.Execute('ra')">RA</button>
       </div>
+      <div class="col-2">
+        <button class="btn btn-block" @click="step.Execute('')">STEP</button>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-block" @click="stepToEnd.Execute('')">END</button>
+      </div>
+
 		</div>
 		<div class="row" style="flex-grow: 1;">
 			<column class="d-flex flex-column" style="flex-grow: 1;">
