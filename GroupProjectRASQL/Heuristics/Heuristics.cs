@@ -64,7 +64,6 @@ namespace GroupProjectRASQL.Heuristics
                                 }
                             } else {
                                 // Convert Dictionary<relationName, List<fieldName>> to List<KeyValuePair<relationName,fieldName>>
-                                new KeyValuePair<String, String>("a", "b");
                                 IEnumerable<KeyValuePair<String,String>> fieldPairs = fields.ToList().SelectMany(key => key.Value, (key, value) => new KeyValuePair<String,String>(key.Key, value));
                                 // Filter to when fieldName = oldName
                                 IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(pair => pair.Value.Equals(oldName));
