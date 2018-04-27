@@ -1,10 +1,10 @@
-[query] => [projection]
-[query] => [selection]
-[query] => [rename]
-[query] => [join]
-[query] => [setOperation]
-[query] => [string]
-[query] =>  '(' + [query] + ')'
+[query] => [projection] + ';'
+[query] => [selection] + ';'
+[query] => [rename] + ';'
+[query] => [join] + ';'
+[query] => [setOperation] + ';'
+[query] => [string] + ';'
+[query] =>  '(' + [query] + ')' + ';'
 
 [projection] => [pi] + ' ' + [attributeList] + ' ('+ [query] + ')'
 
@@ -31,6 +31,8 @@
 [literal] => [value]
 [literal] => [value] + [operator] + [value]
 [literal] => [value] + ' ' + [operator] + ' ' + [value]
+[literal] => [value] + [operator] + ' ' + [value]
+[literal] => [value] + ' ' + [operator] + [value]
 
 [andCondition] => [condition] + ' AND ' + [condition]
 [orCondition] => [condition] + ' OR ' + [condition]
