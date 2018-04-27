@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Node = GroupProjectRASQL.Parser.TreeNode<System.String>;
 
+
 namespace GroupProjectRASQL.Operations
 {
     static class Conditions
@@ -40,9 +41,22 @@ namespace GroupProjectRASQL.Operations
             throw new Exception("Can't parse " + root.TreeToString());
         }
 
-        public static IEnumerable<Node> GetFields(Node condition)
+        public static IEnumerable<String> GetFields(Node condition)
         {
-            return condition.Where(node => node.Data == "[field]").Select(node => node.Child());
+            return condition.Where(node => node.Data == "[field]").Select(node => node.Child().Data);
+        }
+
+        public static Node SetField(Node root, String oldName, String newName)
+        {
+            root.ForEach(node =>
+            {
+                if (node.Data.Equals(oldName))
+                {
+                    node.Data = newName;
+                }
+                return node;
+            });
+            return root;
         }
 
         public static Node ToCNF(Node condition)

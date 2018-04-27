@@ -26,7 +26,15 @@ namespace GroupProjectRASQL.Operations
             {
                 return "[" + this.GetType().Name + "](" + parameter.TreeToString() + ")";
             }
-           
+        }
+
+        public virtual IEnumerable<String> getFieldNames()
+        {
+            return new List<String>();
+        }
+
+        public virtual void setFieldName(String oldName, String newName){
+            throw new NotImplementedException(GetType().Name);
         }
     }
 }

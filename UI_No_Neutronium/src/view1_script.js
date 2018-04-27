@@ -7,7 +7,6 @@ $(document).ready(function(){
 	}); 
 });  
 
-// lets not talk about this - it works tho 
 function sqlOnClick(){
 	document.getElementById("taskbar sql").hidden = false;
 	document.getElementById("taskbar ra").hidden = true;

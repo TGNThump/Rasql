@@ -26,9 +26,14 @@ namespace GroupProjectRASQL.Operations
             return condition;
         }
 
-        public IEnumerable<TreeNode<String>> getFields()
+        public override IEnumerable<String> getFieldNames()
         {
             return Conditions.GetFields(condition);
+        }
+
+        public override void setFieldName(string oldName, string newName)
+        {
+            this.condition = Conditions.SetField(condition, oldName, newName);
         }
 
         public Join setCondition(TreeNode<String> condition)
@@ -44,7 +49,7 @@ namespace GroupProjectRASQL.Operations
 
         public string ToString(int depth = 0)
         {
-            String ret = "[" + this.GetType().Name + "](<br />" + condition.TreeToDebugString(new List<String>() { }, depth + 1);
+            String ret = "[" + this.GetType().Name + "](<br />" + condition.TreeToDebugString(new List<String>() { "[literal]" }, depth + 1);
             for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
             ret += ")";
             return ret;

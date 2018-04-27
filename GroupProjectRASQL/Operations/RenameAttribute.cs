@@ -17,6 +17,17 @@ namespace GroupProjectRASQL.Operations
             oldName = parameter.Child(1).TreeToString();
         }
 
+        public override IEnumerable<String> getFieldNames()
+        {
+            return new List<String>() { oldName };
+        }
+
+        public override void setFieldName(string oldName, string newName)
+        {
+            this.oldName = newName;
+            this.newName = newName.Split('.')[0] + '.' + this.newName;
+        }
+
         public String getNewName()
         {
             return newName;
