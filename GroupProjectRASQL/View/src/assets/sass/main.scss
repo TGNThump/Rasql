@@ -1,14 +1,61 @@
 $grid-gutter-width: 10px;
+$theme-colors: (
+  "primary": #1B4D3E,
+);
+
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/codemirror/lib/codemirror.css";
 
 html, body, #main, .app{
 	width: 100%;
 	height: 100%;
 	margin: 0px;
-	padding: 2px;
-    background-color: #eee;
+	padding: 0px;
+}
+
+body{
+    background-color: #E8E8E8;
 }
 
 .row{
     margin-bottom: 10px;
+}
+
+.nav-main .nav-item{
+	padding-right: 15px;
+}
+
+.view{
+	padding: 16px;
+}
+
+.codemirror{
+    padding: 0px;
+    overflow: hidden;
+    border-top-radius: 0px;
+}
+
+.CodeMirror{
+	height: 100%;
+}
+
+.CodeMirror-lines{
+	padding: 10px 2px;
+	font-size:1.1em;
+}
+
+.CodeMirror-linenumber {
+    padding: 0 8px 2px 5px;
+}
+
+.nav-tabs{
+	.nav-link{
+	    color: #495057;
+	    border-color: #dee2e6 #dee2e6 #f7f7f7;
+	    background-color: #f7f7f7;
+	}
+}
+
+.card{
+	margin-bottom: 19px;
 }
