@@ -26,9 +26,14 @@ namespace GroupProjectRASQL.Operations
             return condition;
         }
 
-        public IEnumerable<TreeNode<String>> getFields()
+        public override IEnumerable<String> getFieldNames()
         {
             return Conditions.GetFields(condition);
+        }
+
+        public override void setFieldName(string oldName, string newName)
+        {
+            this.condition = Conditions.SetField(condition, oldName, newName);
         }
 
         public Selection setCondition(TreeNode<String> condition)

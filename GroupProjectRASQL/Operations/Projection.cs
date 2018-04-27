@@ -15,14 +15,31 @@ namespace GroupProjectRASQL.Operations
             this.fields = new List<String>(parameter.TreeToString().Split(','));
         }
 
-        public List<String> getFields()
+        public override IEnumerable<String> getFieldNames()
         {
             return fields;
         }
 
-        public void setFields(List<String> fields)
+        public override void setFieldName(string oldName, string newName)
         {
-            this.fields = fields;
+            for(int i = 0; i < fields.Count; i++)
+            {
+                String field = fields[i];
+                if (field.Equals(oldName))
+                {
+                    fields.RemoveAt(i);
+                    fields.Add(newName);
+                    return;
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            {
+                return "[" + this.GetType().Name + "](" + fields.Aggregate((a,b) => a + ", " + b) + ")";
+            }
+
         }
     }
 }

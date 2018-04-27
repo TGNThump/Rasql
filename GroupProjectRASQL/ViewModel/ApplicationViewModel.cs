@@ -98,6 +98,7 @@ namespace GroupProjectRASQL.ViewModel
                     */
 
                     TreeNode<Operation> ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+                    ops = Heuristics.Heuristics.Heuristic0(ops);
 
                     output += "<div class='card'><div class='card-body'>";
                     output += ops.TreeToDebugString();

@@ -1,4 +1,5 @@
-﻿using GroupProjectRASQL.Schema;
+﻿using GroupProjectRASQL.Parser;
+using GroupProjectRASQL.Schema;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace GroupProjectRASQL.Operations
             this.fields = fields;
         }
 
-        public IEnumerable<String> getFieldNames()
+        public override IEnumerable<String> getFieldNames()
         {
             return fields.Select(field => field.name);
         }

@@ -78,19 +78,16 @@ namespace GroupProjectRASQL.Parser
             this.ElementsIndex.Add(this);
         }
 
-        public void ForEach(Func<TreeNode<T>, Boolean> action)
+        public void ForEach(Func<TreeNode<T>, TreeNode<T>> action)
         {
-            if (action(this)) return;
-
+            TreeNode <T> temp = action(this);
+            this.Data = temp.Data;
+            this.Parent = temp.Parent;
+            this.Children = temp.Children;
             for (int i = 0; i < this.Children.Count; i++)
             {
                 Children.ElementAt(i).ForEach(action);
             }
-        }
-
-        public void ForEach(Action<TreeNode<T>> action)
-        {
-            ForEach((node) => { action(node); return false; });
         }
 
         public override string ToString()
