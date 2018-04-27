@@ -165,6 +165,7 @@ namespace GroupProjectRASQL.Heuristics
                     }, (typeOfStep == 1));
                     if (typeOfStep == 2)
                     {
+                        isRunning = 0;
                         return 2;
                     }
 
@@ -186,17 +187,23 @@ namespace GroupProjectRASQL.Heuristics
                 default:
                     break;
             }
-            if (temp) { return 2; }
+            if (temp)
+            {
+                isRunning = 0;
+                return 2;
+            }
             else { return 1; }
+            
         }
 
-        public static int Heuristic2(TreeNode<Operation> rootTree, int typeOfStep = 1)
+        public static int Heuristic2(Node root, int typeOfStep = 1)
         {
             /*
              * Heuristic One deals with the splitting of any selection 
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
+            /*
             bool temp = false;
             switch (isRunning)
             {
@@ -232,38 +239,70 @@ namespace GroupProjectRASQL.Heuristics
                     break;
             }
             if (temp) { return 2; }
-            else { return 1; }
+            else { return 1; }*/
+            return 3;
         }
 
-        public static int Heuristic3(TreeNode<Operation> rootTree, int typeOfStep = 1)
+        public static int Heuristic3(Node root, int typeOfStep = 1)
         {
             return 4;
         }
 
-        public static int Heuristic4(TreeNode<Operation> rootTree, int typeOfStep = 1)
+        public static int Heuristic4(Node root, int typeOfStep = 1)
+
         {
-            rootTree.ForEach((element) => 
+            bool temp = false;
+            switch (isRunning)
             {
-                if (element.Data is Cartesian) 
-                {
-                    if (element.Parent.Data is Selection)
+                case 0:
+                    currentNode = root.ForEach((element) =>
                     {
-                        Selection selection = (Selection)element.Parent.Data;
-                        element.Parent.Data = new Join(selection.getCondition());
-                        element.Parent.RemoveChild(element);
-                        element.Parent.AddChild(element.Child(0));
-                        element.Parent.AddChild(element.Child(1));
+                        if (element.Data is Cartesian)
+                        {
+                            if (element.Parent.Data is Selection)
+                            {
+                                Selection selection = (Selection)element.Parent.Data;
+                                element.Parent.Data = new Join(selection.getCondition());
+                                element.Parent.RemoveChild(element);
+                                element.Parent.AddChild(element.Child(0));
+                                element.Parent.AddChild(element.Child(1));
+                            }
+                        }
+                        //// CODE goes here
+                    }, (typeOfStep == 1));
 
 
+
+                    if (typeOfStep == 2)
+                    {
+                        return 2;
                     }
-                }
-                return element;
-            });
-            return 5;
+
+                    isRunning = 1;
+                    break;
+                case 1:
+
+                    Console.WriteLine(currentNode.ToString());
+                    isRunning = 1;
+                    if (typeOfStep == 1)
+                    {
+                        temp = currentNode.step();
+                    }
+                    else
+                    {
+                        temp = currentNode.stepToEnd();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (temp) { return 2; }
+            else { return 1; }
+           
 
         }
 
-        public static int Heuristic5(TreeNode<Operation> rootTree, int typeOfStep = 1)
+        public static int Heuristic5(Node root, int typeOfStep = 1)
         {
             return 1;
 
