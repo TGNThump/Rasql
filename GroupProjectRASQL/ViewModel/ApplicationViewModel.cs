@@ -130,8 +130,7 @@ namespace GroupProjectRASQL.ViewModel
                     Heuristics.Heuristics.Heuristic5(ops);
 
                     return;
-                } catch (Exception e)
-                {
+                } catch (Exception e){
                     Console.WriteLine(e.ToString());
                     output = "<div class='alert alert-danger'>" + e.ToString().Replace(Environment.NewLine, "<br/>") + "</div>";
                 }
@@ -140,7 +139,7 @@ namespace GroupProjectRASQL.ViewModel
 
         bool Squish(TreeNode<String> root)
         {
-            if (root.Data.Equals("[string]"))
+            if (root.Data.Equals("[string]") || root.Data.Equals("[field]"))
             {
                 String value = root.TreeToString();
                 root.RemoveChildren();

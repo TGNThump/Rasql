@@ -26,7 +26,7 @@ namespace GroupProjectRASQL.Operations
             return condition;
         }
 
-        public IEnumerable<String> getFields()
+        public IEnumerable<TreeNode<String>> getFields()
         {
             return Conditions.GetFields(condition);
         }

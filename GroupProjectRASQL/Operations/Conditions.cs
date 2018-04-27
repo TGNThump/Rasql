@@ -40,9 +40,9 @@ namespace GroupProjectRASQL.Operations
             throw new Exception("Can't parse " + root.TreeToString());
         }
 
-        public static IEnumerable<String> GetFields(Node condition)
+        public static IEnumerable<Node> GetFields(Node condition)
         {
-            return condition.Where(node => node.Data == "[field]").Select(node => node.TreeToString());
+            return condition.Where(node => node.Data == "[field]").Select(node => node.Child());
         }
 
         public static Node ToCNF(Node condition)

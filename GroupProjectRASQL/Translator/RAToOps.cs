@@ -73,7 +73,7 @@ namespace GroupProjectRASQL.Translator
                 case "[join]":
                     bool hasCondition = root.Children.Count > 6;
 
-                    TreeNode<Operation> join = new TreeNode<Operation>(Join.fromParameters(hasCondition ? root.Child(2) : null));
+                    TreeNode<Operation> join = new TreeNode<Operation>(Join.fromParameters(hasCondition ? root.Child(1) : null));
                     join.AddChild(Translate(root.Child((hasCondition ? 1 : 0) + 2), relations));
                     join.AddChild(Translate(root.Child((hasCondition ? 1 : 0) + 4), relations));
                     return join;
