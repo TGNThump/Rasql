@@ -41,7 +41,7 @@ namespace GroupProjectRASQL.Translator
             }
 
             //If there is a where clause, then add a select
-            bool isWhere = node.Children.Count() == 5 && node.Child(4).Data == "[where]";
+            bool isWhere = node.Children.Count() == 6 && node.Child(4).Data == "[where]";
 
             if (isWhere)
             {
