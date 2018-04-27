@@ -1,10 +1,10 @@
-[query] => [projection] + ';'
-[query] => [selection] + ';'
-[query] => [rename] + ';'
-[query] => [join] + ';'
-[query] => [setOperation] + ';'
-[query] => [string] + ';'
-[query] =>  '(' + [query] + ')' + ';'
+[query] => [projection]
+[query] => [selection]
+[query] => [rename]
+[query] => [join]
+[query] => [setOperation]
+[query] => [string]
+[query] =>  '(' + [query] + ')'
 
 [projection] => [pi] + ' ' + [attributeList] + ' ('+ [query] + ')'
 

@@ -15,6 +15,11 @@ namespace GroupProjectRASQL.ViewModel
 {
     public class ApplicationViewModel : Reactive
     {
+        public string CurrentView { get; set; } = "input";
+
+
+        // --- OLD ---
+
         public string input { get; set; }
 
         public string output { get; private set; } = "";
