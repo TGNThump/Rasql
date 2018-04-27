@@ -14,6 +14,7 @@
 		<div class="row" style="flex-grow: 1;">
 			<column class="d-flex flex-column" style="flex-grow: 1;">
         <div style="overflow-y: scroll; overflow-x: hidden;" class="cardcontainer">
+          <div v-html="output"></div>
           <div class='card' style='flex-shrink: 0;'>
             <div class='card-header'>Schema</div>
             <div class='card-body'>
@@ -57,7 +58,6 @@
               </div>
             </div>
           </div>
-          <div v-html="output"></div>
         </div>
 			</column>
 		</div>
