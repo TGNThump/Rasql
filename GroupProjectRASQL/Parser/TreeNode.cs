@@ -78,20 +78,68 @@ namespace GroupProjectRASQL.Parser
             this.ElementsIndex.Add(this);
         }
 
-        public void ForEach(Func<TreeNode<T>, Boolean> action)
-        {
-            if (action(this)) return;
 
-            for (int i = 0; i < this.Children.Count; i++)
+
+
+
+
+
+
+
+        public TreeNode<T> ForEach(Action<TreeNode<T>> action,bool stepping = true )
+        {
+            action(this);
+            if (this.Children.Count == 0) { return null; }
+            if (!stepping)
             {
-                Children.ElementAt(i).ForEach(action);
+                for (int i=0; i < this.Children.Count; i++)
+                {
+                    Children.ElementAt(i).ForEach(action,false);
+                }
+                return null;
+
+            }
+            else
+            {
+                forEachStore(action);
+                return this;
+                
             }
         }
 
-        public void ForEach(Action<TreeNode<T>> action)
+        private int currenti;
+        private Action<TreeNode<T>> currentAction;
+        
+        public void forEachStore(Action<TreeNode<T>> action)
         {
-            ForEach((node) => { action(node); return false; });
+            this.currentAction = action;
         }
+
+        public void step()
+        {
+            Console.WriteLine("Step");
+            for (int i = 0; i < this.Children.Count; i++)
+            {
+                Children.ElementAt(i).ForEach(this.currentAction, true);
+            }
+        }
+        public void stepToEnd()
+        {
+            Console.WriteLine("toEnd");
+
+            ForEach(this.currentAction, false);
+            
+
+        }
+
+        
+
+
+
+
+
+
+
 
         public override string ToString()
         {
@@ -149,7 +197,7 @@ namespace GroupProjectRASQL.Parser
             MethodInfo toString = Data.GetType().GetMethod("ToString", new Type[] { typeof(int) });
 
             ret +=  (toString != null ? toString.Invoke(Data, new object[]{ depth }) : Data.ToString()) + (Children.Count == 0 ? "<br/>" : "{<br />");
-            if (Children.Count == 0) return ret;
+            if (Children.Count == 0) return ret; // TEMPish
             foreach (TreeNode<T> child in Children) ret += child.TreeToDebugString(squish, depth + 1);
             for (int i = 0; i < depth; i++) ret += "&nbsp;&nbsp;&nbsp;&nbsp;";
             ret += "}<br />";
