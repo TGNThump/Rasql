@@ -13,6 +13,7 @@
     "neutronium-vue-command-mixin": "^1.4.1",
     "neutronium-vue-simple-command-mixin": "^1.1.0",
     "popper.js": "^1.12.9",
+    "treantjs": "^1.0.0",
     "vue": "^2.5.13",
     "vue-codemirror": "^4.0.5"
   },

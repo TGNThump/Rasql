@@ -5,6 +5,7 @@ $theme-colors: (
 
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 @import "../../../node_modules/codemirror/lib/codemirror.css";
+@import "../../../node_modules/treantjs/treant.css";
 
 html, body, #main, .app{
 	width: 100%;
