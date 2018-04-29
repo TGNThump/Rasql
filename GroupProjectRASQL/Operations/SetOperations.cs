@@ -7,7 +7,18 @@ using GroupProjectRASQL.Parser;
 
 namespace GroupProjectRASQL.Operations
 {
-    class Cartesian : Operation {}
+    class Cartesian : Join
+    {
+
+        private TreeNode<String> condition;
+
+        public Cartesian()
+            : base(new TreeNode<String>(""))
+        {
+
+        }
+
+    }
     class Union : Operation { }
     class Intersect : Operation { }
     class Difference : Operation { }

@@ -49,7 +49,6 @@ export default {
 		return this.viewModel
 	},
   methods: {
-    
   }
 }
 </script>

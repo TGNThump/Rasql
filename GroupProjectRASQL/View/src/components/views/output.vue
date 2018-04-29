@@ -51,7 +51,7 @@
 				</div>
 				<div class="row">
 					<column>
-						<button class="btn btn-block btn-primary">Step</button>
+						<button @click="model.step.Execute('')" class="btn btn-block btn-primary">Step</button>
 					</column>
 					<column>
 						<button class="btn btn-block btn-primary">Complete</button>

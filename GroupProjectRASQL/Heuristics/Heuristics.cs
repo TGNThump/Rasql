@@ -77,6 +77,7 @@ namespace GroupProjectRASQL.Heuristics
                         } else if (node.Data is RenameRelation)
                         {
                             String newName = ((RenameRelation)node.Data).getNewName();
+                            if (fields.ContainsKey(newName)) throw new Exception("Cannot rename to a relation name that already exists.");
                             if (fields.Values.Distinct().Count() != fields.Values.Count()) throw new Exception("Cannot rename relation '" + newName + "' as a result of ambigious field names");
                             IList<String> values = fields.Values.Aggregate((a,b) => {
                                 foreach (String value in b)
@@ -202,7 +203,114 @@ namespace GroupProjectRASQL.Heuristics
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
+            Console.WriteLine("H2");
+
+            bool temp = false;
+            switch (isRunning)
+            {
+                case 0:
+                    Console.WriteLine("H2 START");
+
+                    currentNode = root.ForEach((operation) =>
+                    {
+                        //// CODE goes here
+                        if (operation.Data is Selection) // if the current node is a selection 
+                        {
+                            TreeNode<Operation> newChild = operation;
+                            Selection selection = (Selection)operation.Data; // cast it to selection
+                            IEnumerable<String> names = selection.getFieldNames();
+                            List<String> tableList = new List<String>();
+                            foreach ( string fieldname in names )
+                            {
+                                //Console.WriteLine(fieldname);
+                                string[] split = fieldname.Split('.');
+                                if (!(tableList.Contains(split[0])))
+                                {
+                                    tableList.Add(split[0]);
+                                }
+                            }
+                            
+
+                            if (tableList.Count == 1)
+                            {
+                                newChild = operation.Where(node => 
+                                {
+                                    if (node.Data is Relation) return ((Relation)node.Data).name == tableList[0];
+                                    if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == tableList[0];
+                                    return false;
+                                }).SingleOrDefault();
+
+                                Console.WriteLine("H2 Output bit");
+                                Console.WriteLine(newChild);
+                            }
+                            if (tableList.Count > 1)
+                            {
+                                newChild=operation.Where(Node =>
+                                {
+                                    if (Node.Data is Join)
+                                    {
+                                        Join join = (Join)Node.Data; // cast it to a join
+                                        IEnumerable<String> joins = join.getFieldNames();
+                                        bool isCorrectFlag = true;
+                                        foreach (String table in joins )
+                                        {
+                                            Console.WriteLine(table);
+                                            if ( !tableList.Contains(table))
+                                            {
+                                                 isCorrectFlag = false;
+                                            }
+                                        }
+                                        return isCorrectFlag;
+                                        
+                                    }
+                                    
+                                    return false;
+                                }).SingleOrDefault();
+                                Console.WriteLine("H2 Output bit");
+                                Console.WriteLine(newChild);
+
+                            } // Swap to newChild
+                        }
+                    }, (typeOfStep == 1));
+
+
+
+                    if (typeOfStep == 2)
+                    {
+                        return 3;// Changed to reflect current heuristic
+                    }
+
+                    isRunning = 1;
+                    break;
+                case 1:
+                    Console.WriteLine("H2 STEP");
+
+                    Console.WriteLine(currentNode.ToString());
+                    isRunning = 1;
+                    if (typeOfStep == 1)
+                    {
+                        temp = currentNode.step();
+                    }
+                    else
+                    {
+                        temp = currentNode.stepToEnd();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (temp)
+            {
+                isRunning = 0; // this is finished
+                return 3; }// Changed to reflect current heuristic
+            else { return 2; } // Changed to reflect current heuristic
+
             
+        }
+
+        public static int Heuristic3(Node root, int typeOfStep = 1) // Restriction Heuristic
+        {
+            Console.WriteLine(root.TreeToDebugString());
             bool temp = false;
             switch (isRunning)
             {
@@ -237,14 +345,12 @@ namespace GroupProjectRASQL.Heuristics
                 default:
                     break;
             }
-            if (temp) { return 4; }// Changed to reflect current heuristic
+            return 4; // TEMPORARY SKIPS THIS
+            if (temp)
+            {
+                isRunning = 0; // this is finished
+                return 4; }// Changed to reflect current heuristic
             else { return 3; } // Changed to reflect current heuristic
-            return 3;
-        }
-
-        public static int Heuristic3(Node root, int typeOfStep = 1) // Restriction Heuristic
-        {
-            return 4;
         }
 
         public static int Heuristic4(Node root, int typeOfStep = 1) // Cartisean removal Heuristic
@@ -281,7 +387,7 @@ namespace GroupProjectRASQL.Heuristics
                     break;
                 case 1:
 
-                    Console.WriteLine(currentNode.ToString());
+                   // Console.WriteLine(currentNode.ToString());
                     isRunning = 1;
                     if (typeOfStep == 1)
                     {
@@ -295,7 +401,10 @@ namespace GroupProjectRASQL.Heuristics
                 default:
                     break;
             }
-            if (temp) { return 5; }// Changed to reflect current heuristic
+            if (temp)
+            {
+                isRunning = 0; // this is finished
+                return 5; }// Changed to reflect current heuristic
             else { return 4; }// Changed to reflect current heuristic
 
 
@@ -303,7 +412,45 @@ namespace GroupProjectRASQL.Heuristics
 
         public static int Heuristic5(Node root, int typeOfStep = 1) // Move projection heuristic
         {
-            return 1;
+            bool temp = false;
+            switch (isRunning)
+            {
+                case 0:
+                    currentNode = root.ForEach((operation) =>
+                    {
+                        //// CODE goes here
+                    }, (typeOfStep == 1));
+
+
+
+                    if (typeOfStep == 2)
+                    {
+                        return 1;// Changed to reflect current heuristic
+                    }
+
+                    isRunning = 1;
+                    break;
+                case 1:
+
+                   // Console.WriteLine(currentNode.ToString());
+                    isRunning = 1;
+                    if (typeOfStep == 1)
+                    {
+                        temp = currentNode.step();
+                    }
+                    else
+                    {
+                        temp = currentNode.stepToEnd();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if (temp)
+            {
+                isRunning = 0; // this is finished
+                return 1; }// Changed to reflect current heuristic
+            else { return 5; } // Changed to reflect current heuristic // this heuristic loops back to the start.
 
         }
 

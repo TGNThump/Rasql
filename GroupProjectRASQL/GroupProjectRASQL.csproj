@@ -169,6 +169,9 @@
     <AppDesigner Include="Properties\" />
     <None Include="View\.babelrc" />
     <None Include="View\src\assets\sass\main.scss" />
+    <None Include="View\src\components\views\input.vue" />
+    <None Include="View\src\components\views\output.vue" />
+    <None Include="View\src\components\views\schema.vue" />
     <Resource Include="FodyWeavers.xml" />
     <Content Include="View\.gitignore" />
     <None Include="View\data\vm.cjson" />
