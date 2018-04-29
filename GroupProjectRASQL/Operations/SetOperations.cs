@@ -10,7 +10,6 @@ namespace GroupProjectRASQL.Operations
     class Cartesian : Join
     {
 
-        private TreeNode<String> condition;
 
         public Cartesian()
             : base(new TreeNode<String>(""))

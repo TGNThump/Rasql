@@ -114,11 +114,17 @@ namespace GroupProjectRASQL.Parser
         public void forEachStore(Action<TreeNode<T>> action)
         {
             this.currentAction = action;
+            foreach ( TreeNode<T> child in this.Children )
+            {
+                child.currentAction = action;
+            }
         }
+
 
         public bool step()
         {
             Console.WriteLine("Step");
+            Console.WriteLine(this);
 
             for (int i = 0; i < this.Children.Count; i++)
             {

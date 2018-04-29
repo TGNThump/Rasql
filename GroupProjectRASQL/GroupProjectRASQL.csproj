@@ -129,11 +129,11 @@
     <Compile Include="Operations\Relation.cs" />
     <Compile Include="Operations\Field.cs" />
     <Compile Include="Parser\DFS.cs" />
+    <Compile Include="Parser\TreeNode.cs" />
     <Compile Include="Translator\RAToOps.cs" />
     <Compile Include="Translator\SqlToRa.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Parser\State.cs" />
-    <Compile Include="Parser\TreeNode.cs" />
     <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>

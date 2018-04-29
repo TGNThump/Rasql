@@ -137,12 +137,10 @@ namespace GroupProjectRASQL.Heuristics
              * Heuristic One deals with the splitting of any selection 
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
-            */
-            bool isDone = false; // Init a temporary boolean to handle whether the tree has been explored
-            switch (isRunning) // Switch on isRunning - heuristics class static variable that handles whether a heuristic is currently being run
-            {
-                case 0: // If not running
-                    currentNode = root.ForEach((operation) => // ForEach is a iteration function for the tree, it returns the node at each step incase it needs to be interupted ( for stepwise explinations )
+             * 
+             * 
+             * 
+             *      currentNode = root.ForEach((operation) => // ForEach is a iteration function for the tree, it returns the node at each step incase it needs to be interupted ( for stepwise explinations )
                     {
                         if (operation.Data is Selection) // if the current node is a selection 
                         {
@@ -165,36 +163,58 @@ namespace GroupProjectRASQL.Heuristics
                             }
                         }
                     }, (typeOfStep == 1)); // passes true if it needs to be done stepwise
-                    if (typeOfStep == 2) // if stepwise is false
-                    {
-                        isRunning = 0; // This is finished
-                        return 2; // return the next heuristic
-                    }
 
-                    isRunning = 1; // otherwise its not finished
+            */
+
+            bool isDone = false; // Init a temporary boolean to handle whether the tree has been explored
+            switch (isRunning) // Switch on isRunning - heuristics class static variable that handles whether a heuristic is currently being run
+            {
+                case 0: // If not running
+                    isRunning = 1;
+                    currentNode = root.ForEach((operation) => // ForEach is a iteration function for the tree, it returns the node at each step incase it needs to be interupted ( for stepwise explinations )
+                    {
+                        if (operation.Data is Selection) // if the current node is a selection 
+                        {
+                            Selection selection = (Selection)operation.Data; // cast it to selection
+                            Condition condition = selection.getCondition(); // get the selections conditions
+
+                            condition = Conditions.ToCNF(condition); // In order to split the selection into multiple selections its condition must be in conjunctive normal form, this function handles that.
+
+                            if (condition.Data == "[and]") // If it can be split
+                            {
+                                Node[] children = new Node[operation.Children.Count]; // Create a new node
+                                operation.Children.CopyTo(children, 0); // Move this nodes child pointers to the new node
+                                operation.RemoveChildren(); // Remove the original nodes child pointers
+
+                                Node newChild = new Node(new Selection(condition.Child(1))); // Make a new selection
+                                selection.setCondition(condition.Child(0)); // set  its condition to the first branch of the original condition
+
+                                newChild.AddChildren(children); // give the new selection its position in the tree
+                                operation.AddChild(newChild);
+                            }
+                        }
+                    },( typeOfStep==1)); // passes true if it needs to be done stepwise
                     break;
                 case 1: // if currently running
-                   
-                     //Console.WriteLine(currentNode.ToString()); // debug string
-                     if (typeOfStep == 1) // if stepwise
-                     {
-                         isDone=currentNode.step(); // next step // returns tree if this is the end of the tree, false otherwise
-                     }
-                     else // if not stepwise
-                     {
-                         isDone=currentNode.stepToEnd(); // move to end - returns true
-                     }
-                    break;
-                default: // In an error situation, this will trigger - this should never trigger.
+                    if(currentNode.Data is Query)
+                    {
+                        isDone = true;
+                    }
+                    currentNode = currentNode.ForEach((operation) => { operation.step(); }, (typeOfStep == 1));
+
                     break;
             }
-            if (isDone) // If the tree has been explored
+            if (!isDone)
             {
-                isRunning = 0; // this is finished
-                return 2; // move to next heuristic
+                return 1;
             }
-            else { return 1; } // otherwise stay on this heuristic
-            
+            else
+            {
+                return 2;
+            }
+
+
+
         }
 
         public static int Heuristic2(Node root, int typeOfStep = 1) // Move Selection Heuristic
@@ -241,33 +261,6 @@ namespace GroupProjectRASQL.Heuristics
                                 operation.AddChild(newChild);
                             }
 
-                            /*if (relationNames.Count() > 1)
-                            {
-                                newChild=operation.Where(Node =>
-                                {
-                                    if (Node.Data is Join)
-                                    {
-                                        Join join = (Join)Node.Data; // cast it to a join
-                                        IEnumerable<String> joins = join.getFieldNames();
-                                        bool isCorrectFlag = true;
-                                        foreach (String table in joins )
-                                        {
-                                            Console.WriteLine(table);
-                                            if ( !relationNames.Contains(table))
-                                            {
-                                                 isCorrectFlag = false;
-                                            }
-                                        }
-                                        return isCorrectFlag;
-                                        
-                                    }
-                                    
-                                    return false;
-                                }).SingleOrDefault();
-                                Console.WriteLine("H2 Output bit");
-                                Console.WriteLine(newChild);
-
-                            } */
                         }
                     }, (typeOfStep == 1));
 
@@ -282,8 +275,8 @@ namespace GroupProjectRASQL.Heuristics
                     break;
                 case 1:
                     Console.WriteLine("H2 STEP");
-
                     Console.WriteLine(currentNode.ToString());
+
                     isRunning = 1;
                     if (typeOfStep == 1)
                     {
