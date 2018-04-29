@@ -20,8 +20,6 @@ namespace GroupProjectRASQL.ViewModel
 
         // --- OLD ---
 
-        public string input { get; set; }
-
         public string output { get; private set; } = "";
         //public string output { get { return output; } private set { Set(ref output, value); }}
         public TreeNode<Operation> ops;
@@ -55,8 +53,11 @@ namespace GroupProjectRASQL.ViewModel
             Parser.Parser sqlParser = new Parser.Parser("sql");
             Parser.Parser raParser = new Parser.Parser("ra");
 
-            Parse = new RelaySimpleCommand<String>(delegate (String type)
-            {
+            Parse = new RelaySimpleCommand<String>((String argsString) => {
+                String[]args = argsString.Split('|');
+                String type = args[0];
+                String input = args[1];
+
                 try
                 {
                     if (input == null) return;
@@ -107,6 +108,7 @@ namespace GroupProjectRASQL.ViewModel
                     */
 
                     ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+                    ops = new TreeNode<Operation>(new Query()) { ops };
                     ops = Heuristics.Heuristics.Heuristic0(ops);
 
                     output += "<div class='card'><div class='card-body'>";

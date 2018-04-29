@@ -87,11 +87,6 @@ namespace GroupProjectRASQL.Parser
             for (int i = 0; i < this.Children.Count; i++)
                 Children.ElementAt(i).ForEach(action);
         }
-    
-
-
-
-
 
         public TreeNode<T> ForEach(Action<TreeNode<T>> action,bool stepping = true )
         {
@@ -141,15 +136,6 @@ namespace GroupProjectRASQL.Parser
 
 
         }
-
-
-
-
-
-
-
-
-
 
         public override string ToString()
         {

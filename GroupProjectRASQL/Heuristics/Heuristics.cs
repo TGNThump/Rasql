@@ -13,6 +13,7 @@ namespace GroupProjectRASQL.Heuristics
     {
         private static int isRunning = 0; // Running flag
         private static TreeNode<Operation> currentNode; // Current Root for any paused heuristic
+
         public static void AddSingle<K,V>(this IDictionary<K,IList<V>> dictionary, K key, V value)
         {
             if (!dictionary.ContainsKey(key)) dictionary.Add(key, new List<V>());
@@ -137,7 +138,7 @@ namespace GroupProjectRASQL.Heuristics
              * - σp(r) - statement that has more than one condition,
              * for example  σa=b and b=c  ,into several smaller selections.
             */
-            bool temp = false; // Init a temporary boolean to handle whether the tree has been explored
+            bool isDone = false; // Init a temporary boolean to handle whether the tree has been explored
             switch (isRunning) // Switch on isRunning - heuristics class static variable that handles whether a heuristic is currently being run
             {
                 case 0: // If not running
@@ -177,17 +178,17 @@ namespace GroupProjectRASQL.Heuristics
                      //Console.WriteLine(currentNode.ToString()); // debug string
                      if (typeOfStep == 1) // if stepwise
                      {
-                         temp=currentNode.step(); // next step // returns tree if this is the end of the tree, false otherwise
+                         isDone=currentNode.step(); // next step // returns tree if this is the end of the tree, false otherwise
                      }
                      else // if not stepwise
                      {
-                         temp=currentNode.stepToEnd(); // move to end - returns true
+                         isDone=currentNode.stepToEnd(); // move to end - returns true
                      }
                     break;
                 default: // In an error situation, this will trigger - this should never trigger.
                     break;
             }
-            if (temp) // If the tree has been explored
+            if (isDone) // If the tree has been explored
             {
                 isRunning = 0; // this is finished
                 return 2; // move to next heuristic
@@ -216,34 +217,31 @@ namespace GroupProjectRASQL.Heuristics
                         //// CODE goes here
                         if (operation.Data is Selection) // if the current node is a selection 
                         {
-                            TreeNode<Operation> newChild = operation;
+                            Node newChild;
                             Selection selection = (Selection)operation.Data; // cast it to selection
-                            IEnumerable<String> names = selection.getFieldNames();
-                            List<String> tableList = new List<String>();
-                            foreach ( string fieldname in names )
-                            {
-                                //Console.WriteLine(fieldname);
-                                string[] split = fieldname.Split('.');
-                                if (!(tableList.Contains(split[0])))
-                                {
-                                    tableList.Add(split[0]);
-                                }
-                            }
-                            
 
-                            if (tableList.Count == 1)
+                            IEnumerable<String> relationNames = selection.getFieldNames().Select(name => name.Split('.')[0]).Distinct();
+
+                            if (relationNames.Count() == 1)
                             {
                                 newChild = operation.Where(node => 
                                 {
-                                    if (node.Data is Relation) return ((Relation)node.Data).name == tableList[0];
-                                    if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == tableList[0];
+                                    if (node.Data is Relation) return ((Relation)node.Data).name == relationNames.Single();
+                                    if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == relationNames.Single();
                                     return false;
                                 }).SingleOrDefault();
 
-                                Console.WriteLine("H2 Output bit");
-                                Console.WriteLine(newChild);
+                                operation.Parent.RemoveChild(operation);
+                                operation.Parent.AddChildren(operation.Children);
+                                operation.RemoveChildren();
+
+                                Node newParent = newChild.Parent;
+                                newChild.Parent.RemoveChild(newChild);
+                                newParent.AddChild(operation);
+                                operation.AddChild(newChild);
                             }
-                            if (tableList.Count > 1)
+
+                            /*if (relationNames.Count() > 1)
                             {
                                 newChild=operation.Where(Node =>
                                 {
@@ -255,7 +253,7 @@ namespace GroupProjectRASQL.Heuristics
                                         foreach (String table in joins )
                                         {
                                             Console.WriteLine(table);
-                                            if ( !tableList.Contains(table))
+                                            if ( !relationNames.Contains(table))
                                             {
                                                  isCorrectFlag = false;
                                             }
@@ -269,7 +267,7 @@ namespace GroupProjectRASQL.Heuristics
                                 Console.WriteLine("H2 Output bit");
                                 Console.WriteLine(newChild);
 
-                            } // Swap to newChild
+                            } */
                         }
                     }, (typeOfStep == 1));
 

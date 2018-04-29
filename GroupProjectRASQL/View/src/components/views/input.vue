@@ -25,7 +25,7 @@
 			<codemirror ref="ra" v-if="type == 'ra'" v-model="ra" class="form-control codemirror" :options="cmoptions"></codemirror>
 		</div>
 		<div class="row" style="flex-shrink: 0;">
-			<button @click="model.input = (type == 'sql' ? sql : ra); model.Parse.Execute(type); model.CurrentView = 'output';" class="btn btn-block btn-primary">Parse</button>
+			<button @click="model.Parse.Execute(type + '|' +  (type == 'sql' ? sql : ra)); model.CurrentView = 'output';" class="btn btn-block btn-primary">Parse</button>
 		</div>
 	</div>
 </template>
