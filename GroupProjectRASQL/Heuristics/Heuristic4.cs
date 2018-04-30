@@ -16,6 +16,21 @@ namespace GroupProjectRASQL.Heuristics
 
         public override bool Run(Node operation)
         {
+             // The following block is the only part that meaningfully changes from Heuristic 1 - see comments there
+            
+            if (operation.Data is Cartesian) // if this node is a cartisean product
+            {
+                if (operation.Parent.Data is Selection) // and the node above it is a selection
+                {
+                    Selection selection = (Selection)operation.Parent.Data;  // cast the selection
+                    operation.Parent.Data = new Join(selection.getCondition()); // create a new join using the cast selections condition
+
+                    operation.Parent.RemoveChild(operation);  // Give this join its position in the list
+                    operation.Parent.AddChild(operation.Child(0));
+                    operation.Parent.AddChild(operation.Child(1));
+                    return true;
+                }
+            }
             return false;
         }
     }
