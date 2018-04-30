@@ -20,6 +20,8 @@ namespace GroupProjectRASQL.Heuristics
             
             Node newChild = null;
             Selection selection = (Selection)operation.Data; // cast it to selection
+            Console.WriteLine("Is Select");
+            Console.WriteLine(newChild);
 
             IEnumerable<String> relationNames = selection.getFieldNames().Select(name => name.Split('.')[0]).Distinct();
             if (relationNames.Count() < 1) { return false; }
