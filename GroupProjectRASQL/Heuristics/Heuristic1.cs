@@ -35,6 +35,7 @@ namespace GroupProjectRASQL.Heuristics
 
             newChild.AddChildren(children); // give the new selection its position in the tree
             operation.AddChild(newChild);
+            remainingNodes.Enqueue(newChild);
 
             return true;
         }
