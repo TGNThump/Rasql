@@ -11,7 +11,7 @@ namespace GroupProjectRASQL.Parser
     {
         public T Data { get; set; }
         public TreeNode<T> Parent { get; set; }
-        public ICollection<TreeNode<T>> Children { get; set; }
+        public IList<TreeNode<T>> Children { get; set; }
 
         public Boolean IsRoot
         {
@@ -42,9 +42,9 @@ namespace GroupProjectRASQL.Parser
         public TreeNode(T data)
         {
             this.Data = data;
-            this.Children = new LinkedList<TreeNode<T>>();
+            this.Children = new List<TreeNode<T>>();
 
-            this.ElementsIndex = new LinkedList<TreeNode<T>>();
+            this.ElementsIndex = new List<TreeNode<T>>();
             this.ElementsIndex.Add(this);
         }
 
@@ -88,7 +88,29 @@ namespace GroupProjectRASQL.Parser
                 Children.ElementAt(i).ForEach(action);
         }
 
-        public TreeNode<T> ForEach(Action<TreeNode<T>> action,bool stepping = true )
+        public TreeNode<T> getNextNode()
+        {
+            if (IsRoot) return Child();
+            TreeNode<T> last = this;
+            while (!last.IsRoot)
+            {
+                if (last.Children.Count() > 0) return last.Child();
+                else
+                {
+                    int indexInParent = last.Parent.Children.IndexOf(last);
+                    if (indexInParent+1 < last.Parent.Children.Count)
+                    {
+                        return last.Parent.Children.ElementAt(indexInParent + 1);
+                    } else
+                    {
+                        last = last.Parent;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public TreeNode<T> ForEach(Action<TreeNode<T>> action, bool stepping = true )
         {
             action(this);
             if (!stepping)

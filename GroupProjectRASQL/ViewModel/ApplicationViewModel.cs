@@ -47,12 +47,13 @@ namespace GroupProjectRASQL.ViewModel
             })
         };
 
+        Parser.Parser sqlParser = new Parser.Parser("sql");
+        Parser.Parser raParser = new Parser.Parser("ra");
+
+        Heuristic1 heuristic1;
 
         public ApplicationViewModel()
         {
-            Parser.Parser sqlParser = new Parser.Parser("sql");
-            Parser.Parser raParser = new Parser.Parser("ra");
-
             Parse = new RelaySimpleCommand<String>((String argsString) => {
                 String[]args = argsString.Split('|');
                 String type = args[0];
@@ -141,6 +142,8 @@ namespace GroupProjectRASQL.ViewModel
 
                     Heuristics.Heuristics.Heuristic5(ops);
                     */
+
+                    heuristic1 = new Heuristic1(ops);
                     return;
                 } catch (Exception e){
                     Console.WriteLine(e.ToString());
@@ -149,7 +152,16 @@ namespace GroupProjectRASQL.ViewModel
             });
             step = new RelaySimpleCommand<String>(delegate (String type)
             {
-                switch(currentHeuristic)
+                if (!heuristic1.IsComplete())
+                {
+                    heuristic1.Step();
+                    output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                }
+
+                output += ops.TreeToDebugString();
+                output += "</div></div>";
+
+                /*switch(currentHeuristic)
                 {
                     case 1:
                         currentHeuristic=Heuristics.Heuristics.Heuristic1(ops,1);
@@ -179,7 +191,7 @@ namespace GroupProjectRASQL.ViewModel
 
                 }
                 output += ops.TreeToDebugString();
-                output += "</div></div>";
+                output += "</div></div>";*/
 
             });
             stepToEnd = new RelaySimpleCommand<String>(delegate (String type)
