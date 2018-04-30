@@ -18,7 +18,7 @@
 
     <div class="app" style="overflow-y: scroll; overflow-x: hidden;">
       <keep-alive>
-    		<view-input class="view" v-if="CurrentView == 'input'" :viewModel='this.viewModel'></view-input>
+		<view-input class="view" v-if="CurrentView == 'input'" :viewModel='this.viewModel'></view-input>
       </keep-alive>
       <keep-alive>
         <view-output class="view" v-if="CurrentView == 'output'" :viewModel='this.viewModel'></view-output>

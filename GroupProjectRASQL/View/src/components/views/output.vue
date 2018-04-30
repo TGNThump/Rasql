@@ -28,11 +28,7 @@
 
 		<div class="row">
 			<column>
-				<div class="card">
-					<div class="card-body" style="height: 500px;" v-html="model.output">
-            
-					</div>
-				</div>
+        <div v-html="model.Output"></div>
 			</column>
 			<column>
 				<div class="row d-flex flex-row">
@@ -51,10 +47,10 @@
 				</div>
 				<div class="row">
 					<column>
-						<button @click="model.step.Execute('')" class="btn btn-block btn-primary">Step</button>
+						<button @click="model.Step.Execute('')" class="btn btn-block btn-primary">Step</button>
 					</column>
 					<column>
-						<button @click="model.stepToEnd.Execute('')" class="btn btn-block btn-primary">Complete</button>
+						<button @click="model.Complete.Execute('')" class="btn btn-block btn-primary">Complete</button>
 					</column>
 					<column>
 						<button class="btn btn-block btn-primary">Reset</button>
