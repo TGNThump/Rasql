@@ -16,7 +16,7 @@ namespace GroupProjectRASQL.Heuristics
 
         public override bool Run(Node operation)
         {
-            return true;
+            return false;
         }
     }
 }

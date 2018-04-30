@@ -11,7 +11,7 @@ namespace GroupProjectRASQL.Heuristics
     public abstract class Heuristic
     {
         protected Node root;
-        protected Node last;
+        protected Node next;
         protected bool isStarted = false;
         protected bool isComplete = false;
 
@@ -24,23 +24,22 @@ namespace GroupProjectRASQL.Heuristics
         {
             if (isComplete) return;
 
-            Node next;
-
             if (!isStarted)
             {
                 isStarted = true;
                 next = root.Child();
             }
-            else next = last.getNextNode();
+
+            bool stop = Run(next);
+            Node last = next;
+
+            next = last.getNextNode();
 
             if (next == null || next == root)
             {
                 isComplete = true;
                 return;
             }
-
-            last = next;
-            bool stop = Run(next);
             if (!stop) Step();
         }
 
@@ -53,7 +52,6 @@ namespace GroupProjectRASQL.Heuristics
         {
             isStarted = false;
             isComplete = false;
-            last = null;
         }
 
         // Abstract method run for each Node in the tree.
