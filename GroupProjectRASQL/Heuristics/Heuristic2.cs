@@ -75,64 +75,6 @@ namespace GroupProjectRASQL.Heuristics
             operation.AddChild(newChild);
 
             return true;
-            
-            /*if (operation.Data is Selection) // if the current node is a selection 
-                        {
-                            TreeNode<Operation> newChild = operation;
-                            Selection selection = (Selection)operation.Data; // cast it to selection
-                            IEnumerable<String> names = selection.getFieldNames();
-                            List<String> tableList = new List<String>();
-                            foreach ( string fieldname in names )
-                            {
-                                //Console.WriteLine(fieldname);
-                                string[] split = fieldname.Split('.');
-                                if (!(tableList.Contains(split[0])))
-                                {
-                                    tableList.Add(split[0]);
-                                }
-                            }
-
-
-                            if (tableList.Count == 1)
-                            {
-                                newChild = operation.Where(node => 
-                                {
-                                    if (node.Data is Relation) return ((Relation)node.Data).name == tableList[0];
-                                    if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == tableList[0];
-                                    return false;
-                                }).SingleOrDefault();
-
-                                Console.WriteLine("H2 Output bit");
-                                Console.WriteLine(newChild);
-                            }
-                            if (tableList.Count > 1)
-                            {
-                                newChild=operation.Where(Node =>
-                                {
-                                    if (Node.Data is Join)
-                                    {
-                                        Join join = (Join)Node.Data; // cast it to a join
-                                        IEnumerable<String> joins = join.getFieldNames();
-                                        bool isCorrectFlag = true;
-                                        foreach (String table in joins )
-                                        {
-                                            Console.WriteLine(table);
-                                            if ( !tableList.Contains(table))
-                                            {
-                                                 isCorrectFlag = false;
-                                            }
-                                        }
-                                        return isCorrectFlag;
-
-                                    }
-
-                                    return false;
-                                }).SingleOrDefault();
-                                Console.WriteLine("H2 Output bit");
-                                Console.WriteLine(newChild);
-
-                            } // Swap to newChild*/
-
         }
     }
 }

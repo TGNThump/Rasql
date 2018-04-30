@@ -37,7 +37,9 @@ namespace GroupProjectRASQL.Heuristics
             if (!isStarted) Init();
             if (isComplete) return;
 
-            bool stop = Run(remainingNodes.Dequeue());
+            Node next = remainingNodes.Dequeue();
+            if (next.IsRoot && next.IsLeaf) Step();
+            bool stop = Run(next);
             if (!stop && !isComplete) Step();
         }
 

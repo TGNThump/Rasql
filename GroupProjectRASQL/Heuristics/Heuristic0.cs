@@ -32,7 +32,7 @@ namespace GroupProjectRASQL.Heuristics
                     path.Add(current);
                 }
 
-                path.Reverse();
+                //path.Reverse();
 
                 foreach (Node node in path)
                 {
@@ -63,12 +63,15 @@ namespace GroupProjectRASQL.Heuristics
                             // Convert Dictionary<relationName, List<fieldName>> to List<KeyValuePair<relationName,fieldName>>
                             IEnumerable<KeyValuePair<String, String>> fieldPairs = fields.ToList().SelectMany(key => key.Value, (key, value) => new KeyValuePair<String, String>(key.Key, value));
                             // Filter to when fieldName = oldName
-                            IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(pair => pair.Value.Equals(oldName));
+                            IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(p => p.Value.Equals(oldName));
 
                             if (filtered.Count() > 1) throw new Exception("Field '" + oldName + "' found in multiple relations, please remove ambiguity.");
+                            if (filtered.Count() == 0) continue;
 
-                            fields[filtered.Single().Key].Remove(filtered.Single().Value);
-                            fields.AddSingle(filtered.Single().Key, newName);
+                            KeyValuePair<String, String> pair = filtered.Single();
+
+                            fields[pair.Key].Remove(pair.Value);
+                            fields.AddSingle(pair.Key, newName);
                         }
                     }
                     else if (node.Data is RenameRelation)
