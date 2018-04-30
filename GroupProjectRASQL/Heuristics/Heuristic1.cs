@@ -10,7 +10,7 @@ using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Oper
 
 namespace GroupProjectRASQL.Heuristics
 {
-    class Heuristic1 : Heuristic
+    public class Heuristic1 : Heuristic
     {
         public Heuristic1(Node root) : base(root){}
 

@@ -50,7 +50,12 @@ namespace GroupProjectRASQL.ViewModel
         Parser.Parser sqlParser = new Parser.Parser("sql");
         Parser.Parser raParser = new Parser.Parser("ra");
 
-        Heuristic1 heuristic1;
+        public Heuristic0 Heuristic0 { get; private set; }
+        public Heuristic1 Heuristic1 { get; private set; }
+        public Heuristic2 Heuristic2 { get; private set; }
+        public Heuristic3 Heuristic3 { get; private set; }
+        public Heuristic4 Heuristic4 { get; private set; }
+        public Heuristic5 Heuristic5 { get; private set; }
 
         public ApplicationViewModel()
         {
@@ -102,48 +107,22 @@ namespace GroupProjectRASQL.ViewModel
 
                     Squish(tree);
 
-                    /*
-                    output += "<div class='card'><div class='card-body'>";
-                    output += tree.TreeToDebugString();
-                    output += "</div></div>";
-                    */
-
                     ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
                     ops = new TreeNode<Operation>(new Query()) { ops };
-                    ops = Heuristics.Heuristics.Heuristic0(ops);
+
+                    Heuristic0 = new Heuristic0(ops);
+                    Heuristic1 = new Heuristic1(ops);
+                    Heuristic2 = new Heuristic2(ops);
+                    Heuristic3 = new Heuristic3(ops);
+                    Heuristic4 = new Heuristic4(ops);
+                    Heuristic5 = new Heuristic5(ops);
+
+                    Heuristic0.Complete();
 
                     output += "<div class='card'><div class='card-body'>";
                     output += ops.TreeToDebugString();
                     output += "</div></div>";
-                    /*
-                    //Heuristics.Heuristics.Heuristic1(ops);
-
-                    output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
-                    output += ops.TreeToDebugString();
-                    output += "</div></div>";
-
-                    Heuristics.Heuristics.Heuristic2(ops);
-
-                    output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
-                    output += ops.TreeToDebugString();
-                    output += "</div></div>";
-
-                    Heuristics.Heuristics.Heuristic3(ops);
-
-                    output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
-                    output += ops.TreeToDebugString();
-                    output += "</div></div>";
-
-                    Heuristics.Heuristics.Heuristic4(ops);
-
-                    output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
-                    output += ops.TreeToDebugString();
-                    output += "</div></div>";
-
-                    Heuristics.Heuristics.Heuristic5(ops);
-                    */
-
-                    heuristic1 = new Heuristic1(ops);
+                    
                     return;
                 } catch (Exception e){
                     Console.WriteLine(e.ToString());
@@ -152,82 +131,72 @@ namespace GroupProjectRASQL.ViewModel
             });
             step = new RelaySimpleCommand<String>(delegate (String type)
             {
-                if (!heuristic1.IsComplete())
+                if (!Heuristic1.IsComplete())
                 {
-                    heuristic1.Step();
+                    Heuristic1.Step();
                     output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                }
+                else if (!Heuristic2.IsComplete())
+                {
+                    Heuristic2.Step();
+                    output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                }
+                else if (!Heuristic3.IsComplete())
+                {
+                    Heuristic3.Step();
+                    output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+                }
+                else if (!Heuristic4.IsComplete())
+                {
+                    Heuristic4.Step();
+                    output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+                }
+                else if (!Heuristic5.IsComplete())
+                {
+                    Heuristic5.Step();
+                    output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
+                } else
+                {
+                    return;
                 }
 
                 output += ops.TreeToDebugString();
                 output += "</div></div>";
-
-                /*switch(currentHeuristic)
-                {
-                    case 1:
-                        currentHeuristic=Heuristics.Heuristics.Heuristic1(ops,1);
-                        output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
-                        break;
-                    case 2:
-                        currentHeuristic=Heuristics.Heuristics.Heuristic2(ops,1);
-                        output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
-
-                        break;
-                    case 3:
-                        currentHeuristic=Heuristics.Heuristics.Heuristic3(ops,1);
-                        output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
-
-                        break;
-                    case 4:
-                        currentHeuristic=Heuristics.Heuristics.Heuristic4(ops,1);
-                        output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
-
-                        break;
-                    case 5:
-                        currentHeuristic=Heuristics.Heuristics.Heuristic5(ops,1);
-                        output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
-
-                        break;
-
-
-                }
-                output += ops.TreeToDebugString();
-                output += "</div></div>";*/
-
             });
             stepToEnd = new RelaySimpleCommand<String>(delegate (String type)
             {
-                switch (currentHeuristic)
+                if (!Heuristic1.IsComplete())
                 {
-                    case 1:
-                        currentHeuristic = Heuristics.Heuristics.Heuristic1(ops, 2);
-                        output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
-                        break;
-                    case 2:
-                        currentHeuristic = Heuristics.Heuristics.Heuristic2(ops, 2);
-                        output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
-
-                        break;
-                    case 3:
-                        currentHeuristic = Heuristics.Heuristics.Heuristic3(ops, 2);
-                        output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
-
-                        break;
-                    case 4:
-                        currentHeuristic = Heuristics.Heuristics.Heuristic4(ops, 2);
-                        output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
-
-                        break;
-                    case 5:
-                        currentHeuristic = Heuristics.Heuristics.Heuristic5(ops, 2);
-                        output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
-
-                        break;
-
-
+                    Heuristic1.Complete();
+                    output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
                 }
+                else if (!Heuristic2.IsComplete())
+                {
+                    Heuristic2.Complete();
+                    output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                }
+                else if (!Heuristic3.IsComplete())
+                {
+                    Heuristic3.Complete();
+                    output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+                }
+                else if (!Heuristic4.IsComplete())
+                {
+                    Heuristic4.Complete();
+                    output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+                }
+                else if (!Heuristic5.IsComplete())
+                {
+                    Heuristic5.Complete();
+                    output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
+                }
+                else
+                {
+                    return;
+                }
+
                 output += ops.TreeToDebugString();
                 output += "</div></div>";
-
             });
 
         }

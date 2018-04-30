@@ -115,9 +115,13 @@
     <Compile Include="Framework\JobManagement.cs" />
     <Compile Include="Framework\Reactive.cs" />
     <Compile Include="Heuristics\Heuristic.cs" />
+    <Compile Include="Heuristics\Heuristic0.cs" />
+    <Compile Include="Heuristics\Heuristic5.cs" />
+    <Compile Include="Heuristics\Heuristic4.cs" />
+    <Compile Include="Heuristics\Heuristic3.cs" />
+    <Compile Include="Heuristics\Heuristic2.cs" />
     <Compile Include="Heuristics\Heuristic1.cs" />
     <Compile Include="Heuristics\Heuristics.cs" />
-    <Compile Include="Heuristics\StepIterator.cs" />
     <Compile Include="Operations\Conditions.cs" />
     <Compile Include="Operations\Query.cs" />
     <Compile Include="Operations\RenameRelation.cs" />

@@ -90,21 +90,17 @@ namespace GroupProjectRASQL.Parser
 
         public TreeNode<T> getNextNode()
         {
-            if (IsRoot) return Child();
             TreeNode<T> last = this;
+            if (last.Children.Count() > 0) return last.Child();
             while (!last.IsRoot)
             {
-                if (last.Children.Count() > 0) return last.Child();
-                else
+                int indexInParent = last.Parent.Children.IndexOf(last);
+                if (indexInParent+1 < last.Parent.Children.Count)
                 {
-                    int indexInParent = last.Parent.Children.IndexOf(last);
-                    if (indexInParent+1 < last.Parent.Children.Count)
-                    {
-                        return last.Parent.Children.ElementAt(indexInParent + 1);
-                    } else
-                    {
-                        last = last.Parent;
-                    }
+                    return last.Parent.Children.ElementAt(indexInParent + 1);
+                } else
+                {
+                    last = last.Parent;
                 }
             }
             return null;

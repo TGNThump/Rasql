@@ -8,7 +8,7 @@ using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Oper
 
 namespace GroupProjectRASQL.Heuristics
 {
-    abstract class Heuristic
+    public abstract class Heuristic
     {
         protected Node root;
         protected Node last;
@@ -40,7 +40,8 @@ namespace GroupProjectRASQL.Heuristics
             }
 
             last = next;
-            if (!Run(next)) Step();
+            bool stop = Run(next);
+            if (!stop) Step();
         }
 
         public void Complete()
