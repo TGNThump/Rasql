@@ -65,6 +65,13 @@ namespace GroupProjectRASQL.Heuristics
 
             }
 
+            for (Node current = newChild; !current.Equals(operation); current = current.Parent)
+            {
+                if (current.Data is RenameAttribute) { return false; }
+            }
+            
+
+
             operation.Parent.RemoveChild(operation);
             operation.Parent.AddChildren(operation.Children);
             operation.RemoveChildren();
