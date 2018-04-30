@@ -9,14 +9,12 @@ namespace GroupProjectRASQL.Operations
 {
     class Cartesian : Join
     {
+        public Cartesian() : base(new TreeNode<String>("")){}
 
-
-        public Cartesian()
-            : base(new TreeNode<String>(""))
+        public override string ToString(int depth = 0)
         {
-
+            return "[" + this.GetType().Name + "]";
         }
-
     }
     class Union : Operation { }
     class Intersect : Operation { }

@@ -13,34 +13,32 @@ namespace GroupProjectRASQL.Heuristics
         protected Node root;
         protected Node next;
         protected bool isStarted = false;
-        protected bool isComplete = false;
+        protected bool isComplete { get { return isStarted && remainingNodes.Count == 0; } }
+
+        protected Queue<Node> remainingNodes = new Queue<Node>();
 
         public Heuristic(Node root)
         {
             this.root = root;
         }
 
+        public void Init()
+        {
+            isStarted = true;
+            remainingNodes = new Queue<Node>();
+            for (Node node = root.Child(); node != null && node != root; node = node.getNextNode())
+            {
+                remainingNodes.Enqueue(node);
+            }
+        }
+
         public void Step()
         {
+            if (!isStarted) Init();
             if (isComplete) return;
 
-            if (!isStarted)
-            {
-                isStarted = true;
-                next = root.Child();
-            }
-
-            bool stop = Run(next);
-            Node last = next;
-
-            next = last.getNextNode();
-
-            if (next == null || next == root)
-            {
-                isComplete = true;
-                return;
-            }
-            if (!stop) Step();
+            bool stop = Run(remainingNodes.Dequeue());
+            if (!stop && !isComplete) Step();
         }
 
         public void Complete()
@@ -51,7 +49,6 @@ namespace GroupProjectRASQL.Heuristics
         public void Reset()
         {
             isStarted = false;
-            isComplete = false;
         }
 
         // Abstract method run for each Node in the tree.

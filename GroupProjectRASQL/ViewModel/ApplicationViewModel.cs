@@ -17,17 +17,6 @@ namespace GroupProjectRASQL.ViewModel
     {
         public string CurrentView { get; set; } = "input";
 
-
-        // --- OLD ---
-
-        public string output { get; private set; } = "";
-        //public string output { get { return output; } private set { Set(ref output, value); }}
-        public TreeNode<Operation> ops;
-        public int currentHeuristic = 1;
-        public ISimpleCommand<String> Parse { get; private set; }
-        public ISimpleCommand<String> step { get; private set; }
-        public ISimpleCommand<String> stepToEnd{ get; private set;}
-
         public IList<Relation> Relations { get; set; } = new List<Relation> {
             new Relation("animals", new List<Field>() {
                 new Field("name", new List<String>{ "cat", "dog", "cow", "sheep", "pig" }),
@@ -57,57 +46,74 @@ namespace GroupProjectRASQL.ViewModel
         public Heuristic4 Heuristic4 { get; private set; }
         public Heuristic5 Heuristic5 { get; private set; }
 
+        public string SQL { get; private set; }
+        public string RA { get; private set; }
+
+        public bool Input_Valid_SQL { get; private set; } = true;
+        public bool Input_Valid_RA { get; private set; } = true;
+        public string Input_Type { get; set; } = "sql";
+        public string Input_SQL { get; private set; }
+        public string Input_RA { get; private set; }
+
+        public string Output { get; private set; } = "";
+        public string Error { get; private set; }
+
+
+        public ISimpleCommand<String> ParseSQL { get; private set; }
+        public ISimpleCommand<String> ParseRA { get; private set; }
+        public ISimpleCommand Step { get; private set; }
+        public ISimpleCommand Complete { get; private set; }
+        public ISimpleCommand Reset { get; private set; }
+
+        public TreeNode<Operation> ops;
+
         public ApplicationViewModel()
         {
-            Parse = new RelaySimpleCommand<String>((String argsString) => {
-                String[]args = argsString.Split('|');
-                String type = args[0];
-                String input = args[1];
-
+            ParseSQL = new RelaySimpleCommand<String>(sql =>
+            {
                 try
                 {
-                    if (input == null) return;
-                    output = "";
-                    Heuristics.Heuristics.reset();
-                    currentHeuristic = 1;
-                    String sql = input;
-                    String ra = input;
-                    List<State>[] stateSets;
-                    TreeNode<String> tree;
-                    bool valid;
+                    Input_Valid_SQL = true;
+                    if (sql == null) { Input_Valid_SQL = false; return; }
 
-                    if (type.Equals("sql"))
-                    {
-                        output += @"<div class='card'><div class='card-header'>SQL: " + sql + "</div>";
+                    List<State>[] stateSets = sqlParser.Parse(sql);
+                    
+                    if (!sqlParser.IsValid(stateSets)) { Input_Valid_SQL = false; return; }
 
-                        stateSets = sqlParser.Parse(sql);
+                    
+                    stateSets = sqlParser.FilterAndReverse(stateSets);
+                    TreeNode<String> tree = sqlParser.parse_tree(sql, stateSets);
 
-                        valid = sqlParser.IsValid(stateSets);
-                        output += @"<div class='card-body'>Valid: " + valid + "</div></div>";
-                        if (!valid) return;
+                    this.SQL = sql;
+                    this.Input_RA = SqlToRa.TranslateQuery(tree);
+                    this.Input_Type = "ra";
+                    return;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Error = "<div class='alert alert-danger'>" + e.ToString().Replace(Environment.NewLine, "<br/>") + "</div>";
+                    return;
+                }
+            });
 
-                        stateSets = sqlParser.FilterAndReverse(stateSets);
-                        tree = sqlParser.parse_tree(sql, stateSets);
-                        //DON'T SQUISH TREE BEFORE TRANSLATION. TRANSLATION ASSUMES TREE CORRESPONDS TO THE RA GRAMMAR. Squish(tree);
-                        //output += "<div class='card'><div class='card-body'>";
-                        //output += tree.TreeToDebugString();
-                        //output += "</div></div>";
-                        ra = SqlToRa.TranslateQuery(tree);
-                    }
+            ParseRA = new RelaySimpleCommand<String>(ra =>
+            {
+                try
+                {
+                    Input_Valid_RA = true;
+                    if (ra == null) { Input_Valid_RA = false; return; }
 
-                    output += @"<div class='card'><div class='card-header'>RA: " + ra + "</div>";
-                    stateSets = raParser.Parse(ra);
+                    List<State>[] stateSets = raParser.Parse(ra);
 
-                    valid = raParser.IsValid(stateSets);
-                    output += @"<div class='card-body'>Valid: " + valid + "</div></div>";
-                    if (!valid) return;
+                    if (!raParser.IsValid(stateSets)) { Input_Valid_RA = false; return; }
 
                     stateSets = raParser.FilterAndReverse(stateSets);
-                    tree = raParser.parse_tree(ra, stateSets);
+                    TreeNode<String> tree = raParser.parse_tree(ra, stateSets);
 
                     Squish(tree);
 
-                    ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+                    this.ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
                     ops = new TreeNode<Operation>(new Query()) { ops };
 
                     Heuristic0 = new Heuristic0(ops);
@@ -119,86 +125,85 @@ namespace GroupProjectRASQL.ViewModel
 
                     Heuristic0.Complete();
 
-                    output += "<div class='card'><div class='card-body'>";
-                    output += ops.TreeToDebugString();
-                    output += "</div></div>";
-                    
+                    this.Output = "<div class='card'><div class='card-body'>";
+                    this.Output += ops.TreeToDebugString();
+                    this.Output += "</div></div>";
+                    this.CurrentView = "output";
                     return;
-                } catch (Exception e){
+                }
+                catch (Exception e)
+                {
                     Console.WriteLine(e.ToString());
-                    output = "<div class='alert alert-danger'>" + e.ToString().Replace(Environment.NewLine, "<br/>") + "</div>";
+                    Error = "<div class='alert alert-danger'>" + e.ToString().Replace(Environment.NewLine, "<br/>") + "</div>";
+                    return;
                 }
             });
-            step = new RelaySimpleCommand<String>(delegate (String type)
+
+            Step = new RelaySimpleCommand(() => 
             {
                 if (!Heuristic1.IsComplete())
                 {
                     Heuristic1.Step();
-                    output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
                 }
                 else if (!Heuristic2.IsComplete())
                 {
                     Heuristic2.Step();
-                    output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
                 }
                 else if (!Heuristic3.IsComplete())
                 {
                     Heuristic3.Step();
-                    output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
                 }
                 else if (!Heuristic4.IsComplete())
                 {
                     Heuristic4.Step();
-                    output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
                 }
                 else if (!Heuristic5.IsComplete())
                 {
                     Heuristic5.Step();
-                    output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
-                } else
-                {
-                    return;
+                    Output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
                 }
+                else return;
 
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
+                Output += ops.TreeToDebugString();
+                Output += "</div></div>";
             });
-            stepToEnd = new RelaySimpleCommand<String>(delegate (String type)
+
+            Complete = new RelaySimpleCommand(() =>
             {
                 if (!Heuristic1.IsComplete())
                 {
                     Heuristic1.Complete();
-                    output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
                 }
                 else if (!Heuristic2.IsComplete())
                 {
                     Heuristic2.Complete();
-                    output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
                 }
                 else if (!Heuristic3.IsComplete())
                 {
                     Heuristic3.Complete();
-                    output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
                 }
                 else if (!Heuristic4.IsComplete())
                 {
                     Heuristic4.Complete();
-                    output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
                 }
                 else if (!Heuristic5.IsComplete())
                 {
                     Heuristic5.Complete();
-                    output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
+                    Output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
                 }
-                else
-                {
-                    return;
-                }
+                else return;
 
-                output += ops.TreeToDebugString();
-                output += "</div></div>";
+                Output += ops.TreeToDebugString();
+                Output += "</div></div>";
             });
-
         }
 
         bool Squish(TreeNode<String> root)
