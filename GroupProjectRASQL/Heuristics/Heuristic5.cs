@@ -31,7 +31,7 @@ namespace GroupProjectRASQL.Heuristics
                     operation.RemoveChildren();
                     operation.AddChildren(child.Children);
                     operation.Child(0).Parent = operation;
-                    child.Children = null;
+                    child.RemoveChildren();
                     child.Parent = null;
 
                     remainingNodes.Enqueue(operation);
