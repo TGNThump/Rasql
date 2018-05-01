@@ -22,7 +22,9 @@ namespace GroupProjectRASQL.Heuristics
 
             bool retVal = false;
 
-            foreach (Node child in operation.Children) {
+            if(operation.Children.Count() == 1) {
+
+                Node child = operation.Child(0);
 
                 if (child.Data is Projection)
                 {
@@ -124,7 +126,7 @@ namespace GroupProjectRASQL.Heuristics
                 }
                 else if (child.Data is Selection)
                 {
-                    HashSet<String> conditionFields = new HashSet<String>(Conditions.GetFields(((Join)child.Data).getCondition()));
+                    HashSet<String> conditionFields = new HashSet<String>(Conditions.GetFields(((Selection)child.Data).getCondition()));
                     HashSet<String> projectFields = new HashSet<String>(operation.Data.getFieldNames());
 
                     if (projectFields.IsSubsetOf(conditionFields)) {
@@ -136,10 +138,12 @@ namespace GroupProjectRASQL.Heuristics
 
 
                         //Insert operation beneath select
+                        operation.Parent = child;
+                        operation.RemoveChildren();
+                        operation.AddChildren(child.Children);
                         child.RemoveChildren();
                         child.AddChild(operation);
-                        operation.Parent = child;
-                        operation.Children = child.Children;
+                        
 
                         retVal = true;
                     }
