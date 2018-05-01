@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<div class="row" style="margin-bottom: 0px;">
+		<div v-if="model.SQL != ''" class="row" style="margin-bottom: 0px;">
 			<column>
 				<div class="card d-flex flex-row" style="margin-bottom: 0px; border-bottom-radius: 0px;">
 					<div class="card-body" style="padding: 15px; text-align: right; width: 75px; background-color: #f7f7f7;">
 						SQL
 					</div>
 					<div class="col card-body" style="padding: 15px;">
-						SELECT * FROM test WHERE a=b AND b=c AND d=e;
+						{{model.SQL}}
 					</div>
 				</div>
 			</column>
@@ -20,7 +20,7 @@
 						RA
 					</div>
 					<div class="col card-body" style="padding: 15px;">
-						RA: σ a=b AND b=c AND d=e (test)
+						{{model.RA}}
 					</div>
 				</div>
 			</column>
@@ -28,7 +28,14 @@
 
 		<div class="row">
 			<column>
-        <div v-html="model.Output"></div>
+				<div class="card"><div class="card-body"><pre>{{ops}}</pre></div></div>
+			</column>
+		</div>
+
+
+		<!-- <div class="row">
+			<column>
+        		<div v-html="model.Output"></div>
 			</column>
 			<column>
 				<div class="row d-flex flex-row">
@@ -99,21 +106,15 @@
 					</div>
 				</div>
 			</column>
-		</div>
+		</div> -->
 
-		<!-- <div class="row">
-			<column>
-				<div v-html="model.output"></div>
-			</column>
-		</div>
 		<div class="row">
 			<column>
-				<button class="btn btn-block btn-primary" @click="model.step.Execute('')">STEP</button>
+				<svg>
+					<g ref="graph"></g>
+				</svg>
 			</column>
-			<column>
-				<button class="btn btn-block btn-primary" @click="model.stepToEnd.Execute('')">END</button>
-			</column>
-		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -123,20 +124,121 @@ const props={
 	__window__: Object
 };
 
+import * as d3 from 'd3';
 export default {
 	name: 'app',
 	props,
 	data () {
 		return {
-			model: this.viewModel			
+			model: this.viewModel		
 		}
 	},
-	methods: {
+	mounted(){
+		var test = JSON.parse(`{
+  "data": {
+    "type": "Projection",
+    "properties": "animals.name"
+  },
+  "children": [
+    {
+      "data": {
+        "type": "Selection",
+        "properties": "animals.age=&quot;3&quot;"
+      },
+      "children": [
+        {
+          "data": {
+            "type": "Relation",
+            "properties": "name, age, colour, weight"
+          },
+          "children": []
+        }
+      ]
+    }
+  ]
+}`);
 
+		var svg = d3.select(this.$refs.graph),
+			width = +svg.attr("width"),
+			height = +svg.attr("height"),
+			g = svg.append("g");
+
+		var data = d3.hierarchy(test);
+
+		var i = 0;
+
+		var tree = d3.tree(data).size([height,width]);
+
+		var root = test[0];
+
+		update(root);
+
+		function update(source){
+			var nodes = data.descendants().reverse();
+			var links = data.links(nodes);
+
+			nodes.forEach(function(d){d.y = d.depth * 180});
+
+			var node = svg.selectAll("g.node")
+				.data(nodes, function(d){return d.id || (d.id = ++i); });
+
+			var nodeEnter = tree.node().enter().append("g")
+				.attr("class","node")
+				.attr("transform", function(d){
+					return "translate(" + d.y + "," + d.x + ")";
+				});
+
+			nodeEnter.append("circle")
+				.attr("r", 10)
+				.style("fill", "#fff");
+
+			nodeEnter.append("text")
+				.attr("x", function(d){
+					return d.children || d._children ? -13 : 13;
+				}).attr("dy", ".35em")
+				.attr("text-anchor", function(d){
+					return d.children || d._children ? "end" : "start";
+				}).text(function(d){return d.data.type;})
+				.style("fill-opacity", 1);
+
+			var link = svg.selectAll("path.link")
+				.data(links, function(d) {return d.target.id;});
+
+			link.enter().insert("path", "g")
+				.attr("class", "link")
+				.attr("d",
+					d3.linkHorizontal()
+					.x( function(d){
+						return d.y;
+					}).y( function(d){
+						return d.x;
+					})
+				);
+		}
+
+	},
+	computed: {
+		ops: function(){
+			if (this.model.OpsJSON == null) return null;
+			if (this.model.OpsJSON == "") return null;
+			return JSON.parse(this.model.OpsJSON);
+		}
 	}
 }
 </script>
 
 <style>
+ .node circle {
+   fill: #fff;
+   stroke: steelblue;
+   stroke-width: 3px;
+ }
 
+ .node text { font: 12px sans-serif; }
+
+ .link {
+   fill: none;
+   stroke: #ccc;
+   stroke-width: 2px;
+ }
 </style>
