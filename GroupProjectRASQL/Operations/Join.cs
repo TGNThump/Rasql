@@ -55,5 +55,10 @@ namespace GroupProjectRASQL.Operations
             return ret;
         
         }
+
+        public override string ToJSON()
+        {
+            return "{'type':'" + this.GetType().Name + "', 'properties': '" + condition.TreeToString() + "'}";
+        }
     }
 }

@@ -28,6 +28,11 @@ namespace GroupProjectRASQL.Operations
             }
         }
 
+        public virtual string ToJSON()
+        {
+            return "{'type':'" + this.GetType().Name + "', 'properties': ''}";
+        }
+
         public virtual IEnumerable<String> getFieldNames()
         {
             return new List<String>();

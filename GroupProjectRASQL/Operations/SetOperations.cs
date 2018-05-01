@@ -15,6 +15,11 @@ namespace GroupProjectRASQL.Operations
         {
             return "[" + this.GetType().Name + "]";
         }
+
+        public override string ToJSON()
+        {
+            return "{'type':'" + this.GetType().Name + "', 'properties': ''}";
+        }
     }
     class Union : Operation { }
     class Intersect : Operation { }
