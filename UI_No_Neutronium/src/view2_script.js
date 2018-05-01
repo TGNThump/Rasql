@@ -51,7 +51,7 @@ $(document).ready(function(){
 	            	],
 	            }
 	        ],
-	    } 
+	    }
 	};
 
 	tree = new Treant(tree_config, function() { alert( 'Tree Loaded' ) }, $ );
