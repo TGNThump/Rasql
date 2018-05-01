@@ -11,9 +11,15 @@ namespace GroupProjectRASQL.Operations
     {
         private List<String> fields;
 
+        public Projection(IEnumerable<String> parameter) {
+            this.fields = new List<String>(parameter);
+        }
+
         public Projection(TreeNode<string> parameter) : base(parameter) {
             this.fields = new List<String>(parameter.TreeToString().Split(','));
         }
+
+        
 
         public override IEnumerable<String> getFieldNames()
         {
