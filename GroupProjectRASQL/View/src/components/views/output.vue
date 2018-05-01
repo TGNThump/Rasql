@@ -28,16 +28,13 @@
 
 		<div class="row">
 			<column>
-				<div class="card"><div class="card-body"><pre>{{ops}}</pre></div></div>
+				<div class="card">
+					<div class="card-body">
+						<svg width="500" height="500" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" id="graph"></svg>
+					</div>
+				</div>
 			</column>
-		</div>
-
-
-		<!-- <div class="row">
-			<column>
-        		<div v-html="model.Output"></div>
-			</column>
-			<column>
+						<column>
 				<div class="row d-flex flex-row">
 					<column style="flex-grow: 0; padding-right: 0px;">
 						<button style="height: 100%; border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&lt;</button>
@@ -106,14 +103,14 @@
 					</div>
 				</div>
 			</column>
-		</div> -->
+		</div>
+
 
 		<div class="row">
 			<column>
-				<svg>
-					<g ref="graph"></g>
-				</svg>
+        		<div v-html="model.Output"></div>
 			</column>
+
 		</div>
 	</div>
 </template>
@@ -136,86 +133,106 @@ export default {
 	mounted(){
 		var test = JSON.parse(`{
   "data": {
-    "type": "Projection",
-    "properties": "animals.name"
+    "type": "Selection",
+    "properties": "animals.oldage=test.b"
   },
   "children": [
     {
       "data": {
-        "type": "Selection",
-        "properties": "animals.age=&quot;3&quot;"
+        "type": "RenameAttribute",
+        "properties": "new: animals.oldage, old: animals.age"
       },
       "children": [
         {
           "data": {
-            "type": "Relation",
-            "properties": "name, age, colour, weight"
+            "type": "Selection",
+            "properties": "test.a=test.btest.a=animals.agetest.b=test.d"
           },
-          "children": []
+          "children": [
+            {
+              "data": {
+                "type": "Cartesian",
+                "properties": ""
+              },
+              "children": [
+                {
+                  "data": {
+                    "type": "Relation",
+                    "properties": "a, b, c, d, e, f, g, h"
+                  },
+                  "children": []
+                },
+                {
+                  "data": {
+                    "type": "Relation",
+                    "properties": "name, age, colour, weight"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
         }
       ]
     }
   ]
 }`);
 
-		var svg = d3.select(this.$refs.graph),
+		var svg = d3.select('#graph'),
 			width = +svg.attr("width"),
 			height = +svg.attr("height"),
-			g = svg.append("g");
+			g = svg.append("g").attr("transform", "translate(0,40)");
 
-		var data = d3.hierarchy(test);
+		var root = d3.hierarchy(test);
 
-		var i = 0;
+		d3.cluster().size([width, height-80])(root);
 
-		var tree = d3.tree(data).size([height,width]);
+		console.log(root)
 
-		var root = test[0];
+		var link = g.selectAll(".link")
+		.data(root.links())
+		.enter()
+		.append('line')
+		.classed('link', true)
+		.attr('x1', function(d) {return d.source.x;})
+		.attr('y1', function(d) {return d.source.y;})
+		.attr('x2', function(d) {return d.target.x;})
+		.attr('y2', function(d) {return d.target.y;});
 
-		update(root);
+	// 	// Links
+	// d3.select('svg g.links')
+	//   .selectAll('line.link')
+	//   .data(root.links())
+	//   .enter()
+	//   .append('line')
+	//   .classed('link', true)
+	//   .attr('x1', function(d) {return d.source.x;})
+	//   .attr('y1', function(d) {return d.source.y;})
+	//   .attr('x2', function(d) {return d.target.x;})
+	//   .attr('y2', function(d) {return d.target.y;});
 
-		function update(source){
-			var nodes = data.descendants().reverse();
-			var links = data.links(nodes);
-
-			nodes.forEach(function(d){d.y = d.depth * 180});
-
-			var node = svg.selectAll("g.node")
-				.data(nodes, function(d){return d.id || (d.id = ++i); });
-
-			var nodeEnter = tree.node().enter().append("g")
-				.attr("class","node")
-				.attr("transform", function(d){
-					return "translate(" + d.y + "," + d.x + ")";
+		var node = g.selectAll(".node")
+			.data(root.descendants())
+			.enter().append("g")
+				.attr("class", function (d){
+					return "node" + (d.children ? " node--internal" : " node--leaf");
+				}).attr("transform", function(d) {
+					return "translate(" + d.x + "," + d.y + ")";
 				});
+	
+		node.append("circle").attr("r", 2.5);
 
-			nodeEnter.append("circle")
-				.attr("r", 10)
-				.style("fill", "#fff");
+		node.append("text")
+			.attr("dy", -3)
+			.attr("x", function(d){ return d.children ? -8 : 8; })
+			.style("text-anchor", function(d){ return d.children ? "end" : "start";})
+			.text(function(d){ return d.data.data.type; });
 
-			nodeEnter.append("text")
-				.attr("x", function(d){
-					return d.children || d._children ? -13 : 13;
-				}).attr("dy", ".35em")
-				.attr("text-anchor", function(d){
-					return d.children || d._children ? "end" : "start";
-				}).text(function(d){return d.data.type;})
-				.style("fill-opacity", 1);
-
-			var link = svg.selectAll("path.link")
-				.data(links, function(d) {return d.target.id;});
-
-			link.enter().insert("path", "g")
-				.attr("class", "link")
-				.attr("d",
-					d3.linkHorizontal()
-					.x( function(d){
-						return d.y;
-					}).y( function(d){
-						return d.x;
-					})
-				);
-		}
-
+		node.append("text")
+			.attr("dy", 13)
+			.attr("x", function(d){ return d.children ? -8 : 8; })
+			.style("text-anchor", function(d){ return d.children ? "end" : "start";})
+			.text(function(d){ return d.data.data.properties; });
 	},
 	computed: {
 		ops: function(){

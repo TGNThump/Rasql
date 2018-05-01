@@ -18,17 +18,6 @@ namespace GroupProjectRASQL.Heuristics
         private List<KeyValuePair<Node, float>> RelationDictList;
         private Dictionary<Node,float> RelationDict = new Dictionary<Node, float>();
         private bool isRun;
-        public struct Sorted
-        {
-            public Node node;
-            public float selectivityRatio;
-
-            public Sorted(Node n, float s)
-            {
-                node = n;
-                selectivityRatio  = s;
-            }
-        }
 
         private IEnumerable<Node> PossibleSwaps;
 
@@ -66,7 +55,7 @@ namespace GroupProjectRASQL.Heuristics
 
                 foreach ( Node re in RelationList)
                 {
-                    RelationDict.Add(re, 0);
+                    RelationDict.Add(re, 1);
                 }
 
                 foreach (Node Selection in SelectionList)
@@ -82,14 +71,7 @@ namespace GroupProjectRASQL.Heuristics
                             return false;
                         }).SingleOrDefault();
 
-                        if (RelationDict[fieldSplitNode] != 0)
-                        {
-                            RelationDict[fieldSplitNode] *= selectivityEstimate(fieldSplitNode, fieldsplit[1]);
-                        }
-                        else
-                        {
-                            RelationDict[fieldSplitNode] += selectivityEstimate(fieldSplitNode, fieldsplit[1]);
-                        }
+                        RelationDict[fieldSplitNode] *= selectivityEstimate(fieldSplitNode, fieldsplit[1]);
                     }
                 }
                 /*
@@ -119,6 +101,10 @@ namespace GroupProjectRASQL.Heuristics
                     Console.Write("\n");
                 }
 
+                foreach (var permu in Permutate(RelationDictList, RelationDictList.Count))
+                {
+
+                }
 
 
 
@@ -126,8 +112,7 @@ namespace GroupProjectRASQL.Heuristics
 
 
 
-
-            }
+                }
             
 
 
@@ -144,6 +129,27 @@ namespace GroupProjectRASQL.Heuristics
 
 
             return false;
+        }
+
+        public static void RotateRight<T>(IList<T> sequence, int count)
+        {
+            T tmp = sequence[count - 1];
+            sequence.RemoveAt(count - 1);
+            sequence.Insert(0, tmp);
+        }
+
+        public static IEnumerable<IList<T>> Permutate<T>(IList<T> sequence, int count)
+        {
+            if (count == 1) yield return sequence;
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    foreach (var perm in Permutate(sequence, count - 1))
+                        yield return perm;
+                    RotateRight(sequence, count);
+                }
+            }
         }
 
         public float selectivityEstimate(Node relation, String field)
