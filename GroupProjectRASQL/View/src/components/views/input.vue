@@ -13,7 +13,7 @@
 				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C0</a></li>
 				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C3</a></li>
 				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C1</a></li>
-        <li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#8904</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#8904</a></li>
 				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x22C3</a></li>
 				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x22C2</a></li>
 				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">X</a></li>
@@ -21,11 +21,15 @@
 			</ul>
 		</div>
 		<div class="row">
-			<codemirror v-if="model.Input_Type == 'sql'" v-model="model.Input_SQL" class="form-control codemirror" :options="cmoptions"></codemirror>
-			<codemirror ref="ra" v-if="model.Input_Type == 'ra'" v-model="model.Input_RA" class="form-control codemirror" :options="cmoptions"></codemirror>
+			<column>
+				<codemirror style="border-radius: 0px 0px inherit inherit;" :class="{'is-invalid': !model.Input_Valid_SQL}" v-if="model.Input_Type == 'sql'" v-model="model.Input_SQL" class="form-control codemirror" :options="cmoptions"></codemirror>
+				<codemirror :class="{'is-invalid': !model.Input_Valid_RA}" ref="ra" v-if="model.Input_Type == 'ra'" v-model="model.Input_RA" class="form-control codemirror" :options="cmoptions"></codemirror>
+			</column>
 		</div>
 		<div class="row" style="flex-shrink: 0;">
-			<button @click="parse" class="btn btn-block btn-primary">Parse</button>
+			<column>
+				<button @click="parse" class="btn btn-block btn-primary">Parse</button>
+			</column>
 		</div>
 	</div>
 </template>

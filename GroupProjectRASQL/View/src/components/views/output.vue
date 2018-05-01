@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<div class="row" style="margin-bottom: 0px;">
+		<div v-if="model.SQL != ''" class="row" style="margin-bottom: 0px;">
 			<column>
 				<div class="card d-flex flex-row" style="margin-bottom: 0px; border-bottom-radius: 0px;">
 					<div class="card-body" style="padding: 15px; text-align: right; width: 75px; background-color: #f7f7f7;">
 						SQL
 					</div>
 					<div class="col card-body" style="padding: 15px;">
-						SELECT * FROM test WHERE a=b AND b=c AND d=e;
+						{{model.SQL}}
 					</div>
 				</div>
 			</column>
@@ -20,7 +20,7 @@
 						RA
 					</div>
 					<div class="col card-body" style="padding: 15px;">
-						RA: σ a=b AND b=c AND d=e (test)
+						{{model.RA}}
 					</div>
 				</div>
 			</column>
@@ -28,9 +28,13 @@
 
 		<div class="row">
 			<column>
-        <div v-html="model.Output"></div>
+				<div class="card">
+					<div class="card-body">
+						<svg width="500" height="500" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" id="graph"></svg>
+					</div>
+				</div>
 			</column>
-			<column>
+						<column>
 				<div class="row d-flex flex-row">
 					<column style="flex-grow: 0; padding-right: 0px;">
 						<button style="height: 100%; border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&lt;</button>
@@ -101,19 +105,13 @@
 			</column>
 		</div>
 
-		<!-- <div class="row">
-			<column>
-				<div v-html="model.output"></div>
-			</column>
-		</div>
+
 		<div class="row">
 			<column>
-				<button class="btn btn-block btn-primary" @click="model.step.Execute('')">STEP</button>
+        		<div v-html="model.Output"></div>
 			</column>
-			<column>
-				<button class="btn btn-block btn-primary" @click="model.stepToEnd.Execute('')">END</button>
-			</column>
-		</div> -->
+
+		</div>
 	</div>
 </template>
 
@@ -123,20 +121,141 @@ const props={
 	__window__: Object
 };
 
+import * as d3 from 'd3';
 export default {
 	name: 'app',
 	props,
 	data () {
 		return {
-			model: this.viewModel			
+			model: this.viewModel		
 		}
 	},
-	methods: {
+	mounted(){
+		var test = JSON.parse(`{
+  "data": {
+    "type": "Selection",
+    "properties": "animals.oldage=test.b"
+  },
+  "children": [
+    {
+      "data": {
+        "type": "RenameAttribute",
+        "properties": "new: animals.oldage, old: animals.age"
+      },
+      "children": [
+        {
+          "data": {
+            "type": "Selection",
+            "properties": "test.a=test.btest.a=animals.agetest.b=test.d"
+          },
+          "children": [
+            {
+              "data": {
+                "type": "Cartesian",
+                "properties": ""
+              },
+              "children": [
+                {
+                  "data": {
+                    "type": "Relation",
+                    "properties": "a, b, c, d, e, f, g, h"
+                  },
+                  "children": []
+                },
+                {
+                  "data": {
+                    "type": "Relation",
+                    "properties": "name, age, colour, weight"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}`);
 
+		var svg = d3.select('#graph'),
+			width = +svg.attr("width"),
+			height = +svg.attr("height"),
+			g = svg.append("g").attr("transform", "translate(0,40)");
+
+		var root = d3.hierarchy(test);
+
+		d3.cluster().size([width, height-80])(root);
+
+		console.log(root)
+
+		var link = g.selectAll(".link")
+		.data(root.links())
+		.enter()
+		.append('line')
+		.classed('link', true)
+		.attr('x1', function(d) {return d.source.x;})
+		.attr('y1', function(d) {return d.source.y;})
+		.attr('x2', function(d) {return d.target.x;})
+		.attr('y2', function(d) {return d.target.y;});
+
+	// 	// Links
+	// d3.select('svg g.links')
+	//   .selectAll('line.link')
+	//   .data(root.links())
+	//   .enter()
+	//   .append('line')
+	//   .classed('link', true)
+	//   .attr('x1', function(d) {return d.source.x;})
+	//   .attr('y1', function(d) {return d.source.y;})
+	//   .attr('x2', function(d) {return d.target.x;})
+	//   .attr('y2', function(d) {return d.target.y;});
+
+		var node = g.selectAll(".node")
+			.data(root.descendants())
+			.enter().append("g")
+				.attr("class", function (d){
+					return "node" + (d.children ? " node--internal" : " node--leaf");
+				}).attr("transform", function(d) {
+					return "translate(" + d.x + "," + d.y + ")";
+				});
+	
+		node.append("circle").attr("r", 2.5);
+
+		node.append("text")
+			.attr("dy", -3)
+			.attr("x", function(d){ return d.children ? -8 : 8; })
+			.style("text-anchor", function(d){ return d.children ? "end" : "start";})
+			.text(function(d){ return d.data.data.type; });
+
+		node.append("text")
+			.attr("dy", 13)
+			.attr("x", function(d){ return d.children ? -8 : 8; })
+			.style("text-anchor", function(d){ return d.children ? "end" : "start";})
+			.text(function(d){ return d.data.data.properties; });
+	},
+	computed: {
+		ops: function(){
+			if (this.model.OpsJSON == null) return null;
+			if (this.model.OpsJSON == "") return null;
+			return JSON.parse(this.model.OpsJSON);
+		}
 	}
 }
 </script>
 
 <style>
+ .node circle {
+   fill: #fff;
+   stroke: steelblue;
+   stroke-width: 3px;
+ }
 
+ .node text { font: 12px sans-serif; }
+
+ .link {
+   fill: none;
+   stroke: #ccc;
+   stroke-width: 2px;
+ }
 </style>

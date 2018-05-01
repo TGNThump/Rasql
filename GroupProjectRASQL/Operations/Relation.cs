@@ -38,5 +38,10 @@ namespace GroupProjectRASQL.Operations
         {
             return "[Relation " + name + "]{" + getFieldNames().Aggregate((all, next) => all + ", " + next) + "}";
         }
+
+        public override string ToJSON()
+        {
+            return "{'type':'" + this.GetType().Name + "', 'properties': '" + getFieldNames().Aggregate((all, next) => all + ", " + next) + "'}";
+        }
     }
 }

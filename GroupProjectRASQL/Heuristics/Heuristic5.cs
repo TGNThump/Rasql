@@ -4,7 +4,6 @@ using System.Linq;
 using GroupProjectRASQL.Operations;
 using System.Text;
 using System.Threading.Tasks;
-using GroupProjectRASQL.Operations;
 using GroupProjectRASQL.Parser;
 using Condition = GroupProjectRASQL.Parser.TreeNode<System.String>;
 using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Operation>;

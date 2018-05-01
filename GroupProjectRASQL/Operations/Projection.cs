@@ -42,10 +42,12 @@ namespace GroupProjectRASQL.Operations
 
         public override string ToString()
         {
-            {
-                return "[" + this.GetType().Name + "](" + fields.Aggregate((a,b) => a + ", " + b) + ")";
-            }
+           return "[" + this.GetType().Name + "](" + fields.Aggregate((a,b) => a + ", " + b) + ")";
+        }
 
+        public override string ToJSON()
+        {
+            return "{'type':'" + this.GetType().Name + "', 'properties': '" + fields.Aggregate((a, b) => a + ", " + b) + "'}";
         }
     }
 }

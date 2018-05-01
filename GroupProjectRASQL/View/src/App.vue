@@ -8,7 +8,7 @@
           <a class="nav-link" @click="CurrentView = 'input'" href="#">Input</a>
         </li>
         <li class="nav-item" :class="{active: CurrentView == 'output'}">
-          <a class="nav-link" @click="CurrentView = 'output'" href="#">Output</a>
+          <a class="nav-link" :class="{disabled: SQL == '' && RA == ''}" @click="CurrentView = (SQL != '' || RA != '') ? 'output' : CurrentView" href="#">Output</a>
         </li>
         <li class="nav-item" :class="{active: CurrentView == 'schema'}">
           <a class="nav-link" @click="CurrentView = 'schema'" href="#">Schema</a>
@@ -17,8 +17,20 @@
     </nav>
 
     <div class="app" style="overflow-y: scroll; overflow-x: hidden;">
+      <div v-if="Error != ''" class="d-flex flex-column error">
+        <div class="row">
+          <column>
+            <div class="alert alert-danger" role="alert">
+              {{Error}}
+              <button type="button" class="close" @click="Error = '';" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </column>
+        </div>
+      </div>
       <keep-alive>
-		<view-input class="view" v-if="CurrentView == 'input'" :viewModel='this.viewModel'></view-input>
+        <view-input class="view" v-if="CurrentView == 'input'" :viewModel='this.viewModel'></view-input>
       </keep-alive>
       <keep-alive>
         <view-output class="view" v-if="CurrentView == 'output'" :viewModel='this.viewModel'></view-output>
