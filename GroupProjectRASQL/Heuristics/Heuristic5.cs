@@ -48,7 +48,7 @@ namespace GroupProjectRASQL.Heuristics
                     
 
                     HashSet<String> projectFields = new HashSet<String>(operation.Data.getFieldNames());
-                    HashSet<String> conditionFields = child.Data is Join? new HashSet <String>(Conditions.GetFields(((Join)child.Data).getCondition())): null;
+                    HashSet<String> conditionFields = child.Data is Join? new HashSet <String>(((Join)child.Data).getFieldNames()): null;
                     HashSet<String> lSubtreeFields = GetFields(child.Child(0));
                     HashSet<String> rSubtreeFields = GetFields(child.Child(1));
 
@@ -65,28 +65,39 @@ namespace GroupProjectRASQL.Heuristics
 
                     lSubtreeFields.IntersectWith(projectFields);
                     rSubtreeFields.IntersectWith(projectFields);
+                    Node rightSubTree = new Node(new Projection(rSubtreeFields));
+                    Node leftSubTree = new Node(new Projection(lSubtreeFields));
 
                     if (lSubtreeFields.Count() > 0)
                     {
-                        Node leftSubTree = new Node(new Projection(lSubtreeFields));
+                       
+                        leftSubTree.Parent = child;
                         leftSubTree.AddChild(child.Child(0));
                         child.Child(0).Parent = leftSubTree;
-                        leftSubTree.Parent = child;
+                        
                         remainingNodes.Enqueue(leftSubTree);
+
+                        
 
                         retVal = true;
                     }
 
                     if (rSubtreeFields.Count() > 0)
                     {
-                        Node rightSubTree = new Node(new Projection(rSubtreeFields));
+                        
+                        rightSubTree.Parent = child;
                         rightSubTree.AddChild(child.Child(1));
                         child.Child(1).Parent = rightSubTree;
-                        rightSubTree.Parent = child;
+                        
                         remainingNodes.Enqueue(rightSubTree);
+
+                       
 
                         retVal = true;
                     }
+                    if(lSubtreeFields.Count() > 0|| rSubtreeFields.Count() > 0)child.RemoveChildren();
+                    if (lSubtreeFields.Count() > 0) child.AddChild(leftSubTree);
+                    if (rSubtreeFields.Count() > 0) child.AddChild(rightSubTree);
 
 
                 }
@@ -165,7 +176,7 @@ namespace GroupProjectRASQL.Heuristics
             if (node.Data is Relation)
             {
 
-                returnSet.UnionWith(node.Data.getFieldNames());
+                returnSet.UnionWith(((Relation)node.Data).getFullFieldNames());
 
 
             }
