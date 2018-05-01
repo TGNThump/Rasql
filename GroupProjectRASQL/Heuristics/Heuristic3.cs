@@ -93,19 +93,29 @@ namespace GroupProjectRASQL.Heuristics
                         return pair1.Value.CompareTo(pair2.Value);
                     }
                 );
-
+                /*
                 foreach (KeyValuePair<Node, float> kvp in RelationDictList)
                 {
                     Console.Write(kvp.Key);
                     Console.Write(" : ");
                     Console.Write(kvp.Value);
                     Console.Write("\n");
-                }
-
+                }*/
+                
                 foreach (var permu in Permutate(RelationDictList, RelationDictList.Count))
                 {
-                    Console.WriteLine(permu);
+                    if (resultsInCrossJoin(permu)) { break; }
+                
+                    foreach ( var kvp in permu)
+                    {
+                        Console.Write(kvp.Key);
+                        Console.Write(" : ");
+                        Console.Write(kvp.Value);
+                        Console.Write("\n");
+
+                    }
                 }
+                
 
 
 
@@ -137,18 +147,21 @@ namespace GroupProjectRASQL.Heuristics
         public float selectivityEstimate(Node relation, String field)
         {
             Relation relationData = (Relation)relation.Data;
-
+            /*
             Console.Write("Field is ;");
             Console.Write(relationData.GetField(field));
             Console.Write("Selectivity Ratio is ;");
             Console.Write((float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount());
             Console.WriteLine("\n");
-
+            */
             return (float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount();
         }
 
-        public bool resultsInCrossJoin()
+        public static bool resultsInCrossJoin(IList<KeyValuePair<Node, float>> permu)
         {
+            Console.WriteLine("Asking for crossjoins");
+            Console.WriteLine(permu);
+        
             return false;
         }
 
@@ -160,15 +173,20 @@ namespace GroupProjectRASQL.Heuristics
             sequence.Insert(0, tmp);
         }
 
-        public static IEnumerable<IList<T>> Permutate<T>(IList<T> sequence, int count)
+        public static IEnumerable<IList<KeyValuePair<Node, float>>> Permutate(IList<KeyValuePair<Node, float>> sequence, int count)
         {
+            Console.WriteLine("Asking for permutations");
+            Console.WriteLine(count);
+
             if (count == 1) yield return sequence;
             else
             {
                 for (int i = 0; i < count; i++)
                 {
                     foreach (var perm in Permutate(sequence, count - 1))
+                    {                    
                         yield return perm;
+                    }
                     RotateRight(sequence, count);
                 }
             }
