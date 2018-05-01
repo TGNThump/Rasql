@@ -4,7 +4,6 @@ using System.Linq;
 using GroupProjectRASQL.Operations;
 using System.Text;
 using System.Threading.Tasks;
-using GroupProjectRASQL.Operations;
 using GroupProjectRASQL.Parser;
 using Condition = GroupProjectRASQL.Parser.TreeNode<System.String>;
 using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Operation>;
@@ -22,14 +21,16 @@ namespace GroupProjectRASQL.Heuristics
 
             bool retVal = false;
 
-            foreach (Node child in operation.Children) {
+            if(operation.Children.Count() == 1) {
+
+                Node child = operation.Child(0);
 
                 if (child.Data is Projection)
                 {
                     operation.RemoveChildren();
                     operation.AddChildren(child.Children);
                     operation.Child(0).Parent = operation;
-                    child.Children = null;
+                    child.RemoveChildren();
                     child.Parent = null;
 
                     remainingNodes.Enqueue(operation);
@@ -124,7 +125,7 @@ namespace GroupProjectRASQL.Heuristics
                 }
                 else if (child.Data is Selection)
                 {
-                    HashSet<String> conditionFields = new HashSet<String>(Conditions.GetFields(((Join)child.Data).getCondition()));
+                    HashSet<String> conditionFields = new HashSet<String>(Conditions.GetFields(((Selection)child.Data).getCondition()));
                     HashSet<String> projectFields = new HashSet<String>(operation.Data.getFieldNames());
 
                     if (projectFields.IsSubsetOf(conditionFields)) {
@@ -136,10 +137,12 @@ namespace GroupProjectRASQL.Heuristics
 
 
                         //Insert operation beneath select
+                        operation.Parent = child;
+                        operation.RemoveChildren();
+                        operation.AddChildren(child.Children);
                         child.RemoveChildren();
                         child.AddChild(operation);
-                        operation.Parent = child;
-                        operation.Children = child.Children;
+                        
 
                         retVal = true;
                     }

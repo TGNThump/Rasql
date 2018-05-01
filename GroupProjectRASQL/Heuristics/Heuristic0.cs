@@ -100,7 +100,7 @@ namespace GroupProjectRASQL.Heuristics
                 {
                     String[] split = oldName.Split('.');
                     if (!fields.ContainsKey(split[0])) throw new Exception("Relation '" + split[0] + "' not found.");
-                    if (!fields.ContainsKey(split[1])) throw new Exception("Field '" + split[1] + "' not found in Relation " + split[0]);
+                    if (!fields[split[0]].Contains(split[1])) throw new Exception("Field '" + split[1] + "' not found in Relation " + split[0]);
                 }
                 else
                 {

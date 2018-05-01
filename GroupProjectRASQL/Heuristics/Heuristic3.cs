@@ -92,42 +92,35 @@ namespace GroupProjectRASQL.Heuristics
                         return pair1.Value.CompareTo(pair2.Value);
                     }
                 );
-
+                /*
                 foreach (KeyValuePair<Node, float> kvp in RelationDictList)
                 {
                     Console.Write(kvp.Key);
                     Console.Write(" : ");
                     Console.Write(kvp.Value);
                     Console.Write("\n");
+                }*/
+                
+                foreach (var permu in Permutate(RelationDictList, RelationDictList.Count))
+                {
+                    if (resultsInCrossJoin(permu)) { break; }
+                
+                    foreach ( var kvp in permu)
+                    {
+                        Console.Write(kvp.Key);
+                        Console.Write(" : ");
+                        Console.Write(kvp.Value);
+                        Console.Write("\n");
+
+                    }
                 }
+                
 
                 foreach (var permu in Permutate(RelationDictList, RelationDictList.Count))
                 {
 
                 }
-
-
-
-
-
-
-
-                }
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            }
             return false;
         }
 
@@ -155,30 +148,41 @@ namespace GroupProjectRASQL.Heuristics
         public float selectivityEstimate(Node relation, String field)
         {
             Relation relationData = (Relation)relation.Data;
-
+            /*
             Console.Write("Field is ;");
             Console.Write(relationData.GetField(field));
             Console.Write("Selectivity Ratio is ;");
             Console.Write((float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount());
             Console.WriteLine("\n");
-            /*
-            foreach (String field in select.Data.getFieldNames())
-            {
-
-            }
             */
             return (float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount();
         }
 
-        public bool resultsInCrossJoin()
+        public static bool resultsInCrossJoin(IList<KeyValuePair<Node, float>> permu)
         {
+            Console.WriteLine("Asking for crossjoins");
+            Console.WriteLine(permu);
+        
             return false;
         }
 
-
-        public void permutations(List<KeyValuePair<Node, float>> listToPermutate)
+        public static IEnumerable<IList<KeyValuePair<Node, float>>> Permutate(IList<KeyValuePair<Node, float>> sequence, int count)
         {
-            //listToPermutate;
+            Console.WriteLine("Asking for permutations");
+            Console.WriteLine(count);
+
+            if (count == 1) yield return sequence;
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    foreach (var perm in Permutate(sequence, count - 1))
+                    {                    
+                        yield return perm;
+                    }
+                    RotateRight(sequence, count);
+                }
+            }
         }
 
         

@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 	<div class="d-flex flex-column">
 		<div class="row" style="margin-bottom: 0px; flex-shrink: 0;">
 			<column class="d-flex flex-row justify-content-between">
@@ -21,6 +22,28 @@
 					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">-</a></li>
 				</ul>
 			</column>
+=======
+	<div class="container-fluid app d-flex flex-column">
+		<div class="row d-flex flex-row justify-content-between" style="margin-bottom: 0px; flex-shrink: 0;">
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a @click="model.Input_Type = 'sql'" class="nav-link" :class="{active: model.Input_Type == 'sql'}" href="#">SQL</a>
+				</li>
+				<li class="nav-item">
+					<a @click="model.Input_Type = 'ra'" class="nav-link" :class="{active: model.Input_Type == 'ra'}" href="#">RA</a>
+				</li>
+			</ul>
+			<ul class="nav nav-tabs" v-if="model.Input_Type == 'ra'">
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C0</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C3</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C1</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#8904</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x22C3</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x22C2</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">X</a></li>
+				<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">-</a></li>
+			</ul>
+>>>>>>> c6c0adbbd712455f17b1474e8ccf0fc27d263585
 		</div>
 		<div class="row">
 			<column>
