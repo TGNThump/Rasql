@@ -161,6 +161,20 @@ namespace GroupProjectRASQL.Parser
 
         }
 
+        public string ToJSON()
+        {
+            MethodInfo toJSON = Data.GetType().GetMethod("ToJSON");
+            String json = "{'data': " + ((string) toJSON.Invoke(Data, new object[0])) + ", 'children': [";
+            foreach(TreeNode<T> child in Children)
+            {
+                json += child.ToJSON() + ",";
+            }
+            if (Children.Count > 0) json = json.Substring(0, json.Length - 1);
+
+            json += "]}";
+            return json;
+        }
+
         public override string ToString()
         {
             return Data != null ? Data.ToString() : "[data null]";
