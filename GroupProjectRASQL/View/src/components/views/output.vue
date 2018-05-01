@@ -28,7 +28,7 @@
 
 		<div class="row">
 			<column>
-        <div v-html="model.Output"></div>
+       	 		<div v-html="model.Output"></div>
 			</column>
 			<column>
 				<div class="row d-flex flex-row">
@@ -97,13 +97,13 @@
 						</div>
 						<span class="form-control">Move Projection Heuristic</span>
 					</div>
-				</div>
+				</div> 
 			</column>
 		</div>
 
 		<!-- <div class="row">
 			<column>
-				<div v-html="model.output"></div>
+				<div class="TreeDisplay" id="tree-simple" v-html="model.Output"></div>
 			</column>
 		</div>
 		<div class="row">
@@ -135,6 +135,59 @@ export default {
 
 	}
 }
+
+tree_config = {
+    chart: {
+        container: "#tree-simple",
+        levelSeparation:    30,
+        siblingSeparation:  20,
+        subTeeSeparation:   50,
+        rootOrientation: "NORTH",
+
+        node: { 
+            HTMLclass: "node-draw",
+            drawLineThrough: false
+        },
+        connectors: {
+            type: "step",
+            style: {
+                "stroke-width": 2,
+                "stroke": "#ccc"
+            },
+            stackIndent: 20    
+        }
+    },
+    
+    nodeStructure: {
+        text: { name: "Node", desc: "subscript" },
+        children: [
+            {
+                text: { name: "Node", desc: "subscript" },
+                children: [
+                    {
+                        text: { name: "Node", desc: "subscript" },
+                    },
+                    {
+                        text: { name: "Node", desc: "subscript" }
+                    }
+                ],
+            },
+            {
+                text: { name: "Node", desc: "subscript" },
+                children: [
+                    {
+                        text: { name: "Node", desc: "subscript" },
+                    },
+                    {
+                        text: { name: "Node", desc: "subscript" }
+                    }
+                ],
+            }
+        ],
+    }
+};
+
+var tree = new Treant(tree_config, function() { alert( 'Tree Loaded' ) }, $ );
 </script>
 
 <style>
