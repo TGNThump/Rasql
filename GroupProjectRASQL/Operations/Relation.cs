@@ -18,7 +18,10 @@ namespace GroupProjectRASQL.Operations
             this.name = name;
             this.fields = fields;
         }
-
+        public Field GetField(String name)
+        {
+            return fields.FirstOrDefault(field => field.name == name);
+        }
         public override IEnumerable<String> getFieldNames()
         {
             return fields.Select(field => field.name);
