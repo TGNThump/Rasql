@@ -1,3 +1,7 @@
+<!--
+  File: app.vue 
+  Description: Definition of the markup for the navigation between views.
+                                                                        --> 
 <template>
   <div class="container-fluid app d-flex flex-column">
     <nav class="nav-main navbar navbar-dark bg-primary">

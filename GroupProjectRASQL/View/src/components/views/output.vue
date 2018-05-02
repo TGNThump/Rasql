@@ -1,3 +1,9 @@
+<!--
+	File: output.vue 
+	Description: Output view markup for the user interface view 1.
+				 Here the user iteracts with the parsed query's tree.
+				 He is allowed to implement heuristics via UI
+																   		--> 
 <template>
 	<div>
 		<div v-if="model.SQL != ''" class="row" style="margin-bottom: 0px;">
