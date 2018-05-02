@@ -33,22 +33,22 @@
 		</div>
 
 		<div class="row">
-			<column>
+			<column lg="6">
 				<div class="card">
 					<div class="card-body">
 						<svg id="graph"></svg>
 					</div>
 				</div>
 			</column>
-			<column>
-				<div class="row d-flex flex-row">
+			<column lg="6">
+				<div v-if="model.CurrentHeuristic != null" class="row d-flex flex-row">
 					<column style="flex-grow: 0; padding-right: 0px;">
 						<button style="height: 100%; border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&lt;</button>
 					</column>
 					<column style="padding: 0px;">
 						<div class="card" style="margin-bottom: 0px; border-radius: 0px;">
-							<div class="card-header">The Selection Split Heuristic</div>
-							<div class="card-body">This deals with the splitting of any selection - σp(r) - statement that has more than one condition, for example  σa=b and b=c  ,into several smaller selections.</div>
+							<div class="card-header">{{model.CurrentHeuristic.name}}</div>
+							<div class="card-body">{{model.CurrentHeuristic.description}}</div>
 						</div>
 					</column>
 					<column style="flex-grow: 0; padding-left: 0px;">
@@ -57,16 +57,19 @@
 				</div>
 				<div class="row">
 					<column>
-						<button @click="model.Step.Execute('')" class="btn btn-block btn-primary">Step</button>
+						<button @click="model.Step.Execute()" class="btn btn-block btn-primary">Step</button>
 					</column>
 					<column>
-						<button @click="model.Complete.Execute('')" class="btn btn-block btn-primary">Complete</button>
+						<button @click="model.Complete.Execute()" class="btn btn-block btn-primary">Complete</button>
 					</column>
 					<column>
-						<button class="btn btn-block btn-primary">Reset</button>
+						<button @click="model.Reset.Execute()" class="btn btn-block btn-primary">Reset</button>
 					</column>
 				</div>
 				<div class="row">
+					<div v-for="heuristic in model.HeuristicList">
+						<div class="card" style="flex-grow: 0;"><div class="card-body"><pre>{{heuristic}}</pre></div></div>
+					</div>
 					<!-- <div class="input-group mb-1" style="margin-bottom: 0px;">
 						<div class="input-group-prepend">
 							<div class="input-group-text">
@@ -101,7 +104,6 @@ export default {
 		ops: function(){
 			if (this.model.OpsJSON == null) return null;
 			if (this.model.OpsJSON == "") return null;
-			console.log(this.model.OpsJSON);
 			return JSON.parse(this.model.OpsJSON);
 		}
 	},
@@ -119,7 +121,6 @@ export default {
 		render: function(){
 			if (this.ops == null) return;
 			if (this.ops == "") return;
-			console.log(this.ops);
 			var root = d3.hierarchy(this.ops);
 
 			var svg = this.svg;

@@ -39,17 +39,18 @@ namespace GroupProjectRASQL.ViewModel
         Parser.Parser sqlParser = new Parser.Parser("sql");
         Parser.Parser raParser = new Parser.Parser("ra");
 
-        public List<Heuristic> Heurisitcs { get; private set; } = new List<Heuristic>();
+        public List<Heuristic> HeuristicList { get; private set; } = new List<Heuristic>();
 
         public Heuristic CurrentHeuristic
         {
             get
             {
-                foreach (Heuristic heuristic in Heurisitcs)
+                if (HeuristicList.Count == 0) return null;
+                foreach (Heuristic heuristic in HeuristicList)
                 {
-                    ; if (heuristic.isEnabled && !heuristic.isComplete) return heuristic;
+                    if (heuristic.isEnabled && !heuristic.isComplete) return heuristic;
                 }
-                return null;
+                return HeuristicList.Last();
             }
         }
 
@@ -174,11 +175,12 @@ namespace GroupProjectRASQL.ViewModel
 
                     new Heuristic0(ops).Complete();
 
-                    Heurisitcs.Add(new Heuristic1(ops));
-                    Heurisitcs.Add(new Heuristic2(ops));
-                    Heurisitcs.Add(new Heuristic3(ops));
-                    Heurisitcs.Add(new Heuristic4(ops));
-                    Heurisitcs.Add(new Heuristic5(ops));
+                    HeuristicList.Clear();
+                    HeuristicList.Add(new Heuristic1(ops));
+                    HeuristicList.Add(new Heuristic2(ops));
+                    HeuristicList.Add(new Heuristic3(ops));
+                    HeuristicList.Add(new Heuristic4(ops));
+                    HeuristicList.Add(new Heuristic5(ops));
 
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     this.CurrentView = "output";
@@ -237,11 +239,12 @@ namespace GroupProjectRASQL.ViewModel
 
                     new Heuristic0(ops).Complete();
 
-                    Heurisitcs.Add(new Heuristic1(ops));
-                    Heurisitcs.Add(new Heuristic2(ops));
-                    Heurisitcs.Add(new Heuristic3(ops));
-                    Heurisitcs.Add(new Heuristic4(ops));
-                    Heurisitcs.Add(new Heuristic5(ops));
+                    HeuristicList.Clear();
+                    HeuristicList.Add(new Heuristic1(ops));
+                    HeuristicList.Add(new Heuristic2(ops));
+                    HeuristicList.Add(new Heuristic3(ops));
+                    HeuristicList.Add(new Heuristic4(ops));
+                    HeuristicList.Add(new Heuristic5(ops));
 
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     return;

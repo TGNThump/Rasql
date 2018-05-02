@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupProjectRASQL.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Oper
 
 namespace GroupProjectRASQL.Heuristics
 {
-    public abstract class Heuristic
+    public abstract class Heuristic : Reactive
     {
         protected Node root;
         protected Node next;
