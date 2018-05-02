@@ -30,11 +30,11 @@
 			<column>
 				<div class="card">
 					<div class="card-body">
-						<svg width="500" height="500" viewBox="0 0 500 500" preserveAspectRatio="xMidYMid meet" id="graph"></svg>
+						<svg id="graph"></svg>
 					</div>
 				</div>
 			</column>
-						<column>
+			<column>
 				<div class="row d-flex flex-row">
 					<column style="flex-grow: 0; padding-right: 0px;">
 						<button style="height: 100%; border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&lt;</button>
@@ -108,6 +108,11 @@
 
 		<div class="row">
 			<column>
+				<div class="card">
+					<div class="card-body">
+						<pre>{{ops}}</pre>
+					</div>
+				</div>
         		<div v-html="model.Output"></div>
 			</column>
 
@@ -127,118 +132,102 @@ export default {
 	props,
 	data () {
 		return {
-			model: this.viewModel		
+			model: this.viewModel,
+			svg: null,
 		}
-	},
-	mounted(){
-		var test = JSON.parse(`{
-  "data": {
-    "type": "Selection",
-    "properties": "animals.oldage=test.b"
-  },
-  "children": [
-    {
-      "data": {
-        "type": "RenameAttribute",
-        "properties": "new: animals.oldage, old: animals.age"
-      },
-      "children": [
-        {
-          "data": {
-            "type": "Selection",
-            "properties": "test.a=test.btest.a=animals.agetest.b=test.d"
-          },
-          "children": [
-            {
-              "data": {
-                "type": "Cartesian",
-                "properties": ""
-              },
-              "children": [
-                {
-                  "data": {
-                    "type": "Relation",
-                    "properties": "a, b, c, d, e, f, g, h"
-                  },
-                  "children": []
-                },
-                {
-                  "data": {
-                    "type": "Relation",
-                    "properties": "name, age, colour, weight"
-                  },
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}`);
-
-		var svg = d3.select('#graph'),
-			width = +svg.attr("width"),
-			height = +svg.attr("height"),
-			g = svg.append("g").attr("transform", "translate(0,40)");
-
-		var root = d3.hierarchy(test);
-
-		d3.cluster().size([width, height-80])(root);
-
-		console.log(root)
-
-		var link = g.selectAll(".link")
-		.data(root.links())
-		.enter()
-		.append('line')
-		.classed('link', true)
-		.attr('x1', function(d) {return d.source.x;})
-		.attr('y1', function(d) {return d.source.y;})
-		.attr('x2', function(d) {return d.target.x;})
-		.attr('y2', function(d) {return d.target.y;});
-
-	// 	// Links
-	// d3.select('svg g.links')
-	//   .selectAll('line.link')
-	//   .data(root.links())
-	//   .enter()
-	//   .append('line')
-	//   .classed('link', true)
-	//   .attr('x1', function(d) {return d.source.x;})
-	//   .attr('y1', function(d) {return d.source.y;})
-	//   .attr('x2', function(d) {return d.target.x;})
-	//   .attr('y2', function(d) {return d.target.y;});
-
-		var node = g.selectAll(".node")
-			.data(root.descendants())
-			.enter().append("g")
-				.attr("class", function (d){
-					return "node" + (d.children ? " node--internal" : " node--leaf");
-				}).attr("transform", function(d) {
-					return "translate(" + d.x + "," + d.y + ")";
-				});
-	
-		node.append("circle").attr("r", 2.5);
-
-		node.append("text")
-			.attr("dy", -3)
-			.attr("x", function(d){ return d.children ? -8 : 8; })
-			.style("text-anchor", function(d){ return d.children ? "end" : "start";})
-			.text(function(d){ return d.data.data.type; });
-
-		node.append("text")
-			.attr("dy", 13)
-			.attr("x", function(d){ return d.children ? -8 : 8; })
-			.style("text-anchor", function(d){ return d.children ? "end" : "start";})
-			.text(function(d){ return d.data.data.properties; });
 	},
 	computed: {
 		ops: function(){
 			if (this.model.OpsJSON == null) return null;
 			if (this.model.OpsJSON == "") return null;
+			console.log(this.model.OpsJSON);
 			return JSON.parse(this.model.OpsJSON);
+		}
+	},
+	watch: {
+		ops: function (value){
+			this.render();	
+		}
+	},
+	mounted(){
+		this.svg = d3.select('#graph');
+		this.svg.append("g").attr("transform", "translate(0,50)")
+		this.render();
+	},
+	methods: {
+		render: function(){
+			if (this.ops == null) return;
+			if (this.ops == "") return;
+			console.log(this.ops);
+			var root = d3.hierarchy(this.ops);
+
+			var svg = this.svg;
+			var	width = (root.leaves().length+1) * 200,
+				height = Math.min((root.leaves()[0].depth) * 200, 500);
+
+			d3.cluster().size([width, height])(root);
+
+			svg.attr("viewBox","0 0 " + (width + 100) + " " + (height + 100));
+			
+			var g = svg.select("g");
+
+			// Update
+
+			var link = g.selectAll('.link')
+				.data(root.links())
+				.attr('x1', function(d) {return d.source.x;})
+				.attr('y1', function(d) {return d.source.y;})
+				.attr('x2', function(d) {return d.target.x;})
+				.attr('y2', function(d) {return d.target.y;});
+
+			var node = g.selectAll(".node")
+				.data(root.descendants())
+				.attr("class", function (d){
+					return "node" + (d.children ? " node--internal" : " node--leaf");
+				}).attr("transform", function(d) {
+					return "translate(" + d.x + "," + d.y + ")";
+				});
+
+			console.log(node);
+
+			node.select('text')
+				.attr("x", function(d){ return d.children ? -8 : 8; })
+				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
+				.text(function(d){ return d.data.data.type; });
+
+			// Enter
+
+			var link = g.selectAll(".link")
+				.data(root.links())
+				.enter()
+				.append('line')
+				.classed('link', true)
+				.attr('x1', function(d) {return d.source.x;})
+				.attr('y1', function(d) {return d.source.y;})
+				.attr('x2', function(d) {return d.target.x;})
+				.attr('y2', function(d) {return d.target.y;});
+
+			var node = g.selectAll(".node")
+				.data(root.descendants())
+				.enter().append("g")
+					.attr("class", function (d){
+						return "node" + (d.children ? " node--internal" : " node--leaf");
+					}).attr("transform", function(d) {
+						return "translate(" + d.x + "," + d.y + ")";
+					});
+		
+			node.append("circle").attr("r", 2.5);
+
+			node.append("text")
+				.attr("dy", -3)
+				.attr("x", function(d){ return d.children ? -8 : 8; })
+				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
+				.text(function(d){ return d.data.data.type; });
+
+			// Exit
+
+			g.selectAll(".link").exit().remove();
+			g.selectAll(".node").exit().remove();
 		}
 	}
 }

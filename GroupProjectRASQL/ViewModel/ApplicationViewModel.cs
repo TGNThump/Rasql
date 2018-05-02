@@ -218,7 +218,7 @@ namespace GroupProjectRASQL.ViewModel
 
                 Output += ops.TreeToDebugString();
                 Output += "</div></div>";
-                this.OpsJSON = ops.Child().ToJSON();
+                this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
             });
 
             Complete = new RelaySimpleCommand(() =>
@@ -252,7 +252,7 @@ namespace GroupProjectRASQL.ViewModel
 
                 Output += ops.TreeToDebugString();
                 Output += "</div></div>";
-                this.OpsJSON = ops.Child().ToJSON();
+                this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
             });
         }
 
