@@ -1,3 +1,9 @@
+<!--
+	File: output.vue 
+	Description: Output view markup for the user interface view 1.
+				 Here the user iteracts with the parsed query's tree.
+				 He is allowed to implement heuristics via UI
+																   		--> 
 <template>
 	<div>
 		<div v-if="model.SQL != ''" class="row" style="margin-bottom: 0px;">
@@ -61,46 +67,14 @@
 					</column>
 				</div>
 				<div class="row">
-					<div class="input-group mb-1" style="margin-bottom: 0px;">
+					<!-- <div class="input-group mb-1" style="margin-bottom: 0px;">
 						<div class="input-group-prepend">
 							<div class="input-group-text">
 								<input type="checkbox" aria-label="Checkbox for following text input">
 							</div>
 						</div>
 						<span class="form-control">Selection Split Heuristic</span>
-					</div>
-					<div class="input-group mb-1" style="margin-bottom: 0px;">
-						<div class="input-group-prepend">
-							<div class="input-group-text">
-								<input type="checkbox" aria-label="Checkbox for following text input">
-							</div>
-						</div>
-						<span class="form-control">Move Selection Heuristic</span>
-					</div>
-					<div class="input-group mb-1" style="margin-bottom: 0px;">
-						<div class="input-group-prepend">
-							<div class="input-group-text">
-								<input type="checkbox" aria-label="Checkbox for following text input">
-							</div>
-						</div>
-						<span class="form-control">Restriction Heuristic</span>
-					</div>
-					<div class="input-group mb-1" style="margin-bottom: 0px;">
-						<div class="input-group-prepend">
-							<div class="input-group-text">
-								<input type="checkbox" aria-label="Checkbox for following text input">
-							</div>
-						</div>
-						<span class="form-control">Equijoin Conversion Heuristic</span>
-					</div>
-					<div class="input-group mb-1" style="margin-bottom: 0px;">
-						<div class="input-group-prepend">
-							<div class="input-group-text">
-								<input type="checkbox" aria-label="Checkbox for following text input">
-							</div>
-						</div>
-						<span class="form-control">Move Projection Heuristic</span>
-					</div>
+					</div> -->
 				</div>
 			</column>
 		</div>

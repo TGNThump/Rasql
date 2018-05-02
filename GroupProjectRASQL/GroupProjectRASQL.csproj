@@ -121,7 +121,6 @@
     <Compile Include="Heuristics\Heuristic3.cs" />
     <Compile Include="Heuristics\Heuristic2.cs" />
     <Compile Include="Heuristics\Heuristic1.cs" />
-    <Compile Include="Heuristics\Heuristics.cs" />
     <Compile Include="Operations\Conditions.cs" />
     <Compile Include="Operations\Query.cs" />
     <Compile Include="Operations\RenameRelation.cs" />

@@ -12,7 +12,10 @@ namespace GroupProjectRASQL.Heuristics
 {
     public class Heuristic4 : Heuristic
     {
-        public Heuristic4(Node root) : base(root){}
+        public Heuristic4(Node root) : base(root){
+            this.name = "Equijoin Conversion Heuristic";
+            this.description = "Heuristic four handles the conversion of cartesian products (cross joins) into natural joins, when it is possible due to a nearby selection statement. This however requires heuristic one to have been executed.";
+        }
 
         public override bool Run(Node operation)
         {

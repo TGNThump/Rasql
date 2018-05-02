@@ -39,20 +39,17 @@ namespace GroupProjectRASQL.ViewModel
         Parser.Parser sqlParser = new Parser.Parser("sql");
         Parser.Parser raParser = new Parser.Parser("ra");
 
-        public Heuristic0 Heuristic0 { get; private set; }
-        public Heuristic1 Heuristic1 { get; private set; }
-        public Heuristic2 Heuristic2 { get; private set; }
-        public Heuristic3 Heuristic3 { get; private set; }
-        public Heuristic4 Heuristic4 { get; private set; }
-        public Heuristic5 Heuristic5 { get; private set; }
+        public List<Heuristic> Heurisitcs { get; private set; } = new List<Heuristic>();
 
-        public Heuristic CurrentHeuristic { get {
-                if (Heuristic1 == null) return null;
-                if (!Heuristic1.IsComplete()) return Heuristic1;
-                if (!Heuristic2.IsComplete()) return Heuristic2;
-                if (!Heuristic3.IsComplete()) return Heuristic3;
-                if (!Heuristic4.IsComplete()) return Heuristic4;
-                return Heuristic5;
+        public Heuristic CurrentHeuristic
+        {
+            get
+            {
+                foreach (Heuristic heuristic in Heurisitcs)
+                {
+                    ; if (heuristic.isEnabled && !heuristic.isComplete) return heuristic;
+                }
+                return null;
             }
         }
 
@@ -68,20 +65,32 @@ namespace GroupProjectRASQL.ViewModel
         public string Input_Type { get; set; } = "sql";
 
         private string input_sql;
-        public string Input_SQL { get {
-            return input_sql;
-        } set {
-             this.Input_Valid_SQL = true;
-            this.input_sql = value;
-        }}
+        public string Input_SQL
+        {
+            get
+            {
+                return input_sql;
+            }
+            set
+            {
+                this.Input_Valid_SQL = true;
+                this.input_sql = value;
+            }
+        }
 
         private string input_ra;
-        public string Input_RA { get {
-            return input_ra;
-        } set {
-            this.Input_Valid_RA = true;
-            this.input_ra = value;
-        } }
+        public string Input_RA
+        {
+            get
+            {
+                return input_ra;
+            }
+            set
+            {
+                this.Input_Valid_RA = true;
+                this.input_ra = value;
+            }
+        }
 
         public string Output { get; private set; } = "";
         public string Error { get; set; } = "";
@@ -91,6 +100,7 @@ namespace GroupProjectRASQL.ViewModel
         public ISimpleCommand ParseRA { get; private set; }
         public ISimpleCommand Step { get; private set; }
         public ISimpleCommand Complete { get; private set; }
+        public ISimpleCommand Auto { get; private set; }
         public ISimpleCommand Reset { get; private set; }
 
         private TreeNode<Operation> ops;
@@ -112,9 +122,9 @@ namespace GroupProjectRASQL.ViewModel
                     if (sql == "") { Input_Valid_SQL = false; return; }
 
                     List<State>[] stateSets = sqlParser.Parse(sql);
-                    
+
                     if (!sqlParser.IsValid(stateSets)) { Input_Valid_SQL = false; return; }
-                    
+
                     stateSets = sqlParser.FilterAndReverse(stateSets);
                     TreeNode<String> tree = sqlParser.parse_tree(sql, stateSets);
 
@@ -162,18 +172,13 @@ namespace GroupProjectRASQL.ViewModel
                     this.ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
                     ops = new TreeNode<Operation>(new Query()) { ops };
 
-                    Heuristic0 = new Heuristic0(ops);
-                    Heuristic1 = new Heuristic1(ops);
-                    Heuristic2 = new Heuristic2(ops);
-                    Heuristic3 = new Heuristic3(ops);
-                    Heuristic4 = new Heuristic4(ops);
-                    Heuristic5 = new Heuristic5(ops);
+                    new Heuristic0(ops).Complete();
 
-                    Heuristic0.Complete();
-
-                    this.Output = "<div class='card'><div class='card-body'>";
-                    this.Output += ops.TreeToDebugString();
-                    this.Output += "</div></div>";
+                    Heurisitcs.Add(new Heuristic1(ops));
+                    Heurisitcs.Add(new Heuristic2(ops));
+                    Heurisitcs.Add(new Heuristic3(ops));
+                    Heurisitcs.Add(new Heuristic4(ops));
+                    Heurisitcs.Add(new Heuristic5(ops));
 
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     this.CurrentView = "output";
@@ -187,99 +192,66 @@ namespace GroupProjectRASQL.ViewModel
                 }
             });
 
-            Step = new RelaySimpleCommand(() => 
+            Step = new RelaySimpleCommand(() =>
             {
-                if (!Heuristic1.IsComplete())
+                try
                 {
-                    Heuristic1.Step();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                    if (CurrentHeuristic != null) CurrentHeuristic.Step();
+                    this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                 }
-                else if (!Heuristic2.IsComplete())
+                catch (Exception e)
                 {
-                    Heuristic2.Step();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                    Console.WriteLine(e.ToString());
+                    Error = e.Message.Replace(Environment.NewLine, "<br/>");
+                    return;
                 }
-                else if (!Heuristic3.IsComplete())
-                {
-                    Heuristic3.Step();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
-                }
-                else if (!Heuristic4.IsComplete())
-                {
-                    Heuristic4.Step();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
-                }
-                else if (!Heuristic5.IsComplete())
-                {
-                    Heuristic5.Step();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
-                }
-                else return;
-
-                Output += ops.TreeToDebugString();
-                Output += "</div></div>";
-                this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
             });
 
             Complete = new RelaySimpleCommand(() =>
             {
-                if (!Heuristic1.IsComplete())
+                try
                 {
-                    Heuristic1.Complete();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 1</div><div class='card-body'>";
+                    if (CurrentHeuristic != null) CurrentHeuristic.Complete();
+                    this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                 }
-                else if (!Heuristic2.IsComplete())
+                catch (Exception e)
                 {
-                    Heuristic2.Complete();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 2</div><div class='card-body'>";
+                    Console.WriteLine(e.ToString());
+                    Error = e.Message.Replace(Environment.NewLine, "<br/>");
+                    return;
                 }
-                else if (!Heuristic3.IsComplete())
-                {
-                    Heuristic3.Complete();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 3</div><div class='card-body'>";
-                }
-                else if (!Heuristic4.IsComplete())
-                {
-                    Heuristic4.Complete();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 4</div><div class='card-body'>";
-                }
-                else if (!Heuristic5.IsComplete())
-                {
-                    Heuristic5.Complete();
-                    Output += "<div class='card'><div class='card-header'>Heuristic 5</div><div class='card-body'>";
-                }
-                else return;
-
-                Output += ops.TreeToDebugString();
-                Output += "</div></div>";
-                this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
             });
 
-            Reset = new RelaySimpleCommand(()=> {
-                List<State>[] stateSets = raParser.Parse(RA);
-                stateSets = raParser.FilterAndReverse(stateSets);
-                TreeNode<String> tree = raParser.parse_tree(RA, stateSets);
+            Reset = new RelaySimpleCommand(() =>
+            {
+                try
+                {
+                    List<State>[] stateSets = raParser.Parse(RA);
+                    stateSets = raParser.FilterAndReverse(stateSets);
+                    TreeNode<String> tree = raParser.parse_tree(RA, stateSets);
 
-                Squish(tree);
+                    Squish(tree);
 
-                this.ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
-                ops = new TreeNode<Operation>(new Query()) { ops };
+                    this.ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+                    ops = new TreeNode<Operation>(new Query()) { ops };
 
-                Heuristic0 = new Heuristic0(ops);
-                Heuristic1 = new Heuristic1(ops);
-                Heuristic2 = new Heuristic2(ops);
-                Heuristic3 = new Heuristic3(ops);
-                Heuristic4 = new Heuristic4(ops);
-                Heuristic5 = new Heuristic5(ops);
+                    new Heuristic0(ops).Complete();
 
-                Heuristic0.Complete();
+                    Heurisitcs.Add(new Heuristic1(ops));
+                    Heurisitcs.Add(new Heuristic2(ops));
+                    Heurisitcs.Add(new Heuristic3(ops));
+                    Heurisitcs.Add(new Heuristic4(ops));
+                    Heurisitcs.Add(new Heuristic5(ops));
 
-                this.Output = "<div class='card'><div class='card-body'>";
-                this.Output += ops.TreeToDebugString();
-                this.Output += "</div></div>";
-
-                this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
-                return;
+                    this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
+                    return;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    Error = e.Message.Replace(Environment.NewLine, "<br/>");
+                    return;
+                }
             });
         }
 

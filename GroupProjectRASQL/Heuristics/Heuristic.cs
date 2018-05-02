@@ -13,7 +13,10 @@ namespace GroupProjectRASQL.Heuristics
         protected Node root;
         protected Node next;
         protected bool isStarted = false;
-        protected bool isComplete { get { return isStarted && remainingNodes.Count == 0; } }
+        public bool isComplete { get { return isStarted && remainingNodes.Count == 0; } }
+        public bool isEnabled { get; set; } = true;
+        public String name { get; protected set; }
+        public String description { get; protected set; }
 
         protected Queue<Node> remainingNodes = new Queue<Node>();
 
@@ -56,10 +59,5 @@ namespace GroupProjectRASQL.Heuristics
         // Abstract method run for each Node in the tree.
         // returns true if it did anything.
         abstract public bool Run(Node node);
-
-        public bool IsComplete()
-        {
-            return isComplete;
-        }
     }
 }
