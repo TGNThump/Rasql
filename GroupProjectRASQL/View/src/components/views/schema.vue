@@ -107,7 +107,7 @@ export default {
 	      relation.fields.splice(column, 1);
 	    },
 	    newRelation: function(){
-	    	this.model.Relations.push({
+	    	this.model.NewRelation.Execute({
 	    		name: this.newRelationName,
 	    		fields: [{
 	    			"name": "",
@@ -128,11 +128,7 @@ export default {
 	    	});
 	    },
 	    removeRelation: function(relation){
-	    	for (var i = this.model.Relations.length - 1; i >= 0; i--) {
-	    		if (this.model.Relations[i] == relation){
-	    			this.model.Relations.splice(i, 1);
-	    		}
-	    	}
+	    	this.model.DeleteRelation.Execute(relation);
 	    }
 	}
 }

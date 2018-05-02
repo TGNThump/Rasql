@@ -92,6 +92,8 @@ namespace GroupProjectRASQL.ViewModel
         public ISimpleCommand Complete { get; private set; }
         public ISimpleCommand Auto { get; private set; }
         public ISimpleCommand Reset { get; private set; }
+        public ISimpleCommand<Relation> DeleteRelation { get; private set; }
+        public ISimpleCommand<Relation> NewRelation { get; private set; }
 
         private TreeNode<Operation> ops;
         public String OpsJSON { get; private set; }
@@ -254,6 +256,16 @@ namespace GroupProjectRASQL.ViewModel
                     Error = e.Message.Replace(Environment.NewLine, "<br/>");
                     return;
                 }
+            });
+
+            this.DeleteRelation = new RelaySimpleCommand<Relation>(relation =>
+            {
+                this.Relations.Remove(relation);
+            });
+
+            this.NewRelation = new RelaySimpleCommand<Relation>(relation =>
+            {
+                this.Relations.Add(relation);
             });
         }
 
