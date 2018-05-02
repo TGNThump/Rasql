@@ -188,8 +188,6 @@ export default {
 					return "translate(" + d.x + "," + d.y + ")";
 				});
 
-			console.log(node);
-
 			node.select('text')
 				.attr("x", function(d){ return d.children ? -8 : 8; })
 				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
@@ -226,8 +224,8 @@ export default {
 
 			// Exit
 
-			g.selectAll(".link").exit().remove();
-			g.selectAll(".node").exit().remove();
+			g.selectAll(".link").data(root.links()).exit().remove();
+			g.selectAll(".node").data(root.descendants()).exit().remove();
 		}
 	}
 }
