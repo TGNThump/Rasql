@@ -63,9 +63,10 @@ namespace GroupProjectRASQL.Heuristics
                     if (child.Data is Cartesian || conditionFields.IsSubsetOf(projectFields)) {
 
                         //Remove operation from tree and connect parent and child
-                        operation.Parent.RemoveChildren();
-                        operation.Parent.AddChildren(operation.Children);
                         child.Parent = operation.Parent;
+                        operation.Parent.Children.Remove(operation);
+                        operation.Parent.AddChildren(operation.Children);
+                        
 
 
                         retVal = true;
@@ -115,7 +116,7 @@ namespace GroupProjectRASQL.Heuristics
                 else if (child.Data is Union)
                 {
                     //Remove operation from tree and connect parent and child
-                    operation.Parent.RemoveChildren();
+                    operation.Parent.Children.Remove(operation);
                     operation.Parent.AddChildren(operation.Children);
                     child.Parent = operation.Parent;
 
@@ -154,7 +155,7 @@ namespace GroupProjectRASQL.Heuristics
                     if (projectFields.SetEquals(conditionFields)) {
 
                         //Remove operation from tree and connect parent and child
-                        operation.Parent.RemoveChildren();
+                        operation.Parent.Children.Remove(operation);
                         operation.Parent.AddChildren(operation.Children);
                         child.Parent = operation.Parent;
 
