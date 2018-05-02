@@ -12,7 +12,10 @@ namespace GroupProjectRASQL.Heuristics
 {
     public class Heuristic5 : Heuristic
     {
-        public Heuristic5(Node root) : base(root){}
+        public Heuristic5(Node root) : base(root){
+            this.name = "Move Projection Heuristic";
+            this.description = "Heuristic five involves moving projections down the tree as far as possible, creating new ones if data is ever not required. To do this the code does a Depth first traversal, storing the required fields at each step. Upon encountering a select,join or table it will create a new projection with these stored values.";
+        }
 
         public override bool Run(Node operation)
         {

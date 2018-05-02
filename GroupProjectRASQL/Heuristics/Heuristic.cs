@@ -15,8 +15,8 @@ namespace GroupProjectRASQL.Heuristics
         protected bool isStarted = false;
         public bool isComplete { get { return isStarted && remainingNodes.Count == 0; } }
         public bool isEnabled { get; set; } = true;
-        public String name { get; private set; }
-        public String description { get; private set; }
+        public String name { get; protected set; }
+        public String description { get; protected set; }
 
         protected Queue<Node> remainingNodes = new Queue<Node>();
 

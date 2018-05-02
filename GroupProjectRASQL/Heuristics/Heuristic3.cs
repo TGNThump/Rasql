@@ -22,6 +22,8 @@ namespace GroupProjectRASQL.Heuristics
 
         public Heuristic3(Node root) : base(root)
         {
+            this.name = "Restriction Heuristic";
+            this.description = "Heuristic three is the most complex heuristic. It deals with reordering the leaf nodes of the relational algebra tree such that the most restrictive selections (i.e. the ones that return the smallest data set) are executed first. This only occurs if it is possible without causing the creation of a cross join (cartesian product).";
             isRun = false; // There are alot of one time things in this heuristic so there is a flag to prevent unnessaccery execution of code
         }
 

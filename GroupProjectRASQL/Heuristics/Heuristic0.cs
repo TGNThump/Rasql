@@ -10,6 +10,14 @@ using Node = GroupProjectRASQL.Parser.TreeNode<GroupProjectRASQL.Operations.Oper
 
 namespace GroupProjectRASQL.Heuristics
 {
+    public static class Extensions{
+        public static void AddSingle<K, V>(this IDictionary<K, IList<V>> dictionary, K key, V value)
+        {
+            if (!dictionary.ContainsKey(key)) dictionary.Add(key, new List<V>());
+            dictionary[key].Add(value);
+        }
+    }
+
     public class Heuristic0 : Heuristic
     {
         public Heuristic0(Node root) : base(root){}

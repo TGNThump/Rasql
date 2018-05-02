@@ -12,7 +12,10 @@ namespace GroupProjectRASQL.Heuristics
 {
     public class Heuristic2 : Heuristic
     {
-        public Heuristic2(Node root) : base(root){}
+        public Heuristic2(Node root) : base(root){
+            this.name = "Selection Move Heuristic";
+            this.description = "Heuristic two moves every selection down the tree as far as possible, it reduce the amount of data that must be acted upon. This means that every select should end up above either the join or the table that it acts upon.";
+        }
 
         public override bool Run(Node operation)
         {

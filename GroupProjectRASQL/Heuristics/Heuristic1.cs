@@ -12,7 +12,10 @@ namespace GroupProjectRASQL.Heuristics
 {
     public class Heuristic1 : Heuristic
     {
-        public Heuristic1(Node root) : base(root){}
+        public Heuristic1(Node root) : base(root){
+            this.name = "Selection Split Heuristic";
+            this.description = "Heuristic one deals with the splitting of any selection (σp(r)) statement that has more than one condition (i.e. splitting  σa=b and b=c into several smaller selections).";
+        }
 
         public override bool Run(Node operation)
         {
