@@ -37,7 +37,7 @@ namespace GroupProjectRASQL.Heuristics
                     { // if its a relation with the first ( and only in this case ) name return it
 
 
-                        for (Node current = node; !current.Equals(operation); current = current.Parent) // check if there is a rename relation between the newchild ( the position to move over ) and the current select
+                        for (Node current = node; !current.Equals(operation); current = current.Parent) // check if there is a rename relation between the search node and the current searches root
                         {
                             if (current.Data is RenameRelation) { return false; }// if their is, the select cannot be moved - so return false.
                         }
