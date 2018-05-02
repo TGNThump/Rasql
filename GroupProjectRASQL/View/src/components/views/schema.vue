@@ -1,3 +1,9 @@
+<!--
+	File: schema.vue 
+	Description: Schema view mark up for the user interface.
+				 Here the user is able to create data tables for use in 
+				 the application. 
+																   		--> 
 <template>
 	<div class="container-fluid app d-flex flex-column">
 		<div class="row d-flex flex-row" style="flex-shrink: 0;">

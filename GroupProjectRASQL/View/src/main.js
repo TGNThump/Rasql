@@ -1,3 +1,7 @@
+/*
+*	File: main.js
+*	Description: imports and installs vue and neutronium dependencies. 
+*/
 import Vue from 'vue'
 import App from './App.vue'
 import rawVm from '../data/vm'

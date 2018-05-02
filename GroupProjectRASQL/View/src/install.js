@@ -1,3 +1,7 @@
+/*
+*	File: install.js
+*	Description: Defines install: require for vue, style and component dependencies.
+*/
 function install(Vue) {
     require('./assets/sass/main.scss');
 	require('bootstrap');
