@@ -27,6 +27,13 @@ namespace GroupProjectRASQL.Operations
             return fields.Select(field => field.name);
         }
 
+        public IEnumerable<String> getFullFieldNames() {
+
+
+            return fields.Select(field => name+"."+field.name);
+
+        }
+
         public override string ToString()
         {
             return "[Relation " + name + "]{" + getFieldNames().Aggregate((all, next) => all + ", " + next) + "}";
