@@ -1,3 +1,7 @@
+/*
+*   File: entry.js
+*   Description: build vue option function.
+*/
 import Vue from 'vue'
 import App from './App.vue'
 import {install, vueInstanceOption} from './install'

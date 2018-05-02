@@ -3,10 +3,12 @@ $theme-colors: (
   "primary": #1B4D3E,
 );
 
+/* Importing style sheets from modules: Bootstrap, codemirror and treant. */
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 @import "../../../node_modules/codemirror/lib/codemirror.css";
 @import "../../../node_modules/treantjs/treant.css";
 
+/* Main CSS */
 html, body, #main, .app{
 	width: 100%;
 	height: 100%;
@@ -30,7 +32,8 @@ body{
 	padding: 16px;
 }
 
-.codemirror{
+/* Code Mirror CSS */
+.codemirror{ 
     padding: 0px;
     overflow: hidden;
     border-radius: 0 0 0.25rem 0.25rem;
@@ -49,6 +52,7 @@ body{
     padding: 0 8px 2px 5px;
 }
 
+/* Extra CSS */
 .nav-tabs{
 	.nav-link{
 	    color: #495057;

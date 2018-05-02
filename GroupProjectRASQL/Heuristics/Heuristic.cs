@@ -13,26 +13,29 @@ namespace GroupProjectRASQL.Heuristics
         protected Node root;
         protected Node next;
         protected bool isStarted = false;
-        protected bool isComplete { get { return isStarted && remainingNodes.Count == 0; } }
+        public bool isComplete { get { return isStarted && remainingNodes.Count == 0; } }
+        public bool isEnabled { get; set; } = true;
+        public String name { get; protected set; }
+        public String description { get; protected set; }
 
         protected Queue<Node> remainingNodes = new Queue<Node>();
 
-        public Heuristic(Node root)
+        public Heuristic(Node root) // create the heuristics- saving the root of the tree
         {
             this.root = root;
         }
 
-        public void Init()
+        public void Init() // init the heuristic
         {
-            isStarted = true;
-            remainingNodes = new Queue<Node>();
-            for (Node node = root.Child(); node != null && node != root; node = node.getNextNode())
+            isStarted = true; // istarted flag
+            remainingNodes = new Queue<Node>(); // queue for the nodes
+            for (Node node = root.Child(); node != null && node != root; node = node.getNextNode()) // for every non-null non-root node
             {
-                remainingNodes.Enqueue(node);
+                remainingNodes.Enqueue(node); // add it to the queue
             }
         }
 
-        public void Step()
+        public void Step() // step through the currently active heuristic - called by ui button
         {
             if (!isStarted) Init();
             if (isComplete) return;
@@ -43,9 +46,9 @@ namespace GroupProjectRASQL.Heuristics
             if (!stop && !isComplete) Step();
         }
 
-        public void Complete()
+        public void Complete() // complete the currently active heurisitc - called by ui button
         {
-            while (!isComplete) Step();
+            while (!isComplete) Step(); // while not done - step without interuptions
         }
 
         public void Reset()
@@ -56,10 +59,5 @@ namespace GroupProjectRASQL.Heuristics
         // Abstract method run for each Node in the tree.
         // returns true if it did anything.
         abstract public bool Run(Node node);
-
-        public bool IsComplete()
-        {
-            return isComplete;
-        }
     }
 }
