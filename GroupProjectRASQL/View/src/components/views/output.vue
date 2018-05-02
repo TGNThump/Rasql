@@ -43,16 +43,17 @@
 			<column lg="6">
 				<div v-if="model.CurrentHeuristic != null" class="row d-flex flex-row">
 					<column style="flex-grow: 0; padding-right: 0px;">
-						<button style="height: 100%; border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&lt;</button>
+						<!-- <button style="height: 100%; border-top-right-radius: 0px; border-bottom-right-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&lt;</button> -->
 					</column>
 					<column style="padding: 0px;">
-						<div class="card" style="margin-bottom: 0px; border-radius: 0px;">
+						<div class="card" style="margin-bottom: 0px;">
+						<!-- <div class="card" style="margin-bottom: 0px; border-radius: 0px;"> -->
 							<div class="card-header">{{model.CurrentHeuristic.name}}</div>
 							<div class="card-body">{{model.CurrentHeuristic.description}}</div>
 						</div>
 					</column>
 					<column style="flex-grow: 0; padding-left: 0px;">
-						<button style="height: 100%; border-top-left-radius: 0px; border-bottom-left-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&gt;</button>
+						<!-- <button style="height: 100%; border-top-left-radius: 0px; border-bottom-left-radius: 0px; background-color: #F7F7F7;" class="btn btn-default">&gt;</button> -->
 					</column>
 				</div>
 				<div class="row">
@@ -67,8 +68,15 @@
 					</column>
 				</div>
 				<div class="row">
-					<div v-for="heuristic in model.HeuristicList">
-						<div class="card" style="flex-grow: 0;"><div class="card-body"><pre>{{heuristic}}</pre></div></div>
+					<!-- <pre>{{model.HeuristicsArray}}</pre> -->
+					<div class="input-group mb-1" style="margin-bottom: 0px;" v-for="heuristic in model.HeuristicsArray">
+						<div class="input-group-prepend">
+							<div class="input-group-text">
+								<input type="checkbox" v-model="heuristic.isEnabled" aria-label="Checkbox for following text input">
+							</div>
+						</div>
+						<span class="form-control">{{heuristic.name}}</span>
+						<!-- <div class="card" style="flex-grow: 0;"><div class="card-body"><pre>{{heuristic}}</pre></div></div> -->
 					</div>
 					<!-- <div class="input-group mb-1" style="margin-bottom: 0px;">
 						<div class="input-group-prepend">
