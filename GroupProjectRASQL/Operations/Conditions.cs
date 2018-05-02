@@ -151,5 +151,30 @@ namespace GroupProjectRASQL.Operations
             return node;
         }
 
+        public static String ToString(Node node) {
+
+            String returnString = "";
+
+            if (node.Data == "[not]") {
+
+                returnString += "NOT (" + ToString(node.Child(0)) + ")";
+
+            }
+            else if (node.Data == "[and]") {
+
+                returnString += "("+ ToString(node.Child(0)) + ") AND (" + ToString(node.Child(1)) + ")";
+
+            }
+            else if (node.Data == "[or]") {
+
+                returnString += "(" + ToString(node.Child(0)) + ") OR (" + ToString(node.Child(1)) + ")";
+
+            }
+            else { returnString += node.TreeToString(); }
+
+            return returnString;
+
+        }
+
     }
 }

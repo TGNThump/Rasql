@@ -62,8 +62,8 @@ namespace GroupProjectRASQL.Heuristics
                         retVal = true;
                     }
 
-                    lSubtreeFields.IntersectWith(projectFields);
-                    rSubtreeFields.IntersectWith(projectFields);
+                    lSubtreeFields.IntersectWith(conditionFields.Union(projectFields));
+                    rSubtreeFields.IntersectWith(conditionFields.Union(projectFields));
                     Node rightSubTree = new Node(new Projection(rSubtreeFields));
                     Node leftSubTree = new Node(new Projection(lSubtreeFields));
 
@@ -139,7 +139,7 @@ namespace GroupProjectRASQL.Heuristics
                     HashSet<String> conditionFields = new HashSet<String>(Conditions.GetFields(((Selection)child.Data).getCondition()));
                     HashSet<String> projectFields = new HashSet<String>(operation.Data.getFieldNames());
 
-                    if (projectFields.IsSubsetOf(conditionFields)) {
+                    if (projectFields.SetEquals(conditionFields)) {
 
                         //Remove operation from tree and connect parent and child
                         operation.Parent.RemoveChildren();
@@ -147,18 +147,25 @@ namespace GroupProjectRASQL.Heuristics
                         child.Parent = operation.Parent;
 
 
-                        //Insert operation beneath select
-                        operation.Parent = child;
-                        operation.RemoveChildren();
-                        operation.AddChildren(child.Children);
-                        child.RemoveChildren();
-                        child.AddChild(operation);
+                        
                         
 
                         retVal = true;
                     }
 
+                    Node newNode = new Node(new Projection(conditionFields.Union(((Projection)operation.Data).getFieldNames())));
 
+                    //Insert operation beneath select
+                    newNode.Parent = child;
+                    newNode.RemoveChildren();
+                    newNode.AddChildren(child.Children);
+                    child.RemoveChildren();
+                    child.AddChild(newNode);
+
+                    remainingNodes.Enqueue(newNode);
+
+
+                    retVal = true;
                 }
 
             }

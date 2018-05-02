@@ -13,6 +13,7 @@ namespace GroupProjectRASQL.Translator
     class SqlToRa
     {
 
+        //Takes a parse tree for a SQL query and return an equivalent RA string
         public static String TranslateQuery(Node node) {
 
             String returnString = "";
@@ -22,6 +23,7 @@ namespace GroupProjectRASQL.Translator
             //If there is no asterisk add a projection
             bool isSelect = node.Child(0).Child(1).Child(0).Data != "*";
 
+            //Create dictionary to store renamed attributes and what they're renamed to
             Dictionary<String, String> attributeRenames = new Dictionary<string, string>();
 
             if (isSelect)
