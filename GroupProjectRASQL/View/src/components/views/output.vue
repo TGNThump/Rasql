@@ -104,19 +104,6 @@
 				</div>
 			</column>
 		</div>
-
-
-		<div class="row">
-			<column>
-				<div class="card">
-					<div class="card-body">
-						<pre>{{ops}}</pre>
-					</div>
-				</div>
-        		<div v-html="model.Output"></div>
-			</column>
-
-		</div>
 	</div>
 </template>
 
@@ -191,7 +178,7 @@ export default {
 			node.select('text')
 				.attr("x", function(d){ return d.children ? -8 : 8; })
 				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
-				.text(function(d){ return d.data.data.type; });
+				.text(function(d){ return d.data.data.type + ' '+ d.data.data.properties; });
 
 			// Enter
 
@@ -220,7 +207,7 @@ export default {
 				.attr("dy", -3)
 				.attr("x", function(d){ return d.children ? -8 : 8; })
 				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
-				.text(function(d){ return d.data.data.type; });
+				.text(function(d){ return d.data.data.type + ' '+ d.data.data.properties; });
 
 			// Exit
 

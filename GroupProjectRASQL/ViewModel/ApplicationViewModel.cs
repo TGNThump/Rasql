@@ -254,6 +254,33 @@ namespace GroupProjectRASQL.ViewModel
                 Output += "</div></div>";
                 this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
             });
+
+            Reset = new RelaySimpleCommand(()=> {
+                List<State>[] stateSets = raParser.Parse(RA);
+                stateSets = raParser.FilterAndReverse(stateSets);
+                TreeNode<String> tree = raParser.parse_tree(RA, stateSets);
+
+                Squish(tree);
+
+                this.ops = RAToOps.Translate(tree, Relations.ToDictionary(relation => relation.name));
+                ops = new TreeNode<Operation>(new Query()) { ops };
+
+                Heuristic0 = new Heuristic0(ops);
+                Heuristic1 = new Heuristic1(ops);
+                Heuristic2 = new Heuristic2(ops);
+                Heuristic3 = new Heuristic3(ops);
+                Heuristic4 = new Heuristic4(ops);
+                Heuristic5 = new Heuristic5(ops);
+
+                Heuristic0.Complete();
+
+                this.Output = "<div class='card'><div class='card-body'>";
+                this.Output += ops.TreeToDebugString();
+                this.Output += "</div></div>";
+
+                this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
+                return;
+            });
         }
 
         bool Squish(TreeNode<String> root)
