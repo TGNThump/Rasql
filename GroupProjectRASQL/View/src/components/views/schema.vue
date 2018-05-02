@@ -6,24 +6,25 @@
 																   		--> 
 <template>
 	<div class="container-fluid app d-flex flex-column">
+		<!-- <pre>{{model.Relations}}</pre> -->
 		<div class="row d-flex flex-row" style="flex-shrink: 0;">
 			<column>
-				<input class="form-control" type="text" placeholder="Relation"></input>
+				<input class="form-control" v-model="newRelationName" type="text" placeholder="Relation"></input>
 			</column>
 			<column style="flex-grow: 0;">
-				<button type="button" class="btn btn-primary">New Relation</button>
+				<button @click="newRelation" type="button" class="btn btn-primary">New Relation</button>
 			</column>
 		</div>
 		<div class="row">
 			<column>
-				<div class='card' style='flex-shrink: 0;' v-for='relation in Relations'>
+				<div class='card' style='flex-shrink: 0;' v-for='relation in model.Relations'>
 					<div class='card-header' style="padding: 5px;">	
 						<div class="row d-flex flex-row" style="flex-shrink: 0; margin: 0px;">
 							<column>
 								<input class="form-control relationName" type="text" placeholder="Relation" v-model="relation.name"></input>
 							</column>
 							<column style="flex-grow: 0;">
-								<button type="button" style="margin: 0px;" class="btn btn-default">Delete Relation</button>
+								<button @click="removeRelation(relation)" type="button" style="margin: 0px;" class="btn btn-default">Delete Relation</button>
 							</column>
 						</div>
 					</div>
@@ -79,10 +80,60 @@ export default {
 	name: 'app',
 	props,
 	data () {
-		return this.viewModel
+		return {
+			model: this.viewModel,
+			newRelationName: "",
+		}
 	},
 	methods: {
-
+	    newRow: function(relation){
+	      for (var i = relation.fields.length - 1; i >= 0; i--) {
+	        relation.fields[i].values.push("");
+	      }
+	    },
+	    removeRow: function(relation, row){
+	       for (var i = relation.fields.length - 1; i >= 0; i--) {
+	        relation.fields[i].values.splice(row, 1);
+	      }
+	    },
+	    newColumn: function(relation){
+	      relation.fields.push({
+	        name: "",
+	        values: []
+	      });
+	    },
+	    removeColumn: function(relation, column){
+	      if (relation.fields.length == 1) return;
+	      relation.fields.splice(column, 1);
+	    },
+	    newRelation: function(){
+	    	this.model.Relations.push({
+	    		name: this.newRelationName,
+	    		fields: [{
+	    			"name": "",
+	    			"values": [""]
+	    		},
+	    		{
+	    			"name": "",
+	    			"values": [""]
+	    		},
+	    		{
+	    			"name": "",
+	    			"values": [""]
+	    		},
+	    		{
+	    			"name": "",
+	    			"values": [""]
+	    		}]
+	    	});
+	    },
+	    removeRelation: function(relation){
+	    	for (var i = this.model.Relations.length - 1; i >= 0; i--) {
+	    		if (this.model.Relations[i] == relation){
+	    			this.model.Relations.splice(i, 1);
+	    		}
+	    	}
+	    }
 	}
 }
 </script>
