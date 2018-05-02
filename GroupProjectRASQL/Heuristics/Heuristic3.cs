@@ -22,63 +22,63 @@ namespace GroupProjectRASQL.Heuristics
 
         public Heuristic3(Node root) : base(root)
         {
-            isRun = false;
+            isRun = false; // There are alot of one time things in this heuristic so there is a flag to prevent unnessaccery execution of code
         }
 
         public override bool Run(Node operation)
         {
             
-            if (!isRun)
+            if (!isRun) // if this is the first time
             {
-                isRun = true;
-                SelectionList = root.Where(node =>
+                isRun = true; // Set the has been run before tag to true
+                SelectionList = root.Where(node => // collect selections into one list
                 {
-                    if (node.Data is Selection)
+                    if (node.Data is Selection)//if selection
                     {
-                        return true;
+                        return true;// add to list
                     }
 
-                    return false;
+                    return false;// else don't
 
                 });
-                RelationList = root.Where(node =>
+                RelationList = root.Where(node =>//collect relations
                 {
-                    if (node.Data is Relation)
+                    if (node.Data is Relation)//if relation
                     {
-                        return true;
+                        return true;//add
                     }
 
-                    return false;
+                    return false;//don't
 
                 });
 
-                foreach ( Node re in RelationList)
+                foreach ( Node re in RelationList) // convert the relation list into a dictionary with the worse case scenario
                 {
-                    RelationDict.Add(re, 1);
+                    RelationDict.Add(re, 1); // worst case ( everything is unique ) is a selectivity ratio of 1
                 }
 
-                foreach (Node Selection in SelectionList)
+                foreach (Node Selection in SelectionList) // foreach selection
                 {
-                    foreach( String field in Selection.Data.getFieldNames())
+                    foreach( String field in Selection.Data.getFieldNames()) // foreach field of each selection
                     {
-                        string[] fieldsplit = field.Split('.');
+                        string[] fieldsplit = field.Split('.'); // split them - getting the relation names
 
-                        Node fieldSplitNode = operation.Where(node =>
+                        Node fieldSplitNode = operation.Where(node => // Find the relation pointers based on there names.
                         {
                             if (node.Data is Relation) return ((Relation)node.Data).name == fieldsplit[0];
                             if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == fieldsplit[0];
                             return false;
                         }).SingleOrDefault();
 
-                        RelationDict[fieldSplitNode] *= selectivityEstimate(fieldSplitNode, fieldsplit[1]);
+                        RelationDict[fieldSplitNode] *= selectivityEstimate(fieldSplitNode, fieldsplit[1]);// Find the total selectivity, by timesing 
                         
                     }
                 }
                 
 
-                RelationDictList = RelationDict.ToList();
+                RelationDictList = RelationDict.ToList(); // Convert the relation dictionary to a list of KVPs so it can be sorted
 
-                RelationDictList.Sort(
+                RelationDictList.Sort( // sort this list on the value - smallest first.
                     delegate (KeyValuePair<Node, float> pair1,
                     KeyValuePair<Node, float> pair2)
                     {
@@ -86,56 +86,31 @@ namespace GroupProjectRASQL.Heuristics
                     }
                 );
                 IList<KeyValuePair<Node, float>> optimalpermu;
-                foreach (var permu in Permutate(RelationDictList, RelationDictList.Count))
+                foreach (var permu in Permutate(RelationDictList, RelationDictList.Count))// move through possible permutations of the leaf nodes in optimality order.
                 {
 
-                    if (!resultsInCrossJoin(permu))
+                    if (!resultsInCrossJoin(permu))// if it doesn't cause a crossjoin
                     {
-                        optimalpermu = permu;
+                        optimalpermu = permu;// then this is the optimal leaf order
+                        /*
+                         * Unfortunatly due to time constraints the manipulation of the graph to cause this could not be completed.
+                         * This would handle moving the selects and joins to impletement this order
+
+                         */
                         break;
                     }
-                    
-                    foreach ( var kvp in permu)
-                    {
-                        Console.Write(kvp.Key);
-                        Console.Write(" : ");
-                        Console.Write(kvp.Value);
-                        Console.Write("\n");
 
-                    }
                 }
 
-
-
-
-
-
-
-
-
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             return false;
         }
 
-        public float selectivityEstimate(Node relation, String field)
+        public float selectivityEstimate(Node relation, String field) // Selectivity estimate
         {
             Relation relationData = (Relation)relation.Data;
-            return (float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount();
+            return (float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount(); // Take the number of unique fields and divide it by the total fields to get a estimate ration.
         }
 
         public bool resultsInCrossJoin(IList<KeyValuePair<Node, float>> permu)
@@ -144,22 +119,34 @@ namespace GroupProjectRASQL.Heuristics
             for (int i = 0; i<permu.Count()-1;i++)
             {
                 possibleFlag = false;
-                foreach(Node currentSelect in SelectionList)
+                foreach (Node currentSelect in SelectionList)
                 {
-                    if (currentSelect.Contains(permu[i].Key))
+                    List<String> currentSelectList = new List<String>();
+                    foreach(String field in currentSelect.Data.getFieldNames())
                     {
-                        if (currentSelect.Contains(permu[i+1].Key))
+                        currentSelectList.Add(field.Split('.')[0]);
+                    }
+
+                    Relation permui= (Relation)permu[i].Key.Data;
+                    Relation permupitwo = (Relation)permu[i+1].Key.Data;
+
+
+
+                    if (currentSelectList.Contains(permui.name))
+                    {
+                        if (currentSelectList.Contains(permupitwo.name))
                         {
                             possibleFlag = true;
                         }
                     }
                 }
+                if (!possibleFlag) { return true; }
             }
             Console.WriteLine("Asking for crossjoins");
             Console.WriteLine(permu);
         
 
-            return true;
+            return false;
         }
 
 
