@@ -18,7 +18,8 @@
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\ben\Desktop\COMP208BUILD\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -28,10 +29,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,6 +59,18 @@
   <PropertyGroup>
     <StartupObject>GroupProjectRASQL.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>8B9494DAF33EF62C2A6C9465009F5D13AFEE6701</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>GroupProjectRASQL_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MoreCollection, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MoreCollection.1.2.2\lib\net45\MoreCollection.dll</HintPath>
@@ -74,8 +87,9 @@
     <Reference Include="Neutronium.WPF, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Neutronium.WPF.1.3.1\lib\Neutronium.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="PropertyChanged, Version=2.5.2.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.2.5.2\lib\netstandard1.0\PropertyChanged.dll</HintPath>
+    <Reference Include="PropertyChanged">
+      <HintPath>..\packages\PropertyChanged.Fody.2.5.4\lib\netstandard1.0\PropertyChanged.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -166,6 +180,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="BNF\ra.lua" />
+    <EmbeddedResource Include="BNF\sql.lua" />
+    <None Include="GroupProjectRASQL_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -229,6 +246,7 @@
     <Error Condition="!Exists('..\packages\Neutronium.WebBrowserEngine.ChromiumFx.1.3.1\build\Neutronium.WebBrowserEngine.ChromiumFx.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Neutronium.WebBrowserEngine.ChromiumFx.1.3.1\build\Neutronium.WebBrowserEngine.ChromiumFx.props'))" />
     <Error Condition="!Exists('..\packages\Neutronium.WebBrowserEngine.ChromiumFx.1.3.1\build\Neutronium.WebBrowserEngine.ChromiumFx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Neutronium.WebBrowserEngine.ChromiumFx.1.3.1\build\Neutronium.WebBrowserEngine.ChromiumFx.targets'))" />
     <Error Condition="!Exists('..\packages\Fody.3.0.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.0.3\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets'))" />
   </Target>
   <Import Project="..\packages\Unofficial.Cef.for.Chromiumfx.x64.3.2924.1\build\Unofficial.Cef.for.Chromiumfx.x64.targets" Condition="Exists('..\packages\Unofficial.Cef.for.Chromiumfx.x64.3.2924.1\build\Unofficial.Cef.for.Chromiumfx.x64.targets')" />
   <Import Project="..\packages\Unofficial.Cef.for.Chromiumfx.x86.3.2924.1\build\Unofficial.Cef.for.Chromiumfx.x86.targets" Condition="Exists('..\packages\Unofficial.Cef.for.Chromiumfx.x86.3.2924.1\build\Unofficial.Cef.for.Chromiumfx.x86.targets')" />
@@ -238,6 +256,7 @@
   </PropertyGroup>
   <Import Project="..\packages\Neutronium.WebBrowserEngine.ChromiumFx.1.3.1\build\Neutronium.WebBrowserEngine.ChromiumFx.targets" Condition="Exists('..\packages\Neutronium.WebBrowserEngine.ChromiumFx.1.3.1\build\Neutronium.WebBrowserEngine.ChromiumFx.targets')" />
   <Import Project="..\packages\Fody.3.0.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.3\build\Fody.targets')" />
+  <Import Project="..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.2.0.0\build\Costura.Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

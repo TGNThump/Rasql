@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Name="Root"
         Visibility="{Binding ElementName=HtmlView, Path=IsHTMLLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
-        Height="350" Width="525">
+        Height="480" Width="720">
     <Grid>
 
         <WPF:HTMLViewControl x:Name="HtmlView" IsDebug="{Binding ElementName=Root, Path=Debug}" Uri="{Binding ElementName=Root, Path=Uri}"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>

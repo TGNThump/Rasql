@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Truncon.Collections;
+using System.IO;
+using System.Reflection;
 
 namespace GroupProjectRASQL.Parser
 {
@@ -56,9 +58,15 @@ namespace GroupProjectRASQL.Parser
         //Create a parser for a given grammar
         public Parser(String type = "sql")
         {
-            //Get the path to the grammar file, then get contents of file
-            String path = @"..\..\..\bnf\" + type + ".lua";
-            String[] lines = System.IO.File.ReadAllLines(path);
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "GroupProjectRASQL.BNF." + type + ".lua";
+
+            String[] lines;
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                lines = reader.ReadToEnd().Split('\n');
+            }
             
             //For each line in the file, add the rules to the grammar
             for(int i=0; i<lines.Length; i++)
