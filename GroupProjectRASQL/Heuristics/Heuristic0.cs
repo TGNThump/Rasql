@@ -32,6 +32,7 @@ namespace GroupProjectRASQL.Heuristics
 
             foreach (Node relation in relations)
             {
+                IDictionary<String, IList<String>> fieldslocal = new Dictionary<string, IList<string>>();
                 String relationName = ((Relation)relation.Data).name;
                 List<Node> path = new List<Node>();
 
@@ -48,7 +49,7 @@ namespace GroupProjectRASQL.Heuristics
                     {
                         foreach (String field in ((Relation)node.Data).getFieldNames())
                         {
-                            fields.AddSingle(((Relation)node.Data).name, field);
+                            fieldslocal.AddSingle(((Relation)node.Data).name, field);
                         }
                     }
                     else if (node.Data is RenameAttribute)
@@ -59,17 +60,17 @@ namespace GroupProjectRASQL.Heuristics
                         if (oldName.Contains('.'))
                         {
                             String[] old = oldName.Split('.');
-                            if (fields.ContainsKey(old[0]))
+                            if (fieldslocal.ContainsKey(old[0]))
                             {
-                                if (!fields[old[0]].Contains(old[1])) throw new Exception("Field '" + old[1] + "' not found in Relation " + old[0]);
-                                fields[old[0]].Remove(old[1]);
-                                fields.AddSingle(old[0], newName);
+                                if (!fieldslocal[old[0]].Contains(old[1])) throw new Exception("Field '" + old[1] + "' not found in Relation " + old[0]);
+                                fieldslocal[old[0]].Remove(old[1]);
+                                fieldslocal.AddSingle(old[0], newName);
                             }
                         }
                         else
                         {
                             // Convert Dictionary<relationName, List<fieldName>> to List<KeyValuePair<relationName,fieldName>>
-                            IEnumerable<KeyValuePair<String, String>> fieldPairs = fields.ToList().SelectMany(key => key.Value, (key, value) => new KeyValuePair<String, String>(key.Key, value));
+                            IEnumerable<KeyValuePair<String, String>> fieldPairs = fieldslocal.ToList().SelectMany(key => key.Value, (key, value) => new KeyValuePair<String, String>(key.Key, value));
                             // Filter to when fieldName = oldName
                             IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(p => p.Value.Equals(oldName));
 
@@ -78,26 +79,31 @@ namespace GroupProjectRASQL.Heuristics
 
                             KeyValuePair<String, String> pair = filtered.Single();
 
-                            fields[pair.Key].Remove(pair.Value);
-                            fields.AddSingle(pair.Key, newName);
+                            fieldslocal[pair.Key].Remove(pair.Value);
+                            fieldslocal.AddSingle(pair.Key, newName);
                         }
                     }
                     else if (node.Data is RenameRelation)
                     {
                         String newName = ((RenameRelation)node.Data).getNewName();
-                        if (fields.ContainsKey(newName)) throw new Exception("Cannot rename to a relation name that already exists.");
-                        if (fields.Values.Distinct().Count() != fields.Values.Count()) throw new Exception("Cannot rename relation '" + newName + "' as a result of ambigious field names");
-                        IList<String> values = fields.Values.Aggregate((a, b) => {
+                        if (fieldslocal.ContainsKey(newName)) throw new Exception("Cannot rename to a relation name that already exists.");
+                        if (fieldslocal.Values.Distinct().Count() != fieldslocal.Values.Count()) throw new Exception("Cannot rename relation '" + newName + "' as a result of ambigious field names");
+                        IList<String> values = fieldslocal.Values.Aggregate((a, b) => {
                             foreach (String value in b)
                             {
                                 a.Add(value);
                             }
                             return a;
                         });
-                        fields.Clear();
-                        foreach (String value in values) fields.AddSingle(newName, value);
+                        fieldslocal.Clear();
+                        foreach (String value in values) fieldslocal.AddSingle(newName, value);
                     }
                 }
+            foreach (KeyValuePair<String, IList<String>> kvp in fieldslocal)
+            {
+                    if (!fields.ContainsKey(kvp.Key)) { fields.Add(kvp.Key, kvp.Value); }
+            }
+
             }
 
             IEnumerable<String> fieldNames = operation.Data.getFieldNames().ToArray();

@@ -70,7 +70,7 @@ namespace GroupProjectRASQL.Heuristics
                             if (node.Data is Relation) return ((Relation)node.Data).name == fieldsplit[0];
                             if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == fieldsplit[0];
                             return false;
-                        }).SingleOrDefault();
+                        }).FirstOrDefault();
 
                         RelationDict[fieldSplitNode] *= selectivityEstimate(fieldSplitNode, fieldsplit[1]);// Find the total selectivity, by timesing 
                         

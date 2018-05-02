@@ -33,7 +33,20 @@ namespace GroupProjectRASQL.Heuristics
 
                 newChild = operation.Where(node => // Search the reset of the tree
                 {
-                    if (node.Data is Relation) return ((Relation)node.Data).name == relationNames.Single(); // if its a relation with the first ( and only in this case ) name return it
+                    if (node.Data is Relation)
+                    { // if its a relation with the first ( and only in this case ) name return it
+
+
+                        for (Node current = node; !current.Equals(operation); current = current.Parent) // check if there is a rename relation between the newchild ( the position to move over ) and the current select
+                        {
+                            if (current.Data is RenameRelation) { return false; }// if their is, the select cannot be moved - so return false.
+                        }
+                        return ((Relation)node.Data).name == relationNames.Single();
+                    }
+
+
+
+
                     if (node.Data is RenameRelation) return ((RenameRelation)node.Data).getNewName() == relationNames.Single(); // or if its a renamed relation with the same name return it
                     return false;//else don't
                 }).SingleOrDefault();//make sure there is only one- then convert the output from a list/Ienumerable to a single Node
@@ -74,7 +87,7 @@ namespace GroupProjectRASQL.Heuristics
 
                     }
                     return false;// if there are no joins - error case - return false
-                }).SingleOrDefault();// make sure it only returns a single node
+                }).FirstOrDefault();// make sure it only returns a single node
 
             }
 
