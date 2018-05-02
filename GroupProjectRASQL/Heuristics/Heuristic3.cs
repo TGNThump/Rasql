@@ -113,21 +113,21 @@ namespace GroupProjectRASQL.Heuristics
             return (float)relationData.GetField(field).getDistinctCount() / (float)relationData.GetField(field).getCount(); // Take the number of unique fields and divide it by the total fields to get a estimate ration.
         }
 
-        public bool resultsInCrossJoin(IList<KeyValuePair<Node, float>> permu)
+        public bool resultsInCrossJoin(IList<KeyValuePair<Node, float>> permu)// will it result in a cross join
         {
-            bool possibleFlag;
-            for (int i = 0; i<permu.Count()-1;i++)
+            bool possibleFlag; // flag
+            for (int i = 0; i<permu.Count()-1;i++) // for every key value pair in the permutation passed to this function
             {
                 possibleFlag = false;
-                foreach (Node currentSelect in SelectionList)
+                foreach (Node currentSelect in SelectionList) // for each select
                 {
                     List<String> currentSelectList = new List<String>();
-                    foreach(String field in currentSelect.Data.getFieldNames())
+                    foreach(String field in currentSelect.Data.getFieldNames()) // get the tables it acts on
                     {
                         currentSelectList.Add(field.Split('.')[0]);
                     }
 
-                    Relation permui= (Relation)permu[i].Key.Data;
+                    Relation permui= (Relation)permu[i].Key.Data;// Cast the permutations
                     Relation permupitwo = (Relation)permu[i+1].Key.Data;
 
 
@@ -136,33 +136,28 @@ namespace GroupProjectRASQL.Heuristics
                     {
                         if (currentSelectList.Contains(permupitwo.name))
                         {
-                            possibleFlag = true;
+                            possibleFlag = true; // if the select acts on both the tables in some way- switch the flag to true- as this means a cross join doesn't need to be created to use it
                         }
                     }
                 }
-                if (!possibleFlag) { return true; }
+                if (!possibleFlag) { return true; }// if its not possible, return that it results in a corssjoin
             }
-            Console.WriteLine("Asking for crossjoins");
-            Console.WriteLine(permu);
-        
 
-            return false;
+            return false;// else return it doesn't cause one.
         }
 
 
-        public void RotateRight<T>(IList<T> sequence, int count)
+        public void RotateRight<T>(IList<T> sequence, int count)// Permutation
         {
             T tmp = sequence[count - 1];
             sequence.RemoveAt(count - 1);
             sequence.Insert(0, tmp);
         }
 
-        public IEnumerable<IList<KeyValuePair<Node, float>>> Permutate(IList<KeyValuePair<Node, float>> sequence, int count)
+        public IEnumerable<IList<KeyValuePair<Node, float>>> Permutate(IList<KeyValuePair<Node, float>> sequence, int count) // Permutaton recursive function
         {
-            Console.WriteLine("Asking for permutations");
-            Console.WriteLine(count);
 
-            if (count == 1) yield return sequence;
+            if (count == 1) yield return sequence;//base case
             else
             {
                 for (int i = 0; i < count; i++)
