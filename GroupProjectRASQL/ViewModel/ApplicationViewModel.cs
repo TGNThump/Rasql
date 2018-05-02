@@ -17,7 +17,7 @@ namespace GroupProjectRASQL.ViewModel
     {
         public string CurrentView { get; set; } = "input";
 
-        public IList<Relation> Relations { get; set; } = new List<Relation> {
+        public Relation[] Relations { get; set; } = new Relation[] {
             new Relation("animals", new List<Field>() {
                 new Field("name", new List<String>{ "cat", "dog", "cow", "sheep", "pig" }),
                 new Field("age", new List<String>{ "1", "2", "4", "2", "4" }),
@@ -93,7 +93,7 @@ namespace GroupProjectRASQL.ViewModel
         public ISimpleCommand Auto { get; private set; }
         public ISimpleCommand Reset { get; private set; }
         public ISimpleCommand<Relation> DeleteRelation { get; private set; }
-        public ISimpleCommand<Relation> NewRelation { get; private set; }
+        public ISimpleCommand<String> NewRelation { get; private set; }
 
         private TreeNode<Operation> ops;
         public String OpsJSON { get; private set; }
@@ -260,12 +260,16 @@ namespace GroupProjectRASQL.ViewModel
 
             this.DeleteRelation = new RelaySimpleCommand<Relation>(relation =>
             {
-                this.Relations.Remove(relation);
+                List<Relation> list = this.Relations.ToList();
+                list.Remove(relation);
+                this.Relations = list.ToArray();
             });
 
-            this.NewRelation = new RelaySimpleCommand<Relation>(relation =>
+            this.NewRelation = new RelaySimpleCommand<String>(relation =>
             {
-                this.Relations.Add(relation);
+                List<Relation> list = this.Relations.ToList();
+                list.Add(new Relation(relation, new List<Field>() { new Field("", new List<String>(){}), new Field("", new List<String>() { }) , new Field("", new List<String>() { }) , new Field("", new List<String>() { }) }));
+                this.Relations = list.ToArray();
             });
         }
 

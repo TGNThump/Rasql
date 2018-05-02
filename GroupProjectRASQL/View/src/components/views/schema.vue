@@ -107,25 +107,7 @@ export default {
 	      relation.fields.splice(column, 1);
 	    },
 	    newRelation: function(){
-	    	this.model.NewRelation.Execute({
-	    		name: this.newRelationName,
-	    		fields: [{
-	    			"name": "",
-	    			"values": [""]
-	    		},
-	    		{
-	    			"name": "",
-	    			"values": [""]
-	    		},
-	    		{
-	    			"name": "",
-	    			"values": [""]
-	    		},
-	    		{
-	    			"name": "",
-	    			"values": [""]
-	    		}]
-	    	});
+	    	this.model.NewRelation.Execute(this.newRelationName);
 	    },
 	    removeRelation: function(relation){
 	    	this.model.DeleteRelation.Execute(relation);
