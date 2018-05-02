@@ -18,10 +18,25 @@ namespace GroupProjectRASQL.Operations
 
         public override string ToJSON()
         {
-            return "{'type':'" + this.GetType().Name + "', 'properties': ''}";
+            return "{'type':'" + "X" + "', 'properties': ''}";
         }
     }
-    class Union : Operation { }
-    class Intersect : Operation { }
-    class Difference : Operation { }
+    class Union : Operation
+    {
+        public override string ToJSON() {
+            return "{'type':'" + "∪" + "', 'properties': ''}";
+        }
+    }
+    class Intersect : Operation
+    {
+        public override string ToJSON() {
+            return "{'type':'" + "∩" + "', 'properties': ''}";
+        }
+    }
+    class Difference : Operation
+    {
+        public override string ToJSON() {
+            return "{'type':'" + "-" + "', 'properties': ''}";
+        }
+    }
 }

@@ -57,7 +57,7 @@ namespace GroupProjectRASQL.Operations
 
         public override string ToJSON()
         {
-            return "{'type':'" + this.GetType().Name + "', 'properties': '" + condition.TreeToString() + "'}";
+            return "{'type':'" + "σ" + "', 'properties': '" + condition.TreeToString() + "'}";
         }
     }
 }
