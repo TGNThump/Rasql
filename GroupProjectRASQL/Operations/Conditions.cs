@@ -170,7 +170,7 @@ namespace GroupProjectRASQL.Operations
                 returnString += "(" + ToString(node.Child(0)) + ") OR (" + ToString(node.Child(1)) + ")";
 
             }
-            else { returnString += node.Data; }
+            else { returnString += node.TreeToString(); }
 
             return returnString;
 
