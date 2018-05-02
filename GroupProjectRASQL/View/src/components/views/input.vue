@@ -22,8 +22,8 @@
 					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C3</a></li>
 					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x03C1</a></li>
 					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#8904</a></li>
-					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x22C3</a></li>
-					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">&#x22C2</a></li>
+					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">U</a></li>
+					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">N</a></li>
 					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">X</a></li>
 					<li class="nav-item"><a @click="insertChar" class="nav-link" href="#">-</a></li>
 				</ul>

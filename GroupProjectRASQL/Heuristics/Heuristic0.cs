@@ -62,7 +62,7 @@ namespace GroupProjectRASQL.Heuristics
                             String[] old = oldName.Split('.');
                             if (fieldslocal.ContainsKey(old[0]))
                             {
-                                if (!fieldslocal[old[0]].Contains(old[1])) throw new Exception("Field '" + old[1] + "' not found in Relation " + old[0]);
+                                if (!fieldslocal[old[0]].Contains(old[1])) throw new HeuristicException("Field '" + old[1] + "' not found in Relation " + old[0]);
                                 fieldslocal[old[0]].Remove(old[1]);
                                 fieldslocal.AddSingle(old[0], newName);
                             }
@@ -74,7 +74,7 @@ namespace GroupProjectRASQL.Heuristics
                             // Filter to when fieldName = oldName
                             IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(p => p.Value.Equals(oldName));
 
-                            if (filtered.Count() > 1) throw new Exception("Field '" + oldName + "' found in multiple relations, please remove ambiguity.");
+                            if (filtered.Count() > 1) throw new HeuristicException("Field '" + oldName + "' found in multiple relations, please remove ambiguity.");
                             if (filtered.Count() == 0) continue;
 
                             KeyValuePair<String, String> pair = filtered.Single();
@@ -86,8 +86,8 @@ namespace GroupProjectRASQL.Heuristics
                     else if (node.Data is RenameRelation)
                     {
                         String newName = ((RenameRelation)node.Data).getNewName();
-                        if (fieldslocal.ContainsKey(newName)) throw new Exception("Cannot rename to a relation name that already exists.");
-                        if (fieldslocal.Values.Distinct().Count() != fieldslocal.Values.Count()) throw new Exception("Cannot rename relation '" + newName + "' as a result of ambigious field names");
+                        if (fieldslocal.ContainsKey(newName)) throw new HeuristicException("Cannot rename to a relation name that already exists.");
+                        if (fieldslocal.Values.Distinct().Count() != fieldslocal.Values.Count()) throw new HeuristicException("Cannot rename relation '" + newName + "' as a result of ambigious field names");
                         IList<String> values = fieldslocal.Values.Aggregate((a, b) => {
                             foreach (String value in b)
                             {
@@ -113,8 +113,8 @@ namespace GroupProjectRASQL.Heuristics
                 if (oldName.Contains('.'))
                 {
                     String[] split = oldName.Split('.');
-                    if (!fields.ContainsKey(split[0])) throw new Exception("Relation '" + split[0] + "' not found.");
-                    if (!fields[split[0]].Contains(split[1])) throw new Exception("Field '" + split[1] + "' not found in Relation " + split[0]);
+                    if (!fields.ContainsKey(split[0])) throw new HeuristicException("Relation '" + split[0] + "' not found.");
+                    if (!fields[split[0]].Contains(split[1])) throw new HeuristicException("Field '" + split[1] + "' not found in Relation " + split[0]);
                 }
                 else
                 {
@@ -123,8 +123,8 @@ namespace GroupProjectRASQL.Heuristics
                     // Filter to fieldnames
                     IEnumerable<KeyValuePair<String, String>> filtered = fieldPairs.Where(p => p.Value.Equals(oldName));
 
-                    if (filtered.Count() > 1) throw new Exception("Field '" + oldName + "' found in multiple relations, please remove ambiguity.");
-                    if (filtered.Count() == 0) throw new Exception("Field '" + oldName + "' not found in any relations.");
+                    if (filtered.Count() > 1) throw new HeuristicException("Field '" + oldName + "' found in multiple relations, please remove ambiguity.");
+                    if (filtered.Count() == 0) throw new HeuristicException("Field '" + oldName + "' not found in any relations.");
 
                     KeyValuePair<String, String> pair = filtered.Single();
                     String newName = pair.Key + "." + pair.Value;

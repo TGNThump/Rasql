@@ -93,75 +93,80 @@
 </template>
 
 <script>
-const props={
-	viewModel: Object,
-	__window__: Object
-};
+  const props={
+  viewModel: Object,
+  __window__: Object
+  };
 
-import * as d3 from 'd3';
-export default {
-	name: 'app',
-	props,
-	data () {
-		return {
-			model: this.viewModel,
-			svg: null,
-		}
-	},
-	computed: {
-		ops: function(){
-			if (this.model.OpsJSON == null) return null;
-			if (this.model.OpsJSON == "") return null;
-			return JSON.parse(this.model.OpsJSON);
-		}
-	},
-	watch: {
-		ops: function (value){
-			this.render();	
-		}
-	},
-	mounted(){
-		this.svg = d3.select('#graph');
-		this.svg.append("g").attr("transform", "translate(0,50)")
-		this.render();
-	},
-	methods: {
-		render: function(){
-			if (this.ops == null) return;
-			if (this.ops == "") return;
-			var root = d3.hierarchy(this.ops);
+  String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+  };
 
-			var svg = this.svg;
-			var	width = (root.leaves().length+1) * 200,
-				height = Math.min((root.leaves()[0].depth) * 200, 500);
+  import * as d3 from 'd3';
+  export default {
+  name: 'app',
+  props,
+  data () {
+  return {
+  model: this.viewModel,
+  svg: null,
+  }
+  },
+  computed: {
+  ops: function(){
+  if (this.model.OpsJSON == null) return null;
+  if (this.model.OpsJSON == "") return null;
+  return JSON.parse(this.model.OpsJSON);
+  }
+  },
+  watch: {
+  ops: function (value){
+  this.render();
+  }
+  },
+  mounted(){
+  this.svg = d3.select('#graph');
+  this.svg.append("g").attr("transform", "translate(0,50)")
+  this.render();
+  },
+  methods: {
+  render: function(){
+  if (this.ops == null) return;
+  if (this.ops == "") return;
+  var root = d3.hierarchy(this.ops);
 
-			d3.cluster().size([width, height])(root);
+  var svg = this.svg;
+  var	width = (root.leaves().length+1) * 200,
+  height = Math.min((root.leaves()[0].depth) * 200, 500);
 
-			svg.attr("viewBox","0 0 " + (width + 100) + " " + (height + 100));
-			
-			var g = svg.select("g");
+  d3.cluster().size([width, height])(root);
 
-			// Update
+  svg.attr("viewBox","0 0 " + (width + 100) + " " + (height + 100));
 
-			var link = g.selectAll('.link')
-				.data(root.links())
-				.attr('x1', function(d) {return d.source.x;})
-				.attr('y1', function(d) {return d.source.y;})
-				.attr('x2', function(d) {return d.target.x;})
-				.attr('y2', function(d) {return d.target.y;});
+  var g = svg.select("g");
 
-			var node = g.selectAll(".node")
-				.data(root.descendants())
-				.attr("class", function (d){
-					return "node" + (d.children ? " node--internal" : " node--leaf");
-				}).attr("transform", function(d) {
-					return "translate(" + d.x + "," + d.y + ")";
-				});
+  // Update
 
-			node.select('text')
-				.attr("x", function(d){ return d.children ? -8 : 8; })
-				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
-				.text(function(d){ return d.data.data.type + ' '+ d.data.data.properties.replace("&quot;", "\""); });
+  var link = g.selectAll('.link')
+  .data(root.links())
+  .attr('x1', function(d) {return d.source.x;})
+  .attr('y1', function(d) {return d.source.y;})
+  .attr('x2', function(d) {return d.target.x;})
+  .attr('y2', function(d) {return d.target.y;});
+
+  var node = g.selectAll(".node")
+  .data(root.descendants())
+  .attr("class", function (d){
+  return "node" + (d.children ? " node--internal" : " node--leaf");
+  }).attr("transform", function(d) {
+  return "translate(" + d.x + "," + d.y + ")";
+  });
+
+  node.select('text')
+  .attr("x", function(d){ return d.children ? -8 : 8; })
+  .style("text-anchor", function(d){ return d.children ? "end" : "start";})
+  .text(function(d){ return d.data.data.type + ' '+ d.data.data.properties.replaceAll("&quot;", "\""); });
 
 			// Enter
 
@@ -190,7 +195,7 @@ export default {
 				.attr("dy", -3)
 				.attr("x", function(d){ return d.children ? -8 : 8; })
 				.style("text-anchor", function(d){ return d.children ? "end" : "start";})
-				.text(function(d){ return d.data.data.type + ' '+ d.data.data.properties.replace("&quot;", "\""); });
+				.text(function(d){ return d.data.data.type + ' '+ d.data.data.properties.replaceAll("&quot;", "\""); });
 
 			// Exit
 

@@ -126,7 +126,7 @@ namespace GroupProjectRASQL.ViewModel
                     this.Input_Type = "ra";
                     return;
                 }
-                catch (Exception e)
+                catch (HeuristicException e)
                 {
                     Console.WriteLine(e.ToString());
                     Error = e.Message.Replace(Environment.NewLine, "<br/>");
@@ -180,7 +180,7 @@ namespace GroupProjectRASQL.ViewModel
                     this.CurrentView = "output";
                     return;
                 }
-                catch (Exception e)
+                catch (HeuristicException e)
                 {
                     Console.WriteLine(e.ToString());
                     Error = e.Message.Replace(Environment.NewLine, "<br/>");
@@ -197,7 +197,7 @@ namespace GroupProjectRASQL.ViewModel
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     UpdateCurrentHeuristic();
                 }
-                catch (Exception e)
+                catch (HeuristicException e)
                 {
                     Console.WriteLine(e.ToString());
                     Error = e.Message.Replace(Environment.NewLine, "<br/>");
@@ -214,7 +214,7 @@ namespace GroupProjectRASQL.ViewModel
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     UpdateCurrentHeuristic();
                 }
-                catch (Exception e)
+                catch (HeuristicException e)
                 {
                     Console.WriteLine(e.ToString());
                     Error = e.Message.Replace(Environment.NewLine, "<br/>");
@@ -250,7 +250,7 @@ namespace GroupProjectRASQL.ViewModel
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     return;
                 }
-                catch (Exception e)
+                catch (HeuristicException e)
                 {
                     Console.WriteLine(e.ToString());
                     Error = e.Message.Replace(Environment.NewLine, "<br/>");

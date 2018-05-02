@@ -29,7 +29,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -135,6 +135,7 @@
     <Compile Include="Heuristics\Heuristic3.cs" />
     <Compile Include="Heuristics\Heuristic2.cs" />
     <Compile Include="Heuristics\Heuristic1.cs" />
+    <Compile Include="Heuristics\HeuristicException.cs" />
     <Compile Include="Operations\Conditions.cs" />
     <Compile Include="Operations\Query.cs" />
     <Compile Include="Operations\RenameRelation.cs" />
