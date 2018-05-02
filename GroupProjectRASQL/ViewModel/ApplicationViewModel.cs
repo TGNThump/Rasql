@@ -39,20 +39,9 @@ namespace GroupProjectRASQL.ViewModel
         Parser.Parser sqlParser = new Parser.Parser("sql");
         Parser.Parser raParser = new Parser.Parser("ra");
 
-        public List<Heuristic> HeuristicList { get; private set; } = new List<Heuristic>();
+        public Heuristic[] HeuristicsArray { get; private set; }
 
-        public Heuristic CurrentHeuristic
-        {
-            get
-            {
-                if (HeuristicList.Count == 0) return null;
-                foreach (Heuristic heuristic in HeuristicList)
-                {
-                    if (heuristic.isEnabled && !heuristic.isComplete) return heuristic;
-                }
-                return HeuristicList.Last();
-            }
-        }
+        public Heuristic CurrentHeuristic { get; private set; }
 
         private string Parsed_SQL = "";
         private string Parsed_RA_From_SQL = "";
@@ -175,12 +164,15 @@ namespace GroupProjectRASQL.ViewModel
 
                     new Heuristic0(ops).Complete();
 
-                    HeuristicList.Clear();
-                    HeuristicList.Add(new Heuristic1(ops));
-                    HeuristicList.Add(new Heuristic2(ops));
-                    HeuristicList.Add(new Heuristic3(ops));
-                    HeuristicList.Add(new Heuristic4(ops));
-                    HeuristicList.Add(new Heuristic5(ops));
+                    HeuristicsArray = new Heuristic[] {
+                        new Heuristic1(ops),
+                        new Heuristic2(ops),
+                        new Heuristic3(ops),
+                        new Heuristic4(ops),
+                        new Heuristic5(ops)
+                    };
+
+                    UpdateCurrentHeuristic();
 
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     this.CurrentView = "output";
@@ -198,8 +190,10 @@ namespace GroupProjectRASQL.ViewModel
             {
                 try
                 {
+                    UpdateCurrentHeuristic();
                     if (CurrentHeuristic != null) CurrentHeuristic.Step();
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
+                    UpdateCurrentHeuristic();
                 }
                 catch (Exception e)
                 {
@@ -213,8 +207,10 @@ namespace GroupProjectRASQL.ViewModel
             {
                 try
                 {
+                    UpdateCurrentHeuristic();
                     if (CurrentHeuristic != null) CurrentHeuristic.Complete();
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
+                    UpdateCurrentHeuristic();
                 }
                 catch (Exception e)
                 {
@@ -239,12 +235,15 @@ namespace GroupProjectRASQL.ViewModel
 
                     new Heuristic0(ops).Complete();
 
-                    HeuristicList.Clear();
-                    HeuristicList.Add(new Heuristic1(ops));
-                    HeuristicList.Add(new Heuristic2(ops));
-                    HeuristicList.Add(new Heuristic3(ops));
-                    HeuristicList.Add(new Heuristic4(ops));
-                    HeuristicList.Add(new Heuristic5(ops));
+                    HeuristicsArray = new Heuristic[] {
+                        new Heuristic1(ops),
+                        new Heuristic2(ops),
+                        new Heuristic3(ops),
+                        new Heuristic4(ops),
+                        new Heuristic5(ops)
+                    };
+
+                    UpdateCurrentHeuristic();
 
                     this.OpsJSON = ops.Child().ToJSON().Replace("\"", "&quot;").Replace("'", "\"");
                     return;
@@ -256,6 +255,20 @@ namespace GroupProjectRASQL.ViewModel
                     return;
                 }
             });
+        }
+
+        void UpdateCurrentHeuristic()
+        {
+            if (HeuristicsArray == null) this.CurrentHeuristic = null;
+            foreach (Heuristic heuristic in HeuristicsArray)
+            {
+                if (heuristic.isEnabled && !heuristic.isComplete)
+                {
+                    this.CurrentHeuristic = heuristic;
+                    return;
+                }
+            }
+            this.CurrentHeuristic = HeuristicsArray.Last();
         }
 
         bool Squish(TreeNode<String> root)
