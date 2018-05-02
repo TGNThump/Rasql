@@ -94,11 +94,19 @@ namespace GroupProjectRASQL.Heuristics
                     if (!resultsInCrossJoin(permu))// if it doesn't cause a crossjoin
                     {
                         optimalpermu = permu;// then this is the optimal leaf order
-                        /*
-                         * Unfortunatly due to time constraints the manipulation of the graph to cause this could not be completed.
-                         * This would handle moving the selects and joins to impletement this order
+                                             /*
+                                              * Unfortunatly due to time constraints the manipulation of the graph to cause this could not be completed.
+                                              * This would handle moving the selects and joins to impletement this order
+                                              * Instead this optimal permutation will just be output to console.
+                                              */
 
-                         */
+                        Console.WriteLine("\n The Optimal permutation of leaf nodes is : ");
+
+                        foreach(KeyValuePair< Node, float >op in optimalpermu)
+                        {
+                            Console.WriteLine(op);
+                        }
+                        Console.WriteLine();
                         break;
                     }
 

@@ -20,17 +20,20 @@ namespace GroupProjectRASQL.Translator
 
 
 
-            //If there is no asterisk add a projection
+            //If there is an asterisk, there is no selection
             bool isSelect = node.Child(0).Child(1).Child(0).Data != "*";
 
             //Create dictionary to store renamed attributes and what they're renamed to
             Dictionary<String, String> attributeRenames = new Dictionary<string, string>();
 
+            //If there is a select:
             if (isSelect)
             {
 
+                //Translate the select list and store renames
                 String selectList = TranslateSelectList(node.Child(0).Child(1), ref attributeRenames);
 
+                //Add the renames to string
                 foreach (KeyValuePair<String, String> entry in attributeRenames)
                 {
 
@@ -38,6 +41,7 @@ namespace GroupProjectRASQL.Translator
 
                 }
 
+                //Add translated select list
                 returnString += "π " + selectList + " (";
 
             }
@@ -45,6 +49,7 @@ namespace GroupProjectRASQL.Translator
             //If there is a where clause, then add a select
             bool isWhere = node.Children.Count() == 6 && node.Child(4).Data == "[where]";
 
+            //If there is a where, add the where clause and the condition
             if (isWhere)
             {
 
@@ -54,6 +59,7 @@ namespace GroupProjectRASQL.Translator
             }
 
 
+            //Add the translated from list
             returnString += TranslateFromList(node.Child(2).Child(1));
 
             //Close open brackets
@@ -64,6 +70,7 @@ namespace GroupProjectRASQL.Translator
 
         }
 
+        //Returns a translated RA equivalent to a select list node
         public static String TranslateSelectList(Node node, ref Dictionary<String, String> renames) {
 
             String returnString = "";
@@ -72,6 +79,7 @@ namespace GroupProjectRASQL.Translator
 
             String name = element.Child(0).TreeToString();
 
+            //If the select list contains a rename, add it to the dictionary
             bool isRename = element.Children.Count() == 3;
             if (isRename)
             {
@@ -83,13 +91,15 @@ namespace GroupProjectRASQL.Translator
 
             }
 
-
             returnString += name;
 
+
+            //If there are three elements, element 0 is the first element of list, 1 is a comma and 2 is another select list
             if (node.Children.Count() == 3)
             {
 
                 returnString += ",";
+                //translate rest of list and att it to string
                 returnString += TranslateSelectList(node.Child(2), ref renames);
 
             }
@@ -98,16 +108,20 @@ namespace GroupProjectRASQL.Translator
 
         }
 
+        //Takes a from list node and returns an equivalent ra string
         public static String TranslateFromList(Node node) {
 
             String returnString = "";
 
+            //If there are 3 elements, there is a cartesian product between the first and last
             bool isCartesian = node.Children.Count() == 3;
 
             if (isCartesian) returnString += "X(";
 
+            //Translate and add the from element to the list
             returnString += TranslateFromElement(node.Child(0));
 
+            //Translate rest of list
             if (isCartesian) {
 
                 returnString += ", ";
@@ -121,10 +135,12 @@ namespace GroupProjectRASQL.Translator
 
         }
 
+        //Takes a from element node and returns equivalent RA string
         public static String TranslateFromElement(Node node) {
 
             String returnString = "";
 
+            //3 elements in element means there is a table rename
             if (node.Children.Count() == 3)
             {
 
@@ -133,6 +149,7 @@ namespace GroupProjectRASQL.Translator
                 returnString += ")";
 
             }
+            //4 elements: named subquery
             else if (node.Children.Count() == 4)
             {
 
@@ -141,12 +158,14 @@ namespace GroupProjectRASQL.Translator
                 returnString += ")";
 
             }
+            // join
             else if (node.Child(0).Data == "[join]")
             {
 
                 returnString += TranslateJoin(node.Child(0));
 
             }
+            //Otherwise, its just a relation
             else {
 
                 returnString = node.TreeToString();
@@ -157,6 +176,7 @@ namespace GroupProjectRASQL.Translator
 
         }
 
+        //Takes a join node and returns equivalent RA string
         public static String TranslateJoin(Node node) {
 
             String returnString = "⋈ ";

@@ -20,14 +20,19 @@ namespace GroupProjectRASQL.Heuristics
         public override bool Run(Node operation)
         {
 
+            //If the operation is not projection, this heuristic does not apply
             if (!(operation.Data is Projection)) return false;
 
             bool retVal = false;
 
+            //If the projection has a valid number of children
             if(operation.Children.Count() == 1) {
 
                 Node child = operation.Child(0);
 
+               ////////////////// See what the child of this node is and act accordingly ///////////////
+
+                //If child is projection, remove it from tree
                 if (child.Data is Projection)
                 {
                     operation.RemoveChildren();
@@ -43,7 +48,7 @@ namespace GroupProjectRASQL.Heuristics
                 }
 
                 
-
+                //If child is a join or cartesian:
                 else if (child.Data is Join || child.Data is Cartesian)
                 {
 
@@ -54,6 +59,7 @@ namespace GroupProjectRASQL.Heuristics
                     HashSet<String> lSubtreeFields = GetFields(child.Child(0));
                     HashSet<String> rSubtreeFields = GetFields(child.Child(1));
 
+                    //If there is no condition, the projection can be moved completely
                     if (child.Data is Cartesian || conditionFields.IsSubsetOf(projectFields)) {
 
                         //Remove operation from tree and connect parent and child
@@ -65,8 +71,11 @@ namespace GroupProjectRASQL.Heuristics
                         retVal = true;
                     }
 
+                    //See what fields the sub projections need
                     lSubtreeFields.IntersectWith(conditionFields.Union(projectFields));
                     rSubtreeFields.IntersectWith(conditionFields.Union(projectFields));
+
+                    //Create new subtrees
                     Node rightSubTree = new Node(new Projection(rSubtreeFields));
                     Node leftSubTree = new Node(new Projection(lSubtreeFields));
 
@@ -112,7 +121,7 @@ namespace GroupProjectRASQL.Heuristics
 
 
 
-
+                    //Create new subtrees
                     Node leftSubTree = new Node(new Projection(operation.Data.parameter));
                     Node rightSubTree = new Node(new Projection(operation.Data.parameter));
 
@@ -176,6 +185,7 @@ namespace GroupProjectRASQL.Heuristics
             return retVal;
         }
 
+        //Function to get fields of subtree
         public static HashSet<String> GetFields(Node node) {
 
             if (!(node.Data is Operation)) return null;
